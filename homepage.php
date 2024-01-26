@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="homepage.css" rel="stylesheet">
   <!--Include Google Fonts - Quicksand-->
-  <<link href='https://fonts.googleapis.com/css?family=Quicksand' rel='stylesheet'>
+  <link href='https://fonts.googleapis.com/css?family=Quicksand' rel='stylesheet'>
   <!--Font Awesome Icons-->
   <script src="https://kit.fontawesome.com/410ff7000d.js" crossorigin="anonymous"></script>
   <!--Boxicons-->
@@ -36,7 +37,7 @@
   <div class="container-con1">
       <h1>Welcome to DiaCare</h1>
       <p>Your Diabetic Journey, Our Priority</p>
-	    <form action="userView.php" >
+	    <form action="userView.php">
         <button>START RECORD NOW</button>
       </form>
   </div>
