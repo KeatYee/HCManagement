@@ -1,0 +1,73 @@
+
+body{
+	margin:0;
+	padding:0;  /*Resetting Browser Defaults*/
+	font-family:'Lato', sans-serif;
+}
+
+ /*HEADER*/
+ header{
+	position: fixed;
+	z-index: 1000;
+	  width:100%;
+	  top:0;
+	}
+	
+	.logopic{
+	  width:auto;
+	  height:auto;
+	  margin-left:125px;
+	  margin-right:50px;
+	}
+	.logopic img{
+	  width:75px;
+	  height:75px;
+	
+	}
+
+	.navbar li{
+	  list-style:none;
+	  
+	}
+	
+   .navbar li a{
+	  text-decoration:none;
+	  color:#7A7A7A;
+	  font-size:23px;
+	  font-weight:550;
+	  font-family: 'Open Sans', sans-serif;
+	
+	}
+	
+	.navbar a:hover{
+	  color:#0C479D;
+	}
+	
+	.navbar{
+	  padding:0;
+	  height:90px;
+	  margin:0;
+	  display:flex;
+	  align-items:center;
+	  justify-content:space-between;
+	  background-color:#ffffff;
+  }
+	.navbar .logo a {
+	  margin-right: 855px;
+	  font-size:2.0rem;
+	  font-weight:800;
+	color:#0C479D;
+	}
+	
+	.navbar .content {
+	  align-items: center;
+	  width:100%;
+		display: flex;
+		gap: 3rem;
+	}
+	.loginbtn i{
+	margin-left:50px;
+	margin-right:100px;
+	font-size:35px;
+	
+	}
