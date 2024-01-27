@@ -13,23 +13,30 @@
 </head>
 
 <!--top nav bar-->
-<header>
-<div class="navbar">
-  <div class="logopic"><img src="Img/logo.png"></div>
-  <div class="logo"><a>DiaCare</a></div>
-
-    <ul class="content">       
-		<li><a href="homepage.php">Home</a></li>
-    <li><a href="calendar.php">Calendar</a></li>
-    <li><a href="record.php">Record</a></li>
-    <li><a href="report.php">Report</a></li>
-    <li><a href="feedback.php">Feedback</a></li>
-   	</ul>
-    <ul class="loginbtn">
-      <li><a href="login.php"><i class='bx bx-user'></i></a></li>
+<nav>
+  <div class="nav-left">
+    <div class="logo"><img src="Img/logo.png" alt="logo"><p>diaCare</p></div>
+  </div>
+  <div class="nav-right">
+    <ul class="nav-links">
+      <li><a href="homepage.php">Home</a></li>
+      <li><a href="calendar.php">Calendar</a></li>
+      <li><a href="record.php">Record</a></li>
+      <li><a href="report.php">Report</a></li>
+      <li><a href="feedback.php">Feedback</a></li>
+      <li><a href="login.php">Login</a></li>
+      <li><a href="profile.php"><i class='bx bx-user' style="font-size:30px;"></i></a></li>
     </ul>
-</div>
-</header>
+
+    <div class="hamburger">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+
+  </div>
+</nav>
 
 <body>
 <div class="container">
