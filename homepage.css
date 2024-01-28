@@ -7,7 +7,7 @@
     list-style: none;
     font-family: 'Open Sans', sans-serif;
     }
-   /*HEADER*/
+/*Top Nav Bar*/
 .logo {
     display: flex;
     align-items: center; 
@@ -50,6 +50,33 @@ nav{
 .nav-links li a:hover{
   color:#0C479D;
 }
+
+/*Hamburger*/
+.hamburger{
+  margin-left:20px;
+  cursor:pointer;
+  display:none;
+} 
+
+.hamburger div{
+  width:30px;
+  height:2px;
+  margin:6px 0;
+  background:#7A7A7A;
+}
+
+@media only screen and (max-width: 768px) {
+
+  nav{
+    position:relative;
+    padding:0 20px;
+    z-index:2;
+  }
+  .hamburger{
+    display:block;
+  } 
+}
+
 
      /*Footer*/
       footer {

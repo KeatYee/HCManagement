@@ -1,6 +1,10 @@
+<?php
+session_start(); // Start the session
+?>
 <!DOCTYPE html>
 <html>
 <head>
+<title>diaCare</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="homepage.css" rel="stylesheet">
   <!--Include Google Fonts - Quicksand-->
@@ -15,7 +19,7 @@
 <!--top nav bar-->
 <nav>
   <div class="nav-left">
-    <div class="logo"><img src="Img/logo.png" alt="logo"><p>diaCare</p></div>
+    <div class="logo"><img src="Img/logo.png" alt="logo"><p>DiaCare</p></div>
   </div>
   <div class="nav-right">
     <ul class="nav-links">
@@ -104,6 +108,22 @@
 
 </div>
 
+
+<?php
+    // Check and display the welcome alert
+    if (isset($_SESSION['loginSuccess']) && $_SESSION['loginSuccess']) {
+?>
+    <!-- Display a welcome alert using JavaScript -->
+    <script>
+	window.onload = function() {
+		alert("Welcome! You have successfully logged in.");
+	}	
+    </script>
+<?php
+     // Unset the loginSuccess session variable
+    unset($_SESSION['loginSuccess']);
+    }
+?>
 
 </body>
 
