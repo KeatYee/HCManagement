@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="feedback.css" rel="stylesheet">
   <!--Include Google Fonts - Quicksand-->
-  <<link href='https://fonts.googleapis.com/css?family=Quicksand' rel='stylesheet'>
+  <link href='https://fonts.googleapis.com/css?family=Quicksand' rel='stylesheet'>
   <!--Font Awesome Icons-->
   <script src="https://kit.fontawesome.com/410ff7000d.js" crossorigin="anonymous"></script>
   <!--Boxicons-->
@@ -13,23 +13,30 @@
  </head>
  
 <!--top nav bar-->
-<header>
-<div class="navbar">
-  <div class="logopic"><img src="Img/logo.png"></div>
-  <div class="logo"><a>DiaCare</a></div>
-
-    <ul class="content">       
-		<li><a href="homepage.php">Home</a></li>
-    <li><a href="calendar.php">Calendar</a></li>
-    <li><a href="record.php">Record</a></li>
-    <li><a href="report.php">Report</a></li>
-    <li><a href="feedback.php">Feedback</a></li>
-   	</ul>
-    <ul class="loginbtn">
-      <li><a href="login.php"><i class='bx bx-user'></i></a></li>
+<nav>
+  <div class="nav-left">
+    <div class="logo"><img src="Img/logo.png" alt="logo"><p>DiaCare</p></div>
+  </div>
+  <div class="nav-right">
+    <ul class="nav-links">
+      <li><a href="homepage.php">Home</a></li>
+      <li><a href="calendar.php">Calendar</a></li>
+      <li><a href="record.php">Record</a></li>
+      <li><a href="report.php">Report</a></li>
+      <li><a href="feedback.php">Feedback</a></li>
+      <li><a href="login.php">Login</a></li>
+      <li><a href="profile.php"><i class='bx bx-user' style="font-size:30px;"></i></a></li>
     </ul>
-</div>
-</header>
+
+    <div class="hamburger">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+
+  </div>
+</nav>
 
 <body>
 
@@ -62,7 +69,8 @@
 	
 		
 
-		
+  <!--Hamburger-->
+  <script src="app.js"></script>		
 </body>
 <footer>
   <div class="footer-content">

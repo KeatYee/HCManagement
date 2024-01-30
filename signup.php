@@ -165,6 +165,8 @@ mysqli_close($conn);
     </div>
 </div>
 
+  <!--Hamburger-->
+  <script src="app.js"></script>
 </body>
 
 <footer>

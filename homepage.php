@@ -124,7 +124,8 @@ session_start(); // Start the session
     unset($_SESSION['loginSuccess']);
     }
 ?>
-
+  <!--Hamburger-->
+  <script src="app.js"></script>
 </body>
 
 

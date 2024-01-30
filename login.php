@@ -206,7 +206,9 @@ if (isset($_SESSION['signupSuccess']) && $_SESSION['signupSuccess']) {
     unset($_SESSION['signupSuccess']);
 }
 ?>
-			
+	
+  <!--Hamburger-->
+  <script src="app.js"></script>  
 </body>
 <footer>
   <div class="footer-content">
