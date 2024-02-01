@@ -1,326 +1,228 @@
+<?php
+session_start();// Start session
+include 'DBconnect.php'; // Include database connection
+
+// Check if the user is logged in
+if (!isset($_SESSION['userid'])) {
+    echo "<script> alert('You need to log in to access the profile page.');";
+	echo "window.location.replace('a-login.php');</script>";
+    exit(); //redirect user to login page
+}
+
+   // Retrieve user information from the session
+	$userid = $_SESSION['userid'];
+	$email = $_SESSION['email'];
+	$password = $_SESSION['password']; 
+	
+	$sql = "SELECT name, age FROM Account
+			WHERE accountID = '$userid'";
+	$result = mysqli_query($conn, $sql);
+	
+	if ($result) {
+		if ($row = mysqli_fetch_assoc($result)) {
+			$username = $row['name'];
+			$age = $row['age'];
+		} 
+		else {
+			// Handle case when no rows are found
+			$username = "N/A";
+			$age = "N/A";
+		}
+	}
+
+?>
 
 <!DOCTYPE html>
 <html>
-<script src="https://kit.fontawesome.com/410ff7000d.js" crossorigin="anonymous"></script>
-<link href='https://fonts.googleapis.com/css?family=Quicksand' rel='stylesheet'>
-<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 <head>
-   
-    <title>User Profile</title>
-    <style>
-  *{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family: 'Open Sans', sans-serif;
-  }
-  
-  body{
-  
-  background-color:#F5F5F5;
-  /*background-image: url("1261630.jpg");*/
-  background-size:cover;
-  margin:0;
-  margin-top:90px;
-  
-  }
-  
-  li{
-    list-style:none;
-    
-  }
-  
-  li a{
-    text-decoration:none;
-    color:#7A7A7A;
-    font-size:23px;
-    font-weight:550;
-    font-family: 'Open Sans', sans-serif;
-  
-  }
-  
-  a:hover{
-    color:#0C479D;
-  }
-  /*HEADER*/
-	header{
-    position: fixed;
-    z-index: 1000;
-	  width:100%;
-	  top:0;
-	}
-	
-	.logopic{
-	  width:auto;
-	  height:auto;
-	  margin-left:125px;
-	}
-	.logopic img{
-	  width:75px;
-	  height:75px;
-	
-	}
-	
-	.navbar{
-	  padding:0;
-	  height:90px;
-	  margin:0;
-	  display:flex;
-	  align-items:center;
-	  justify-content:space-between;
-	  background-color:#ffffff;
-  }
-	.navbar .logo a {
-	  margin-right: 855px;
-	  font-size:2.0rem;
-	  font-weight:800;
-    color:#0C479D;
-	}
-	
-	.navbar .content {
-	  align-items: center;
-	  width:100%;
-		display: flex;
-		gap: 3rem;
-	}
-	.loginbtn i{
-	margin-left:50px;
-	margin-right:100px;
-	font-size:35px;
-	
-	}
-	/*Dropdown Menu*/
-	.dropbtn {
-	  color: black;
-	  padding: 16px;
-	  font-size: 25px;
-	  
-	}
-	
-	.menu-dropdown {
-	  position: relative;
-	  display: inline-block;
-	  z-index: 1000;
-    
-	}
-	
-	.dropdown-content {
-	  display:none;
-	  position:absolute;
-	  background-color:#ffcccc 0.8;
-	  border:1px dotted black;
-    
-	 
-	
-	}
-	
-	.menu-dropdown:hover .dropdown-content{
-		display: block;
-	}
-	.dropdown-content a {
-	  color: black;
-	  display:block;
-	  padding:20px 10px;
-	
-	}
-	.dropdown-content a:hover{
-	color:#a373fb;
-	box-shadow: 0px 8px 20px black;}
-	
-		/*Footer*/
-    footer {
-      color: #0C479D;
-      background-color:#0C479D;
-      width: 100%;
-      background-color: rgba(0, 0, 0, 0.3);
-      text-align: center;
-      bottom: 0;
-      font-family: "Raleway", sans-serif;
-      font-size:23px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 50px;
-    }
-    
-    .footer-content {
-      display: flex; 
-      flex-wrap: wrap; 
-      width: 100%; 
-    }
-    
-    .about,
-    .contact,
-    .social-media {
-      flex:1;
-      text-align: left; 
-    }
-    .about{
-    margin-left:50px;
-    }	
-    .contact{
-      margin-left:175px;  
-      margin-right:100px;
-    }
-    .social-media{
-    
-      margin-left:50px;
-      text-align:center;
-    }
-    .social-icons{
-    font-size:30px;	
-    text-align:center;
-    }	
-    footer a {
-      text-decoration: none;
-      font-family: "Raleway", sans-serif;
-      color: #444444;
-    }
-    
-    footer a:hover {
-      background-color: white;
-      background: transparent;
-      color: white;
-    }
-   
+<title>Food Help Centre</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Food Bank Website</title>
+<link href="a-profile.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+<!--Font Awesome link [for icon]-->
+<link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet'>
+<!--import the font "Lato" from the Google Fonts service-->
 
-        .profile-container {
-            display: flex;
-            max-width: 800px;
-            margin: 20px auto;
-        }
-
-        .profile-picture {
-            flex: 1;
-            padding: 20px;
-            text-align: center;
-        }
-
-        .profile-picture img {
-            max-width: 100%;
-            border-radius: 50%;
-        }
-
-        .profile-details {
-            flex: 1;
-            padding: 20px;
-        }
-
-        .profile-details h2 {
-            color: #0C479D;
-        }
-
-        .profile-details form {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .profile-details label {
-            margin-bottom: 8px;
-        }
-
-        .profile-details input,
-        .profile-details select {
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
-        .profile-details button {
-            padding: 10px;
-            background-color: #0C479D;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-    </style>
 </head>
 <body>
-
-<header>
- <div class="navbar">
-  <div class="logopic"><img src="logo.png";>
-  </div>
-<div class="logo"><a>DiaCare</a></div>
-
-    <ul class="content">       
-		<li><a href="homepage.php">Home</a></li>
-    <li><a href="calender.php">Calender</a></li>
-
+<!--top nav bar-->
+<div class="menu">
+	<img src="Img/Logo header.png"alt="logo">
+	<p id="logoTitle">Food Help Centre</p>
+     <ul>
+        <li><a href="a-homepage.php">Home</a></li>
+		<li><a href="a-about.html">About</a></li>
+        <li>
+		<a href="#">Services</a>
+		<div class="dropDown">
+		<a href="a-foodbankInfo.php">Food Bank</a>
+		<a href="a-request.php">Requests</a>
+		</div>
+		</li>	
+        <li><a href="a-contact.php">Contact</a></li>
+		<li style="margin-right:0;"><a href="a-login.php">Login</a></li>
+		<li style="margin-right:0;"><a href="a-profile.php">
+		<i class="fas fa-user-circle" style="font-size:23px;"></i></a>
 		</li>
-        <li><a href="Location.php">Record</a></li>
-        <li><a href="aboutus.php">Report</a></li>
-        <li><a href="feedback.php">Feedback</a></li>
-   	</ul>
-    <ul class="loginbtn">
-      <li><a href="accounttype.php"><i class='bx bx-user'></i></a></li>
-    </ul>
-	</div>
-</header>
 
-    <div class="profile-container">
-        <div class="profile-picture">
-            <!-- User can upload their picture -->
-            <img src="default-profile-image.jpg" alt="Profile Picture">
-            <p>User ID: <strong>UserID123</strong></p>
-        </div>
+     </ul>
+</div>
+<div class="container">
 
-        <div class="profile-details">
-            <h2>Edit Profile</h2>
-            <form action="#" method="post" id="profileForm">
-                <label for="diabetesType">Diabetes Type:</label>
-                <select name="diabetesType" id="diabetesType">
-                    <option value="type1">Type 1</option>
-                    <option value="type2">Type 2</option>
-                    <option value="gestational">Gestational</option>
-                </select>
-
-                <label for="firstName">First Name:</label>
-                <input type="text" id="firstName" name="firstName" required>
-
-                <label for="lastName">Last Name:</label>
-                <input type="text" id="lastName" name="lastName" required>
-
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required>
-
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required>
-
-                <label for="sex">Sex:</label>
-                <input type="text" id="sex" name="sex" required>
-
-                <label for="birthdate">Birthdate:</label>
-                <input type="date" id="birthdate" name="birthdate" required>
-
-                <button type="submit">Save Changes</button>
-            </form>
-        </div>
+<!-- Side Navigation Bar -->
+    <div class="sidebar">
+        <a href="?action=acc">My Profile</a>
+        <a href="?action=req">Request History</a>
+		<div class="btn">
+		<button id='deleteButton'><i class='fas fa-trash-alt'>&nbsp </i>Delete Account</button>
+		<button id='logoutButton'><i class='fas fa-sign-out-alt'>&nbsp </i>Logout</button>
+		</div>
     </div>
 
+<div class="content">	
+<!--Pop-up Edit form--> 
+<div id="editFormContainer" class="edit-form-container">
+    <div class="edit-form-content">
+		<h2>Update Personal Details</h2>
+		<!--multiplication sign as close button-->
+        <span class="close" id="closeEditForm">&times;</span>
+        <form action="a-editAcc.php" method="post" id="editForm">
+            <!-- Edit form fields -->
+			<label for="name"><b>Name</b></label>
+            <input type="text" name="newUsername" placeholder="Enter your name" value="<?=$username?>">
+			<label for="age"><b>Age</b></label>
+            <input type="number" name="newAge" placeholder="Enter your age" value="<?=$age?>" oninput="quantityZero(event)">
+			<h2>Change your password</h2>
+			<label for="password"><b>Password</b></label>
+            <input type="text" name="newPw" placeholder="Enter your password" value="<?=$password?>">
+			<div class="update">
+            <button name="submit" id="updateBtn" type="submit"><strong>SAVE CHANGES</strong></button>
+			</div>
+        </form>
+    </div>
+</div>
+
+  
+<!-- user profile -->
+<?php
+
+    // Handle actions based on selected link
+  if (isset($_GET['action'])) {
+    $action = $_GET['action'];
+	switch ($action) {
+		
+		
+//for account	
+case 'acc':
+    echo "<div class='acc'>";
+    echo "<h2>Your Detail</h2>";
+    echo "<form class='accForm'>";
+    echo "<label for='userid'><strong>User ID</strong></label><br> <input type='text' id='userid' value='$userid' readonly><br>";
+    echo "<label for='email'><strong>Email</strong></label><br> <input type='email' id='email' value='$email' readonly><br>";
+    echo "<label for='password'><strong>Password</strong></label><br> <input type='password' id='password' value='$password' readonly><br>";
+    echo "<label for='username'><strong>Username</strong></label><br> <input type='text' id='username' value='$username' readonly>";
+    echo "<label for='age'><strong>Age</strong></label><br> <input type='number' id='age' value='$age' readonly><br>";
+    echo "</form>";
+    echo "<button id='editButton'><i class='fas fa-edit'>&nbsp</i>Edit</button>";
+    echo "</div>";
+    break;
+
+
+//for request history 
+case 'req' : 
+	
+	echo "<h2>Request History</h2>";
+    $userid = $_SESSION['userid'];
+	
+	// Fetch and display user's donation history from the database
+    $sql = "SELECT * FROM foodDonation WHERE accountID = '$userid'";
+    $result = mysqli_query($conn, $sql);
+	
+	if (mysqli_num_rows($result) > 0) {
+        echo "<table class='reqTable'>";
+		 echo "<tr>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Contact Number</th>
+                <th>Address</th>
+                <th>Status</th>
+				<th>View</th>
+              </tr>";
+		
+		
+        while ($row = mysqli_fetch_assoc($result)) {
+            echo "<tr>";
+            echo "<td>" . $row['date'] . "</td>";
+            echo "<td>" . date('g:i a',strtotime($row['time'])) . "</td>";
+            echo "<td>" . $row['contactNum'] . "</td>";
+            echo "<td>" . $row['address'] . ", " . $row['city'] . ", " . $row['postcode'] . ", " . $row['state'] . "</td>";
+            echo "<td>" . $row['status'] . "</td>";
+			echo "<td><a href='?action=viewfood&id=". $row['foodDonationID']."'>&nbsp;&nbsp;<i class='fas fa-info-circle' style='color:#252525'></i></a></td>";
+            echo "</tr>";
+        }
+        echo "</table>";
+    } 
+	else {
+        echo "No donation history found.";
+    }
+    
+    break;
+
+case 'viewfood':
+    if(isset($_GET['id'])){
+        $donationID=$_GET['id'];
+    }
+    $sql="SELECT b.name, a.quantity 
+          FROM fooddonationitem a, fooditem b
+          WHERE a.foodItemID=b.foodItemID
+          AND foodDonationID='$donationID'";
+    $result=mysqli_query($conn,$sql);
+
+    if(mysqli_num_rows($result) > 0)
+    {
+        echo "<div id='foodFormContainer' class='food-form-container'>";
+        echo "    <div class='food-form-content'>";
+        echo "        <h2>Food Donation Details</h2>";
+        echo "        <!--multiplication sign as close button-->";
+        echo "        <span class='close' id='closeEditForm'>&times;</span>";
+        echo "        <table class='reqTable'>";
+        echo "        <tr>
+                          <th>Name</th>
+                          <th>Quantity</th>
+                      </tr>";
+        while($row=mysqli_fetch_assoc($result)){
+            echo "    <tr>";
+            echo "        <td>" . $row['name'] . "</td>";
+            echo "        <td>" . $row['quantity'] . "</td>";
+            echo "    </tr>";
+        }
+        echo "        </table>";
+        echo "        <button id='returnBtn' onclick='window.location.href= `?action=req`'>RETURN</button>";
+        echo "    </div>";
+        echo "</div>";
+
+    }
+    else{
+        echo "No food item history";
+    }
+    
+    break;
+
+default:
+// Display a message if the action is not recognized
+       echo "Invalid action!";
+       break;
+		
+	}
+  }
+?>		
+	
+	
+  </div>
+</div>
+
+<script src="a-profile.js"></script>
 </body>
-<footer>
-  <div class="footer-content">
-    <div class="about">
-      <h3>About Foodbank</h3>
-      <p style="color:white;">ØHungers is a Malaysian NGO food bank collecting <br>and distributing edible food to charities and families.</p>
-    </div>
-    <div class="contact">
-      <h3>Contact Us</h3>
-      <p style="color:white;">Email: ØHungers@gmail.com</p>
-      <p style="color:white;">Phone: +601-2879819</p>
-      <p style="color:white;">Address: 1495 Jalan Kong Kong Batu 26 Ladang Lim Lim 81750 Masai Johor Malaysia</p>
-    </div>
-   
-  <div class="social-media">
-    <h3>Follow Us</h3>
-	    <div class="social-icons">
-	    <a href="#"><i class="fab fa-facebook"></i></a>
-        <a href="#"><i class="fab fa-twitter"></i></a>
-        <a href="#"><i class="fab fa-instagram"></i></a>
-  </div>
-  </div>
-</footer>
 </html>
+
