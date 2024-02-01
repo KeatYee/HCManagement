@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 <script src="https://kit.fontawesome.com/410ff7000d.js" crossorigin="anonymous"></script>
@@ -7,235 +6,7 @@
 <head>
    
     <title>User Profile</title>
-    <style>
-  *{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family: 'Open Sans', sans-serif;
-  }
-  
-  body{
-  
-  background-color:#F5F5F5;
-  /*background-image: url("1261630.jpg");*/
-  background-size:cover;
-  margin:0;
-  margin-top:90px;
-  
-  }
-  
-  li{
-    list-style:none;
-    
-  }
-  
-  li a{
-    text-decoration:none;
-    color:#7A7A7A;
-    font-size:23px;
-    font-weight:550;
-    font-family: 'Open Sans', sans-serif;
-  
-  }
-  
-  a:hover{
-    color:#0C479D;
-  }
-  /*HEADER*/
-	header{
-    position: fixed;
-    z-index: 1000;
-	  width:100%;
-	  top:0;
-	}
-	
-	.logopic{
-	  width:auto;
-	  height:auto;
-	  margin-left:125px;
-	}
-	.logopic img{
-	  width:75px;
-	  height:75px;
-	
-	}
-	
-	.navbar{
-	  padding:0;
-	  height:90px;
-	  margin:0;
-	  display:flex;
-	  align-items:center;
-	  justify-content:space-between;
-	  background-color:#ffffff;
-  }
-	.navbar .logo a {
-	  margin-right: 855px;
-	  font-size:2.0rem;
-	  font-weight:800;
-    color:#0C479D;
-	}
-	
-	.navbar .content {
-	  align-items: center;
-	  width:100%;
-		display: flex;
-		gap: 3rem;
-	}
-	.loginbtn i{
-	margin-left:50px;
-	margin-right:100px;
-	font-size:35px;
-	
-	}
-	/*Dropdown Menu*/
-	.dropbtn {
-	  color: black;
-	  padding: 16px;
-	  font-size: 25px;
-	  
-	}
-	
-	.menu-dropdown {
-	  position: relative;
-	  display: inline-block;
-	  z-index: 1000;
-    
-	}
-	
-	.dropdown-content {
-	  display:none;
-	  position:absolute;
-	  background-color:#ffcccc 0.8;
-	  border:1px dotted black;
-    
-	 
-	
-	}
-	
-	.menu-dropdown:hover .dropdown-content{
-		display: block;
-	}
-	.dropdown-content a {
-	  color: black;
-	  display:block;
-	  padding:20px 10px;
-	
-	}
-	.dropdown-content a:hover{
-	color:#a373fb;
-	box-shadow: 0px 8px 20px black;}
-	
-		/*Footer*/
-    footer {
-      color: #0C479D;
-      background-color:#0C479D;
-      width: 100%;
-      background-color: rgba(0, 0, 0, 0.3);
-      text-align: center;
-      bottom: 0;
-      font-family: "Raleway", sans-serif;
-      font-size:23px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 50px;
-    }
-    
-    .footer-content {
-      display: flex; 
-      flex-wrap: wrap; 
-      width: 100%; 
-    }
-    
-    .about,
-    .contact,
-    .social-media {
-      flex:1;
-      text-align: left; 
-    }
-    .about{
-    margin-left:50px;
-    }	
-    .contact{
-      margin-left:175px;  
-      margin-right:100px;
-    }
-    .social-media{
-    
-      margin-left:50px;
-      text-align:center;
-    }
-    .social-icons{
-    font-size:30px;	
-    text-align:center;
-    }	
-    footer a {
-      text-decoration: none;
-      font-family: "Raleway", sans-serif;
-      color: #444444;
-    }
-    
-    footer a:hover {
-      background-color: white;
-      background: transparent;
-      color: white;
-    }
-   
-
-        .profile-container {
-            display: flex;
-            max-width: 800px;
-            margin: 20px auto;
-        }
-
-        .profile-picture {
-            flex: 1;
-            padding: 20px;
-            text-align: center;
-        }
-
-        .profile-picture img {
-            max-width: 100%;
-            border-radius: 50%;
-        }
-
-        .profile-details {
-            flex: 1;
-            padding: 20px;
-        }
-
-        .profile-details h2 {
-            color: #0C479D;
-        }
-
-        .profile-details form {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .profile-details label {
-            margin-bottom: 8px;
-        }
-
-        .profile-details input,
-        .profile-details select {
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
-        .profile-details button {
-            padding: 10px;
-            background-color: #0C479D;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-    </style>
+ 
 </head>
 <body>
 
@@ -260,12 +31,6 @@
 	</div>
 </header>
 
-    <div class="profile-container">
-        <div class="profile-picture">
-            <!-- User can upload their picture -->
-            <img src="default-profile-image.jpg" alt="Profile Picture">
-            <p>User ID: <strong>UserID123</strong></p>
-        </div>
 
         <div class="profile-details">
             <h2>Edit Profile</h2>
@@ -323,4 +88,60 @@
   </div>
   </div>
 </footer>
+</html>
+
+
+<?php
+session_start(); // Start session
+include 'a-DBconnect.php'; // Include database connection
+
+// Check if the user is logged in
+if (!isset($_SESSION['userid'])) {
+    echo "<script> alert('You need to log in to access the profile page.');";
+    echo "window.location.replace('individuallogin.php');</script>";
+    exit(); // Redirect user to the login page
+}
+
+// Retrieve user information from the session
+$userid = $_SESSION['userid'];
+$email = $_SESSION['email'];
+$password = $_SESSION['password'];
+
+$sql = "SELECT name, age, diabetesType, firstName, lastName, sex, birthdate FROM Account
+        WHERE accountID = '$userid'";
+$result = mysqli_query($conn, $sql);
+
+if ($result) {
+    if ($row = mysqli_fetch_assoc($result)) {
+        $username = $row['name'];
+        $age = $row['age'];
+        $diabetesType = $row['diabetesType'];
+        $firstName = $row['firstName'];
+        $lastName = $row['lastName'];
+        $sex = $row['sex'];
+        $birthdate = $row['birthdate'];
+    } else {
+        // Handle case when no rows are found
+        $username = "N/A";
+        $age = "N/A";
+        $diabetesType = "N/A";
+        $firstName = "N/A";
+        $lastName = "N/A";
+        $sex = "N/A";
+        $birthdate = "N/A";
+    }
+}
+?>
+<script src="a-profile.js"></script>
+    <script>
+        function enableEdit() {
+            document.getElementById("diabetesType").removeAttribute("disabled");
+            document.getElementById("firstName").readOnly = false;
+            document.getElementById("lastName").readOnly = false;
+            document.getElementById("sex").readOnly = false;
+            document.getElementById("birthdate").readOnly = false;
+            document.getElementById("updateBtn").style.display = "block";
+        }
+    </script>
+</body>
 </html>
