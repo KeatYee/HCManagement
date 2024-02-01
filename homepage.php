@@ -48,9 +48,11 @@ session_start(); // Start the session
   <div class="container-con1">
       <h1>Welcome to DiaCare</h1>
       <p>Your Diabetic Journey, Our Priority</p>
-	    <form action="userView.php">
-        <button>START RECORD NOW</button>
-      </form>
+      <div class="recordBtn">
+      <a href="record.php">
+      <button id="recordBtn">START RECORD NOW</button></a>
+      </div>
+        
   </div>
 
   <div class="container-con3">

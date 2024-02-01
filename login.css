@@ -35,31 +35,31 @@ background-color: #ffffff;
 z-index: 2;
 }
 
-.nav-links{
+nav .nav-links{
 display:flex;
 align-items: flex-end;
 }
 
-.nav-links li a{
+nav .nav-links li a{
 color:#7A7A7A;
 font-weight:550;
 font-size: 1.5rem;
 margin:5px 15px;
 }
 
-.nav-links li a:hover,
-.nav-links li a.active{
+nav .nav-links li a:hover,
+nav .nav-links li a.active{
 color:#0C479D;
 }
 
 /*Hamburger*/
-.hamburger{
+nav .hamburger{
 margin-left:20px;
 cursor:pointer;
 display:none;
 } 
 
-.hamburger div{
+nav .hamburger div{
 width:30px;
 height:2px;
 margin:6px 0;
@@ -134,7 +134,7 @@ nav{
 }
 
 }
-          /*Footer*/
+/*Footer*/
       footer {
         color: #0C479D;
         background-color:#0C479D;

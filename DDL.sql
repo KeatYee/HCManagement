@@ -60,8 +60,8 @@ CREATE TABLE MedicationReminder (
     medID INT REFERENCES Medicine(medID),
     ssn CHAR(5) REFERENCES Users(ssn),
     dosage INT(5),
-    date DATE,
-    time TIME,
+    sDate DATETIME,
+    eDate DATETIME,
     remType VARCHAR(10)
 );
 
@@ -69,8 +69,8 @@ CREATE TABLE MedicationReminder (
 CREATE TABLE BSTestingAlert (
     testingID INT PRIMARY KEY AUTO_INCREMENT,
     ssn CHAR(5) REFERENCES Users(ssn),
-    date DATE,
-    time TIME,
+    sDate DATETIME,
+    eDate DATETIME,
     alertType VARCHAR(10)
 );
 

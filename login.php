@@ -33,7 +33,7 @@ $name="";
         
            $row = mysqli_fetch_assoc($result);
 
-           if ($_POST['password'] == $row['password']){
+        if ($_POST['password'] == $row['password']){
 			   
 			   // Set a session variable to indicate successful login
 				$_SESSION['loginSuccess'] = true;

@@ -3,7 +3,8 @@
 
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="feedback.css" rel="stylesheet">
+<title>diaCare</title>  
+<link href="feedback.css" rel="stylesheet">
   <!--Include Google Fonts - Quicksand-->
   <link href='https://fonts.googleapis.com/css?family=Quicksand' rel='stylesheet'>
   <!--Font Awesome Icons-->
