@@ -59,6 +59,7 @@ CREATE TABLE MedicationReminder (
     medRemID INT PRIMARY KEY AUTO_INCREMENT,
     medID INT REFERENCES Medicine(medID),
     ssn CHAR(5) REFERENCES Users(ssn),
+    title VARCHAR(50),
     dosage INT(5),
     sDate DATETIME,
     eDate DATETIME,
@@ -69,6 +70,7 @@ CREATE TABLE MedicationReminder (
 CREATE TABLE BSTestingAlert (
     testingID INT PRIMARY KEY AUTO_INCREMENT,
     ssn CHAR(5) REFERENCES Users(ssn),
+    title VARCHAR(50),
     sDate DATETIME,
     eDate DATETIME,
     alertType VARCHAR(10)
@@ -78,7 +80,7 @@ CREATE TABLE BSTestingAlert (
 CREATE TABLE Appointment (
     apptID INT PRIMARY KEY AUTO_INCREMENT,
     ssn CHAR(5) REFERENCES Users(ssn),
-    name VARCHAR(50),
+    title VARCHAR(50),
     sDate DATETIME,
     eDate DATETIME,
     location VARCHAR(100),

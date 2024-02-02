@@ -3,19 +3,19 @@ session_start();// Start session
 include 'DBconnect.php'; // Include database connection
 
 // Check if the user is logged in
-if (!isset($_SESSION['userid'])) {
+if (!isset($_SESSION['ssn'])) {
     echo "<script> alert('You need to log in to access the profile page.');";
-	echo "window.location.replace('a-login.php');</script>";
+	echo "window.location.replace('login.php');</script>";
     exit(); //redirect user to login page
 }
 
    // Retrieve user information from the session
-	$userid = $_SESSION['userid'];
+	$ssn = $_SESSION['ssn'];
 	$email = $_SESSION['email'];
 	$password = $_SESSION['password']; 
 	
-	$sql = "SELECT name, age FROM Account
-			WHERE accountID = '$userid'";
+	$sql = "SELECT name, age FROM Users
+			WHERE ssn = '$ssn'";
 	$result = mysqli_query($conn, $sql);
 	
 	if ($result) {

@@ -12,7 +12,42 @@ if (!isset($_SESSION['ssn'])) {
 // Retrieve user information from the session
 $ssn = $_SESSION['ssn'];
 
-$fetch_event = mysqli_query($conn, "SELECT * FROM Appointment");
+$fetch_event1 = mysqli_query($conn, "SELECT * FROM Appointment");
+$fetch_event2 = mysqli_query($conn, "SELECT * FROM medicationReminder");
+$fetch_event3 = mysqli_query($conn, "SELECT * FROM bsTestingAlert");
+
+// Combine the results of all queries
+$combined_events = array();
+
+while ($result = mysqli_fetch_array($fetch_event1)) {
+  $combined_events[] = array(
+      'title' => $result['title'],
+      'start' => date('c', strtotime($result['sDate'])),
+      'end' => date('c', strtotime($result['eDate'])),
+      'color' => '#f1ffc4',
+      'textColor' => 'black',
+  );
+}
+
+while ($result = mysqli_fetch_array($fetch_event2)) {
+  $combined_events[] = array(
+      'title' => $result['title'],
+      'start' => date('c', strtotime($result['sDate'])),
+      'end' => date('c', strtotime($result['eDate'])),
+      'color' => '#a7bed3', 
+      'textColor' => 'black', 
+  );
+}
+
+while ($result = mysqli_fetch_array($fetch_event3)) {
+  $combined_events[] = array(
+      'title' => $result['title'],
+      'start' => date('c', strtotime($result['sDate'])),
+      'end' => date('c', strtotime($result['eDate'])),
+      'color' => '#ffcaaf', 
+      'textColor' => 'black', 
+  );    
+}
 ?>
 
 <!DOCTYPE html>
@@ -77,33 +112,40 @@ $fetch_event = mysqli_query($conn, "SELECT * FROM Appointment");
 $(document).ready(function() {
 
    $('#calendar').fullCalendar({
-        header:
-        {
+      header:
+      {
            left: 'month, agendaWeek, agendaDay, list',
            center: 'title',
            right: 'prev, today, next'
-        },
-        buttonText:
-        {
+      },
+      buttonText:
+      {
            today: 'Today',
            month: 'Month',
            week: 'Week',
            day: 'Day',
            list: 'List'
-        },
-        events:[
-       <?php
-       while($result = mysqli_fetch_array($fetch_event))
-       { ?>
-      {
-          title: '<?php echo $result['name']; ?>',
-          start: '<?php echo $result['sDate']; ?>',
-          end: '<?php echo $result['eDate']; ?>',
-          color: 'yellow',
-          textColor: 'black'
-       },
-      <?php } ?>
-      ]
+      },
+      events: <?php echo json_encode($combined_events); ?>,
+      editable: true, // Enables dragging and resizing events
+      eventDrop: function(event) {
+    // This function is called when an event is dropped
+
+    var start = $.fullCalendar.formatDate(event.start, "Y-MM-DD HH:mm:ss");
+    var end = $.fullCalendar.formatDate(event.end, "Y-MM-DD HH:mm:ss");
+    var title = event.title;
+    var id = event.id;
+
+    // Send AJAX request to update.php with event details
+    $.ajax({
+        url: "updateEvent.php",
+        type: "POST",
+        data: { title: title, start: start, end: end, id: id },
+        success: function() {
+            alert("Event Updated Successfully");
+        }
+    });
+}
 
     });
 });
