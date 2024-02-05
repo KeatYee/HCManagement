@@ -143,26 +143,48 @@ nav{
   margin:50px auto;
 }
 
-.buttons{
+a{
+  text-decoration:none;
+  color: #fff;
+}
+
+a:hover{
+  text-decoration:none;
+  color: #fff;
+}
+
+.btn-container {
+  cursor: pointer;
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+  font-size: 3em;
+  color: #fff;
+  background: #db4437;
+  height: 56px;
+  width: 56px;
+  border-radius: 100%;
   display: flex;
-  justify-content: center;
   align-items: center;
-  margin-bottom: 20px;
+  justify-content: center;
+  box-shadow: 0px 0px 15px #888;
 }
 
-#addBtn{
-  padding:20px 40px;
-  border:none;
-  background-color: bisque;
-  color:#ffffff;
-  border-radius: 25px;
-  margin:auto;
+.btn-container::after {
+  content: 'Create Event';
+  font-size: .4em;
+  opacity: 0;
+  position: absolute;
+  left: -76px;
+  padding: 3px;
+  border-radius: 3px;
+  background: #666;
+  transition: 0.2s;
 }
 
-#addBtn:hover{
-  color: bisque;
-  background-color:#ffffff;
-  border-color: burlywood;
+.btn-container:hover::after {
+  opacity: 1;
+  left: -96px;
 }
  /*Footer*/
 footer {

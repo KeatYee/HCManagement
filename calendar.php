@@ -12,40 +12,46 @@ if (!isset($_SESSION['ssn'])) {
 // Retrieve user information from the session
 $ssn = $_SESSION['ssn'];
 
-$fetch_event1 = mysqli_query($conn, "SELECT * FROM Appointment");
-$fetch_event2 = mysqli_query($conn, "SELECT * FROM medicationReminder");
-$fetch_event3 = mysqli_query($conn, "SELECT * FROM bsTestingAlert");
+$fetch_event1 = mysqli_query($conn, "SELECT * FROM Appointment WHERE ssn = '$ssn'");
+$fetch_event2 = mysqli_query($conn, "SELECT * FROM medicationReminder WHERE ssn = '$ssn'");
+$fetch_event3 = mysqli_query($conn, "SELECT * FROM bsTestingAlert WHERE ssn = '$ssn'");
 
 // Combine the results of all queries
 $combined_events = array();
 
 while ($result = mysqli_fetch_array($fetch_event1)) {
   $combined_events[] = array(
+      'id' => $result['apptID'], 
       'title' => $result['title'],
       'start' => date('c', strtotime($result['sDate'])),
       'end' => date('c', strtotime($result['eDate'])),
       'color' => '#f1ffc4',
       'textColor' => 'black',
+      'eventType' => 'Appointment',
   );
 }
 
 while ($result = mysqli_fetch_array($fetch_event2)) {
   $combined_events[] = array(
+      'id' => $result['medRemID'], 
       'title' => $result['title'],
       'start' => date('c', strtotime($result['sDate'])),
       'end' => date('c', strtotime($result['eDate'])),
       'color' => '#a7bed3', 
       'textColor' => 'black', 
+      'eventType' => 'medicationReminder', 
   );
 }
 
 while ($result = mysqli_fetch_array($fetch_event3)) {
   $combined_events[] = array(
+      'id' => $result['testingID'],   
       'title' => $result['title'],
       'start' => date('c', strtotime($result['sDate'])),
       'end' => date('c', strtotime($result['eDate'])),
       'color' => '#ffcaaf', 
       'textColor' => 'black', 
+      'eventType' => 'bsTestingAlert',
   );    
 }
 ?>
@@ -102,52 +108,114 @@ while ($result = mysqli_fetch_array($fetch_event3)) {
 <div class="container">
    <div id="calendar"></div>
 </div>
-<div class="buttons">
-<a href="addEvent.php">
-    <button id="addBtn">Add</button>
-</a>
+<div class="btn-container">
+  <a href="addEvent.php">+</a>
 </div>
+
 
 <script>
 $(document).ready(function() {
 
-   $('#calendar').fullCalendar({
-      header:
-      {
-           left: 'month, agendaWeek, agendaDay, list',
-           center: 'title',
-           right: 'prev, today, next'
+  $('#calendar').fullCalendar({
+    header:
+    {
+      left: 'month, agendaWeek, agendaDay, list',
+      center: 'title',
+      right: 'prev, today, next'
       },
-      buttonText:
-      {
-           today: 'Today',
-           month: 'Month',
-           week: 'Week',
-           day: 'Day',
-           list: 'List'
-      },
-      events: <?php echo json_encode($combined_events); ?>,
-      editable: true, // Enables dragging and resizing events
-      eventDrop: function(event) {
+    buttonText:
+    {
+      today: 'Today',
+      month: 'Month',
+      week: 'Week',
+      day: 'Day',
+      list: 'List'
+    },
+    events: <?php echo json_encode($combined_events); ?>,
+    selectable: true, // Allows selecting a date/time range
+    selectHelper: true, // Renders a placeholder event while dragging
+    select: function(start, end, allDay) {
+      // Format the selected date range
+      var formattedStart = moment(start).format("YYYY-MM-DD HH:mm:ss");
+      var formattedEnd = moment(end).format("YYYY-MM-DD HH:mm:ss");
+
+      // Redirect to add event page
+      window.location.href = "addEvent.php?start=" + formattedStart + "&end=" + formattedEnd;
+},
+    editable: true, // Enables dragging and resizing events
+    eventDrop: function(event, delta, revertFunc) {
     // This function is called when an event is dropped
 
-    var start = $.fullCalendar.formatDate(event.start, "Y-MM-DD HH:mm:ss");
-    var end = $.fullCalendar.formatDate(event.end, "Y-MM-DD HH:mm:ss");
-    var title = event.title;
-    var id = event.id;
+    alert(event.title + " was dropped on " + event.start.format());
+      if (!confirm("Are you sure about this change?")) {
+        revertFunc();
+      }
+      else {
+        var start = $.fullCalendar.formatDate(event.start, "Y-MM-DD HH:mm:ss");
+        var end = $.fullCalendar.formatDate(event.end, "Y-MM-DD HH:mm:ss");
+        var title = event.title;
+        var id = event.id;
+        var eventType = event.eventType;
 
-    // Send AJAX request to update.php with event details
-    $.ajax({
+        // Send AJAX request to updateEvent.php with event details
+        $.ajax({
         url: "updateEvent.php",
         type: "POST",
-        data: { title: title, start: start, end: end, id: id },
-        success: function() {
+        data: { title: title, start: start, end: end, id: id, eventType: eventType },
+          success: function() {
             alert("Event Updated Successfully");
-        }
-    });
-}
+          }
+        });
+      }
 
-    });
+    },
+    eventOverlap: true,
+    eventResize: function(event, delta, revertFunc) {
+    // This function is called when an event is resized
+      alert(event.title + " end is now " + event.end.format());
+      if (!confirm("Are you sure about this change?")) {
+        revertFunc();
+      }
+      else {
+        var start = $.fullCalendar.formatDate(event.start, "Y-MM-DD HH:mm:ss");
+        var end = $.fullCalendar.formatDate(event.end, "Y-MM-DD HH:mm:ss");
+        var title = event.title;
+        var id = event.id;
+        var eventType = event.eventType;
+
+        // Send AJAX request to updateEvent.php with event details
+        $.ajax({
+        url: "updateEvent.php",
+        type: "POST",
+        data: { title: title, start: start, end: end, id: id, eventType: eventType },
+          success: function() {
+            alert("Event Updated Successfully");
+          }
+        });
+      }
+    },
+    eventClick: function(event) {
+    // This function is called when an event is clicked
+
+      if (confirm("Are you sure you want to remove it?")) {
+        var id = event.id;
+        var eventType = event.eventType;
+
+        // Send AJAX request to deleteEvent.php with event details
+        $.ajax({
+          url: "deleteEvent.php",
+          type: "POST",
+          data: { id: id, eventType: eventType },
+          success: function() {
+            alert("Event removed successfully");
+            window.location.reload();
+          }
+        });
+      }
+    }
+
+
+  });
 });
 </script> 
 
@@ -195,3 +263,4 @@ if (isset($_SESSION['addSuccess']) && $_SESSION['addSuccess']) {
   <script src="app.js"></script> 
 </body>
 </html>
+

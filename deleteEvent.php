@@ -1,4 +1,4 @@
-<?php
+<?php 
 session_start();
 include('DBconnect.php');
 
@@ -13,19 +13,17 @@ if (!isset($_SESSION['ssn'])) {
 // Retrieve user information from the session
 $ssn = $_SESSION['ssn'];
 
+
 // Check if the required parameters are present in the POST request
-if (!isset($_POST['title'], $_POST['start'], $_POST['end'], $_POST['id'], $_POST['eventType'])) {
+if (!isset($_POST['id'], $_POST['eventType'])) {
     echo "Missing required parameters.";
     exit();
 }
 else{
-	$title = $_POST['title'];
-	$start_date = $_POST['start'];
-	$end_date = $_POST['end'];
-	$id = $_POST['id'];
+    $id = $_POST['id'];
 	$eventType = $_POST['eventType'];
 
-	$primaryKeyColumn = '';
+    $primaryKeyColumn = '';
     switch ($eventType) {
         case 'Appointment':
             $primaryKeyColumn = 'apptID';
@@ -40,12 +38,9 @@ else{
             echo "Unknown event type";
             exit();
     }
-
-    $sql="UPDATE $eventType 
-		  SET title = '$title',sDate = '$start_date', eDate = '$end_date' 
-		  WHERE $primaryKeyColumn = '$id' AND ssn = '$ssn'";
-
-	$update_query = mysqli_query($conn,$sql );
+    $sql="DELETE FROM $eventType 
+          WHERE $primaryKeyColumn='$id'";
+    $delete_query = mysqli_query($conn,$sql );
 
 }
 
