@@ -105,6 +105,23 @@ while ($result = mysqli_fetch_array($fetch_event3)) {
 </nav>
 </header>
 <body>
+
+<div class="sidebar bar-block" style="display:none" id="mySidebar">
+  <button class="bar-item btnClose" onclick="closeNav()">Close &times;</button>
+  <a href="#" class="bar-item">Calendar</a>
+  <a href="#" class="bar-item">Today's</a>
+  <a href="#" class="bar-item">Link 3</a>
+</div>
+ 
+<div class="btnSidebar">
+  <button id="openNav" class="button btnOpen" onclick="openNav()">
+  <i class='bx bxs-right-arrow'></i>
+  </button>
+</div>
+
+
+<div id="main">
+
 <div class="container">
    <div id="calendar"></div>
 </div>
@@ -112,6 +129,20 @@ while ($result = mysqli_fetch_array($fetch_event3)) {
   <a href="addEvent.php">+</a>
 </div>
 
+</div>
+<script>
+function openNav() {
+  document.getElementById("main").style.marginLeft = "25%";
+  document.getElementById("mySidebar").style.width = "25%";
+  document.getElementById("mySidebar").style.display = "block";
+  document.getElementById("openNav").style.display = 'none';
+}
+function closeNav() {
+  document.getElementById("main").style.marginLeft = "0%";
+  document.getElementById("mySidebar").style.display = "none";
+  document.getElementById("openNav").style.display = "inline-block";
+}
+</script>
 
 <script>
 $(document).ready(function() {

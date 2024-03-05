@@ -22,7 +22,8 @@ if (isset($_GET['start']) && isset($_GET['end'])) {
 //Appointment-------------------
 if(isset($_POST['submitAppt'])) {
 
-    if (!empty($_POST['eventTitle']) && !empty($_POST['eventStartDate']) && !empty($_POST['eventEndDate']) && !empty($_POST['location']) && !empty($_POST['reminderType'])) {
+    if (!empty($_POST['eventTitle']) && !empty($_POST['eventStartDate']) 
+    && !empty($_POST['eventEndDate']) && !empty($_POST['location']) && !empty($_POST['reminderType'])) {
 
         // Perform database insertion for appointment
         $title = $_POST['eventTitle'];
@@ -83,8 +84,8 @@ if(isset($_POST['submitMed'])) {
         $dosage = $_POST['dosage'];
         $remType = $_POST['reminderType'];
 
-        $sql = "INSERT INTO MedicationReminder(ssn, medID, title, sDate, eDate, dosage, remType)
-                VALUES('$ssn', '$medicine', '$title', '$startDate', '$endDate', '$dosage', '$remType')";
+        $sql = "INSERT INTO MedicationReminder(medID, ssn, title, dosage, sDate, eDate, remType)
+                VALUES('$medicine', '$ssn', '$title', '$dosage', '$startDate', '$endDate', '$remType')";
         $result = mysqli_query($conn, $sql);
 
         if (!$result) {
@@ -110,8 +111,57 @@ if(isset($_POST['submitMed'])) {
         if (empty($_POST['eventEndDate'])) {
             $endError = "Please select an end date.";
         }
-        if (empty($_POST['location'])) {
-            $locError = "Please enter location.";
+        if (empty($_POST['medicine'])) {
+            $locError = "Please choose your medicine.";
+        }
+        if (empty($_POST['dosage'])) {
+            $locError = "Please enter medicine dosage.";
+        }
+        if (empty($_POST['reminderType'])) {
+            $remError = "Please choose a reminder type.";
+        }
+
+    }
+}
+
+//Blood Sugar Testing Alert-------------------
+if(isset($_POST['submitBS'])) {
+
+    if (!empty($_POST['eventTitle']) && !empty($_POST['eventStartDate']) && !empty($_POST['eventEndDate'])
+     && !empty($_POST['reminderType'])) {
+
+        // Perform database insertion for appointment
+        $title = $_POST['eventTitle'];
+        $startDate = date("Y-m-d\TH:i:s", strtotime($_POST['eventStartDate']));
+        $endDate = date("Y-m-d\TH:i:s", strtotime($_POST['eventEndDate']));
+        $remType = $_POST['reminderType'];
+
+        $sql = "INSERT INTO BSTestingAlert(ssn, title, sDate, eDate, alertType)
+                VALUES('$ssn', '$title', '$startDate', '$endDate', '$remType')";
+        $result = mysqli_query($conn, $sql);
+
+        if (!$result) {
+            die('Error: ' . mysqli_error($conn));
+        }
+        else{
+            // Set a session variable to indicate event added successful
+			$_SESSION['addSuccess'] = true;
+
+            header("Location:calendar.php");
+            exit();
+        }
+
+    }
+    else {
+        // Handle validation error for appointment
+        if (empty($_POST['eventTitle'])) {
+            $titleError = "Please enter a title.";
+        }
+        if (empty($_POST['eventStartDate'])) {
+            $startError = "Please select a start date.";
+        }
+        if (empty($_POST['eventEndDate'])) {
+            $endError = "Please select an end date.";
         }
         if (empty($_POST['reminderType'])) {
             $remError = "Please choose a reminder type.";
@@ -245,18 +295,30 @@ if(isset($_POST['submitMed'])) {
 </div>
 
 <script>
+    // Function to switch between forms
     function showForm(index) {
         var forms = document.querySelectorAll('.form');
-        forms.forEach(function(form, i) {
-            form.style.display = (i === index) ? 'block' : 'none';
+        var tabs = document.querySelectorAll('.tab');
+
+        // Hide all forms and reset tab colors
+        forms.forEach(function(form) {
+            form.style.display = 'none';
+        });
+        tabs.forEach(function(tab) {
+            tab.style.backgroundColor = '#f0f0f0';
         });
 
-        var tabs = document.querySelectorAll('.tab');
-        tabs.forEach(function(tab, i) {
-            tab.style.backgroundColor = (i === index) ? '#ddd' : '#f0f0f0';
-        });
+        // Show the selected form and set tab color
+        forms[index].style.display = 'block';
+        tabs[index].style.backgroundColor = '#ddd';
     }
+    
+    // Call showForm with index 0 to display the default form on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        showForm(0);
+    });
 </script>
+
 
 </body>
 </html>

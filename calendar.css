@@ -139,6 +139,58 @@ nav{
 
 
 /*Body*/
+/* Style for the sidebar */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -250px; /* Hide the sidebar off-screen */
+  width: 250px;
+  height: 100%;
+  background-color: blue; /* Example background color */
+  transition: left 0.3s ease;
+  z-index: 1000; /* Ensure the sidebar is above other content */
+}
+
+/* Style for the sidebar items */
+.sidebar .bar-item {
+  color: white; /* Example text color */
+  display: block;
+  padding: 10px 20px;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.sidebar .bar-item:hover {
+  background-color: #444; /* Example hover background color */
+}
+
+/* Style for the button with the right arrow icon */
+.sidebar {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 1000; /* Ensure the button is above other content */
+}
+
+.sidebar button {
+  background-color: #008080; /* Example button color */
+  color: white; /* Example text color */
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.sidebar button:hover {
+  background-color: #006666; /* Example hover button color */
+}
+
+/* Style for the right arrow icon */
+.sidebar button i {
+  font-size: 24px; /* Example icon size */
+}
+
 .container{
   margin:50px auto;
 }
@@ -155,9 +207,10 @@ a:hover{
 
 .btn-container {
   cursor: pointer;
-  position: absolute;
+  position: fixed;
   right: 20px;
   bottom: 20px;
+  z-index: 999;
   font-size: 3em;
   color: #fff;
   background: #db4437;
@@ -201,7 +254,36 @@ footer {
         align-items: center;
         padding: 50px;
 }
-      
+
+/* Style the calendar buttons */
+.fc-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-right: 5px;
+}
+
+/* Style the today button differently */
+.fc-today-button {
+  background-color: #28a745;
+}
+
+/* Style the prev and next buttons */
+.fc-prev-button,
+.fc-next-button {
+  background-color: #dc3545;
+}
+
+/* Style the button text */
+.fc-button span {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+
 .footer-content {
         display: flex; 
         flex-wrap: wrap; 

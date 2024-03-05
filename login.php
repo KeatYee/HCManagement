@@ -19,11 +19,10 @@ $name="";
   }
 
   if(isset($_POST['submit'])) {//Validate submit
-	if(!empty($_POST['email']) && !empty($_POST['password']) && !empty($_POST['username'])) {
+	if(!empty($_POST['email']) && !empty($_POST['password'])) {
     
         $email = $_POST['email']; 
         $pass = $_POST['password'];
-        $name = $_POST['username'];
 
         $sql = "SELECT * FROM Users WHERE email='$email'";
         $result = mysqli_query($conn,$sql);
@@ -41,7 +40,6 @@ $name="";
                   $_SESSION['ssn'] = $row['ssn']; 
                   $_SESSION['email'] = $row['email']; 
                   $_SESSION['password'] = $row['password']; 
-                  $_SESSION['username'] = $row['name'];
   
                   header("Location:homepage.php");
                   exit();
@@ -72,8 +70,6 @@ $name="";
             $emailerror= "Email is required";
         }
     
-    
-    
         if(!empty($_POST['password'])){
             
             $pattern='/^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#%$&])[0-9A-Za-z!@#$%&]{8,12}$/'; //(?=.*[A-Za-z]) means at least one A-Za-z, 
@@ -87,22 +83,6 @@ $name="";
         }
         else{	
             $passerror= "Password is required";
-        }
-
-
-        if(!empty($_POST['username'])){
-            
-            $pattern='/^[a-zA-Z0-9]{5,}$/'; // for english chars + numbers only
-                                            // valid username, alphanumeric & longer than or equals 5 chars
-                                                                                      
-            if(preg_match($pattern,$_POST['username'])) {//Validate username    
-                $name=$_POST['username'];
-            }
-            else{
-                $nameerror= "Username at least 5 characters long and alphanumeric";}//Alert message red
-        }
-        else{	
-            $nameerror= "Username is required";
         }
 
     }
@@ -157,13 +137,6 @@ mysqli_close($conn);
     <div class="login">
         <form action="login.php" method="POST">
 	    <h2>LOG IN</h2>
-	
-	    <div class="input-box">
-	        <input type="text" placeholder="Username" name="username" value="<?=$name?>">
-		    <i class='bx bx-user'></i>
-            <?php if(!empty($nameerror)){?>
-            <p class="error"><?php echo "$nameerror";}?></p>
-	    </div>
 
 	    <div class="input-box">
 		    <input type="email" placeholder="Email" name="email" value="<?=$email?>">
