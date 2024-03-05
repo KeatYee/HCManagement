@@ -292,6 +292,11 @@ input[type=number], input[type=email]{
 }
 
 /*med*/
+#addMedBtn{
+	cursor: pointer;
+	padding:20px;
+}
+
 div.gallery {
 	border: 1px solid #ccc;
   }
@@ -309,6 +314,11 @@ div.gallery {
   div.desc {
 	padding: 15px;
 	text-align: center;
+  }
+
+  div.name{
+	padding:15px;
+	text-align: left;
   }
 
   .med {

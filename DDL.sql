@@ -46,13 +46,10 @@ CREATE TABLE Report (
 CREATE TABLE Medicine (
     medID INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(255),
-    description VARCHAR(255)
+    description VARCHAR(255),
+    image MEDIUMBLOB
 );
---for testing purpose:
-INSERT INTO Medicine (name, description)
-VALUES  ("Med A", "A medicine for diabetes"),
-		("Med B", "Whatever"),
-        ("Med C", "Okay");
+
 
 -- MedicationReminder Table
 CREATE TABLE MedicationReminder (

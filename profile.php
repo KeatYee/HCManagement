@@ -116,7 +116,7 @@ if (!isset($_SESSION['ssn'])) {
     <span class="close" onclick="closeEditForm('editNameForm')">&times;</span>
       <form action="editAcc.php" method="post" id="editForm">
 			  <label for="name"><b>Name</b></label>
-        <input type="text" name="newName" placeholder="Enter your name" value="<?=$name?>">
+        <input type="text" name="newName" placeholder="Enter your name" value="<?=$name?>" id="name">
 			  <div class="update">
           <button name="submitName" id="updateBtn" type="submit"><strong>SAVE CHANGES</strong></button>
 			  </div>
@@ -130,7 +130,7 @@ if (!isset($_SESSION['ssn'])) {
     <span class="close" onclick="closeEditForm('editBirthdateForm')">&times;</span>
       <form action="editAcc.php" method="post" id="editForm">
 			  <label for="birthdate"><b>Birthdate</b></label>
-        <input type="date" name="newBirthdate" value="<?=$birthdate?>">
+        <input type="date" name="newBirthdate" value="<?=$birthdate?>" id="birthdate">
 			  <div class="update">
           <button name="submitBd" id="updateBtn" type="submit"><strong>SAVE CHANGES</strong></button>
 			  </div>
@@ -144,8 +144,8 @@ if (!isset($_SESSION['ssn'])) {
     <span class="close" onclick="closeEditForm('editSexForm')">&times;</span>
       <form action="editAcc.php" method="post" id="editForm">
 			  <label for="sex"><b>Sex</b></label>
-        <input type="radio" name="newSex" value="M"><label for="sex">Male</label>
-        <input type="radio" name="newSex" value="F"><label for="sex">Female</label>
+        <input type="radio" name="newSex" value="M" id="sex"><label for="sex">Male</label>
+        <input type="radio" name="newSex" value="F" id="sex"><label for="sex">Female</label>
 			  <div class="update">
           <button name="submitSex" id="updateBtn" type="submit"><strong>SAVE CHANGES</strong></button>
 			  </div>
@@ -159,11 +159,29 @@ if (!isset($_SESSION['ssn'])) {
     <span class="close" onclick="closeEditForm('editDiabetesForm')">&times;</span>
       <form action="editAcc.php" method="post" id="editForm">
 			  <label for="diabetesType"><b>Diabetes Type</b></label>
-        <input type="radio" name="newDiabetesType" value="Type 1"><label for="diabetesType">Type 1</label>
-        <input type="radio" name="newDiabetesType" value="Type 2"><label for="diabetesType">Type 2</label>
-        <input type="radio" name="newDiabetesType" value="GDM"><label for="diabetesType">GDM</label>
+        <input type="radio" name="newDiabetesType" value="Type 1" id="diabetesType"><label for="diabetesType">Type 1</label>
+        <input type="radio" name="newDiabetesType" value="Type 2" id="diabetesType"><label for="diabetesType">Type 2</label>
+        <input type="radio" name="newDiabetesType" value="GDM" id="diabetesType"><label for="diabetesType">GDM</label>
 			  <div class="update">
           <button name="submitDT" id="updateBtn" type="submit"><strong>SAVE CHANGES</strong></button>
+			  </div>
+      </form>
+  </div>
+</div>
+
+<div id="addMedForm" class="edit-form-container">
+  <div class="edit-form-content">
+	<h2>Add Your Medicine</h2>
+    <span class="close" onclick="closeEditForm('addMedForm')">&times;</span>
+      <form action="addMed.php" method="post" id="editForm" enctype="multipart/form-data">
+			  <label for="medName"><b>Name</b></label>
+        <input type="text" name="name" id="medName">
+        <label for="medDesc"><b>Description</b></label>
+        <input type="text" name="desc" id="medDesc">
+        <label for="medPic"><b>Image</b></label>
+        <input type="file" name="file" value="" id="medPic">
+			  <div class="update">
+          <button name="submit" id="updateBtn" type="submit"><strong>ADD</strong></button>
 			  </div>
       </form>
   </div>
@@ -212,52 +230,32 @@ case 'today' :
 case 'med' : 
   
   echo "<h2>Medication</h2>";
+  echo "<button id='addMedBtn' onclick=\"openEditForm('addMedForm')\">Add</button>";
 
-  echo "<><>";
+// Fetch data from the database
+$query = "SELECT * FROM Medicine"; // Modify this query according to your database structure
+$result = mysqli_query($conn, $query);
 
-  echo "<div class='med'>";
-    echo "<div class='gallery'>";
+// Check if there are any rows in the result
+if(mysqli_num_rows($result) > 0) {
+    // Loop through each row of data
+    while($row = mysqli_fetch_assoc($result)) {
+        // Output HTML dynamically using the fetched data
+        echo "<div class='med'>";
+        echo "<div class='gallery'>";
+        echo "<a target='_blank' href=''>";
+        echo "<img src='data:image/jpeg;base64," . base64_encode($row['image']) . "' alt='Medicine Image' width='600' height='400'>";
+        echo "</a>";
+        echo "<div class='name'>" . $row['name'] . "</div>";
+        echo "<div class='desc'>" . $row['description'] . "</div>";
+        echo "</div>";
+        echo "</div>";
+    }
+} else {
+    // Output a message if no rows are found in the database
+    echo "No data found";
+}
 
-      echo "<a target='_blank' href=''>";
-      echo"<img src='Img/bglogin.jpg' alt='Cinque Terre' width='600' height='400'>";
-      echo"</a>";
-      echo"<div class='desc'>Add a description of the image here</div>";
-
-    echo"</div>";
-  echo "</div>";
-
-  echo "<div class='med'>";
-    echo "<div class='gallery'>";
-
-      echo "<a target='_blank' href=''>";
-      echo"<img src='Img/bglogin.jpg' alt='Cinque Terre' width='600' height='400'>";
-      echo"</a>";
-      echo"<div class='desc'>Add a description of the image here</div>";
-
-    echo"</div>";
-  echo "</div>";
-
-  echo "<div class='med'>";
-    echo "<div class='gallery'>";
-
-      echo "<a target='_blank' href=''>";
-      echo"<img src='Img/bglogin.jpg' alt='Cinque Terre' width='600' height='400'>";
-      echo"</a>";
-      echo"<div class='desc'>Add a description of the image here</div>";
-
-    echo"</div>";
-  echo "</div>";
-
-  echo "<div class='med'>";
-  echo "<div class='gallery'>";
-
-    echo "<a target='_blank' href=''>";
-    echo"<img src='Img/bglogin.jpg' alt='Cinque Terre' width='600' height='400'>";
-    echo"</a>";
-    echo"<div class='desc'>Add a description of the image here</div>";
-
-  echo"</div>";
-echo "</div>";
 
   echo "<div class='clearfix'></div>";
 
