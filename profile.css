@@ -292,56 +292,86 @@ input[type=number], input[type=email]{
 }
 
 /*med*/
-#addMedBtn{
-	cursor: pointer;
-	padding:20px;
+div.addMedBtn {
+    display: flex;
+    justify-content: flex-end; /* Align button to the right */
 }
 
-div.gallery {
-	border: 1px solid #ccc;
-  }
-  
-  div.gallery:hover {
-	border: 1px solid #777;
-  }
-  
-  div.gallery img {
-	width: 100%;
-	height: auto;
+#addMedBtn {
+    cursor: pointer;
+    padding: 20px;
+}
 
-  }
-  
-  div.desc {
-	padding: 15px;
-	text-align: center;
-  }
+div.med-container {
+    display: flex;
+    flex-wrap: wrap; 
+	box-sizing: border-box;
+	cursor:pointer;
+}
 
-  div.name{
-	padding:15px;
-	text-align: left;
-  }
+div.med {
+	position: relative; /* Set position relative for absolute positioning of the delete button */
+    border: 1px solid #ccc;
+    padding: 6px;
+    margin: 4px;
+    flex: 1; /* Distribute available space equally among items */
+    max-width: 24.99999%; /* Limit width to fit four items in a row */
+    box-sizing: border-box; /* Include padding in the width calculation */
+    text-align: center; /* Center the content */ /* Include padding in the width calculation */
+}
 
-  .med {
-	padding: 0 6px;
-	float: left;
-	width: 24.99999%;
-  }
+div.med:hover {
+    border: 1px solid #777;
+}
 
-  @media only screen and (max-width: 900px) {
-	.med {
-	  width: 49.99999%;
-	  margin: 6px 0;
-	}
-  }
-  
-  @media only screen and (max-width: 500px) {
-	.med {
-	  width: 100%;
-	}
-  }
+div.med img {
+    width: 100%;
+    height: auto;
+}
 
-  .clearfix:after {
-	content: "";
-	display: table;
-	clear: both;
-  }
+div.name,
+div.desc {
+    padding: 15px;
+}
+
+div.name {
+    text-align: left;
+}
+
+div.desc {
+    text-align: center;
+}
+.deleteBtn {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    display: none; /* Initially hidden */
+}
+
+.med:hover .deleteBtn {
+    display: block; /* Show delete button on hover */
+}
+
+.med:hover .desc,
+.med:hover .name,
+.med:hover img {
+    display: none;
+}
+
+@media only screen and (max-width: 900px) {
+    div.med {
+        max-width: 49.99999%; /* Adjust width for medium-sized screens */
+    }
+}
+
+@media only screen and (max-width: 500px) {
+    div.med {
+        max-width: 100%; /* Adjust width for small screens */
+    }
+}

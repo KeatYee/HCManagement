@@ -92,6 +92,18 @@ CREATE TABLE Records (
     date DATE,
     recordType VARCHAR(20)
 );
+-- INSERT statements for Records table
+INSERT INTO Records (ssn, time, date, recordType) VALUES
+('U2072', '08:30:00', '2024-03-01', 'Blood Sugar'),
+('U2072', '09:45:00', '2024-03-02', 'Blood Sugar'),
+('U2072', '10:15:00', '2024-03-03', 'Blood Sugar'),
+('U2072', '11:30:00', '2024-03-04', 'Blood Sugar'),
+('U2072', '12:45:00', '2024-03-05', 'Blood Sugar'),
+('U2072', '13:15:00', '2024-03-06', 'Blood Sugar'),
+('U2072', '14:30:00', '2024-03-07', 'Blood Sugar'),
+('U2072', '15:45:00', '2024-03-08', 'Blood Sugar'),
+('U2072', '16:15:00', '2024-03-09', 'Blood Sugar'),
+('U2072', '17:30:00', '2024-03-10', 'Blood Sugar');
 
 -- MedicationIntake Table
 CREATE TABLE MedicationIntake (
@@ -138,3 +150,16 @@ CREATE TABLE BloodSugar (
     value DECIMAL(5,2),
     timing VARCHAR(20)
 );
+
+-- INSERT statements for BloodSugar table
+INSERT INTO BloodSugar (recordID, value, timing) VALUES
+(1, 120.5, 'Fasting'),
+(2, 110.8, 'Before Meal'),
+(3, 130.3, 'After Meal'),
+(4, 140.6, 'Bedtime'),
+(5, 125.2, 'Fasting'),
+(6, 115.7, 'Before Meal'),
+(7, 128.9, 'After Meal'),
+(8, 135.4, 'Bedtime'),
+(9, 145.1, 'Fasting'),
+(10, 118.6, 'Before Meal');

@@ -17,12 +17,31 @@ document.getElementById("logoutButton").addEventListener("click", function() {
     
 });
 
-    // Delete button click event listener
+// Delete button click event listener
 document.getElementById("deleteButton").addEventListener("click", function() {
    if (confirm("Are you sure you want to delete your account?")) {
         window.location.href = "deleteAcc.php";
     }
 });
+
+// Delete medicine click event listener
+function deleteMedicine(medID) {
+    if (confirm("Are you sure you want to delete this medicine?")) {
+        var form = document.createElement('form');
+        form.method = 'POST';
+        form.action = 'deleteMedicine.php'; 
+
+        var input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'id';
+        input.value = medID;
+        form.appendChild(input);
+
+        document.body.appendChild(form);
+        form.submit();
+    }
+}
+
 
 window.onload = function() {
     var currentAction = window.location.search;
