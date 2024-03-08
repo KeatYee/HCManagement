@@ -274,10 +274,7 @@ default:
 		
 	}
 }
-else{
-  // Default action if no action is specified
-  $action = 'acc';
-}
+
 ?>		
 	
 	

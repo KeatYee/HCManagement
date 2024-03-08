@@ -108,9 +108,9 @@ while ($result = mysqli_fetch_array($fetch_event3)) {
 
 <div class="sidebar bar-block" style="display:none" id="mySidebar">
   <button class="bar-item btnClose" onclick="closeNav()">Close &times;</button>
-  <a href="#" class="bar-item">Calendar</a>
-  <a href="#" class="bar-item">Today's</a>
-  <a href="#" class="bar-item">Link 3</a>
+  <a href="?action=calendar" class="bar-item">Calendar</a>
+  <a href="?action=today" class="bar-item">Today's</a>
+  <a href="?action=all" class="bar-item">All Events</a>
 </div>
  
 <div class="btnSidebar">
@@ -121,13 +121,54 @@ while ($result = mysqli_fetch_array($fetch_event3)) {
 
 
 <div id="main">
+<?php
 
-<div class="container">
-   <div id="calendar"></div>
-</div>
-<div class="btn-container">
-  <a href="addEvent.php">+</a>
-</div>
+    // Handle actions based on selected link
+if (isset($_GET['action'])) {
+$action = $_GET['action'];
+switch ($action) {
+  case 'calendar':
+  echo"<div class='container'>";
+    echo"<div id='calendar'></div>";
+  echo"</div>";
+  echo"<div class='btn-container'>";
+    echo"<a href='addEvent.php'>+</a>";
+  echo"</div>";
+    break;
+
+  case 'today':
+    echo"<h2>Today's Reminder</h2>";
+    $sql="SELECT * FROM (
+      SELECT *, 'MedicationReminder' AS eventType FROM MedicationReminder
+      WHERE DATE(sDate) <= CURDATE() AND DATE(eDate) >= CURDATE()
+      UNION ALL
+      SELECT *, 'BSTestingAlert' AS eventType FROM BSTestingAlert
+      WHERE DATE(sDate) <= CURDATE() AND DATE(eDate) >= CURDATE()
+      UNION ALL
+      SELECT *, 'Appointment' AS eventType FROM Appointment
+      WHERE DATE(sDate) <= CURDATE() AND DATE(eDate) >= CURDATE()
+  ) AS all_events
+  ORDER BY sDate;
+
+  $result = mysqli_query($conn, $sql);
+
+  
+
+
+  
+    ";
+    break;
+
+  case 'all':
+    break;
+
+  default:
+  // Display a message if the action is not recognized
+    echo "Invalid action!";
+    break;
+}
+}
+?>
 
 </div>
 <script>
@@ -223,6 +264,7 @@ $(document).ready(function() {
             alert("Event Updated Successfully");
           }
         });
+
       }
     },
     eventClick: function(event) {
@@ -292,6 +334,7 @@ if (isset($_SESSION['addSuccess']) && $_SESSION['addSuccess']) {
 </footer>
   <!--Hamburger-->
   <script src="app.js"></script> 
+  <script src="calendar.js"></script>
 </body>
 </html>
 

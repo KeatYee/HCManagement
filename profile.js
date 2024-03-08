@@ -1,3 +1,13 @@
+
+window.onload = function() {
+    var currentAction = window.location.search;
+    if (currentAction.indexOf('action=acc') === -1 &&
+        currentAction.indexOf('action=med') === -1 &&
+        currentAction.indexOf('action=today') === -1) {
+        window.location.href = '?action=acc';
+    }
+};
+
 // Show the edit form pop-up according input
 function openEditForm(formId) {
     var editFormContainer = document.getElementById(formId);
@@ -43,13 +53,5 @@ function deleteMedicine(medID) {
 }
 
 
-window.onload = function() {
-    var currentAction = window.location.search;
-    if (currentAction.indexOf('action=acc') === -1 &&
-        currentAction.indexOf('action=med') === -1 &&
-        currentAction.indexOf('action=today') === -1) {
-        window.location.href = '?action=acc';
-    }
-};
 
 
