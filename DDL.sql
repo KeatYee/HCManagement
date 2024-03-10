@@ -60,7 +60,8 @@ CREATE TABLE MedicationReminder (
     dosage INT(5),
     sDate DATETIME,
     eDate DATETIME,
-    remType VARCHAR(10)
+    remType VARCHAR(10),
+    status INT(1)
 );
 
 -- BSTestingAlert Table

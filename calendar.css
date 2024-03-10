@@ -139,21 +139,34 @@ nav{
 
 
 /*Body*/
-/* Style for the sidebar */
+.container{
+  margin:50px auto;
+}
+
+.sidebar-notif{
+  margin:0 auto;
+}
+
+.navbar-right {
+  float: right ;
+  margin-right: -15px;
+}
+
+/* sidebar */
 .sidebar {
   position: fixed;
   top: 0;
   left: -250px; /* Hide the sidebar off-screen */
   width: 250px;
   height: 100%;
-  background-color: blue; /* Example background color */
+  background-color: #F0EDCF; 
   transition: left 0.3s ease;
   z-index: 1000; /* Ensure the sidebar is above other content */
 }
 
-/* Style for the sidebar items */
+/* sidebar items */
 .sidebar .bar-item {
-  color: white; /* Example text color */
+  color: white; 
   display: block;
   padding: 10px 20px;
   text-decoration: none;
@@ -161,10 +174,10 @@ nav{
 }
 
 .sidebar .bar-item:hover {
-  background-color: #444; /* Example hover background color */
+  background-color: #444; 
 }
 
-/* Style for the button with the right arrow icon */
+/* button with the right arrow icon */
 .sidebar {
   position: fixed;
   top: 20px;
@@ -173,8 +186,8 @@ nav{
 }
 
 .sidebar button {
-  background-color: #008080; /* Example button color */
-  color: white; /* Example text color */
+  background-color: #008080; 
+  color: white; 
   border: none;
   padding: 10px 20px;
   border-radius: 5px;
@@ -183,28 +196,30 @@ nav{
 }
 
 .sidebar button:hover {
-  background-color: #006666; /* Example hover button color */
+  background-color: #006666; 
 }
 
-/* Style for the right arrow icon */
+/* right arrow icon */
 .sidebar button i {
-  font-size: 24px; /* Example icon size */
+  font-size: 24px; 
 }
 
-.container{
-  margin:50px auto;
-}
 
-a{
+.btn-container a{
   text-decoration:none;
   color: #fff;
 }
 
-a:hover{
+.btn-container a:hover{
   text-decoration:none;
   color: #fff;
 }
 
+#openNav{
+  margin-top:12px;
+}
+
+/* Add Button */
 .btn-container {
   cursor: pointer;
   position: fixed;
@@ -239,23 +254,8 @@ a:hover{
   opacity: 1;
   left: -96px;
 }
- /*Footer*/
-footer {
-        color: #0C479D;
-        background-color:#0C479D;
-        width: 100%;
-        background-color: rgba(0, 0, 0, 0.3);
-        text-align: center;
-        bottom: 0;
-        font-family: "Raleway", sans-serif;
-        font-size:23px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 50px;
-}
 
-/* Style the calendar buttons */
+/* calendar buttons */
 .fc-button {
   background-color: #007bff;
   color: white;
@@ -266,23 +266,38 @@ footer {
   margin-right: 5px;
 }
 
-/* Style the today button differently */
+/* today button differently */
 .fc-today-button {
   background-color: #28a745;
 }
 
-/* Style the prev and next buttons */
+/*  prev and next buttons */
 .fc-prev-button,
 .fc-next-button {
   background-color: #dc3545;
 }
 
-/* Style the button text */
+/* button text */
 .fc-button span {
   font-size: 14px;
   font-weight: bold;
 }
 
+ /*Footer*/
+ footer {
+  color: #0C479D;
+  background-color:#0C479D;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.3);
+  text-align: center;
+  bottom: 0;
+  font-family: "Raleway", sans-serif;
+  font-size:23px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 50px;
+}
 
 .footer-content {
         display: flex; 
@@ -290,12 +305,12 @@ footer {
         width: 100%; 
 }
       
-      .about,
-      .contact,
-      .social-media {
-        flex:1;
-        text-align: left; 
-      }
+.about,
+.contact,
+.social-media {
+  flex:1;
+  text-align: left; 
+}      
       .about{
       margin-left:50px;
       }	

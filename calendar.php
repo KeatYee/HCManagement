@@ -73,9 +73,12 @@ while ($result = mysqli_fetch_array($fetch_event3)) {
 
     <!--Font Awesome Icons-->
     <script src="https://kit.fontawesome.com/410ff7000d.js" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.js"></script> 
+    
 </head>
 <!--top nav bar-->
 <header>
@@ -106,6 +109,11 @@ while ($result = mysqli_fetch_array($fetch_event3)) {
 </header>
 <body>
 
+
+
+
+<div class="sidebar-notif">
+
 <div class="sidebar bar-block" style="display:none" id="mySidebar">
   <button class="bar-item btnClose" onclick="closeNav()">Close &times;</button>
   <a href="?action=calendar" class="bar-item">Calendar</a>
@@ -113,17 +121,29 @@ while ($result = mysqli_fetch_array($fetch_event3)) {
   <a href="?action=all" class="bar-item">All Events</a>
 </div>
  
-<div class="btnSidebar">
+<div class="openNav-notif">
   <button id="openNav" class="button btnOpen" onclick="openNav()">
   <i class='bx bxs-right-arrow'></i>
   </button>
+
+  <ul class="nav navbar-nav navbar-right">
+     <li class="dropdown">
+      <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+        <span class="label label-pill label-danger count" style="border-radius:10px;"></span> 
+        <span class="glyphicon glyphicon-bell" style="font-size:18px;"></span>
+      </a>
+      <ul class="dropdown-menu"></ul>
+     </li>
+  </ul>
+
 </div>
 
+</div>
 
 <div id="main">
 <?php
 
-    // Handle actions based on selected link
+// Handle actions based on selected link
 if (isset($_GET['action'])) {
 $action = $_GET['action'];
 switch ($action) {
@@ -137,26 +157,39 @@ switch ($action) {
     break;
 
   case 'today':
-    echo"<h2>Today's Reminder</h2>";
-    $sql="SELECT * FROM (
-      SELECT *, 'MedicationReminder' AS eventType FROM MedicationReminder
-      WHERE DATE(sDate) <= CURDATE() AND DATE(eDate) >= CURDATE()
-      UNION ALL
-      SELECT *, 'BSTestingAlert' AS eventType FROM BSTestingAlert
-      WHERE DATE(sDate) <= CURDATE() AND DATE(eDate) >= CURDATE()
-      UNION ALL
-      SELECT *, 'Appointment' AS eventType FROM Appointment
-      WHERE DATE(sDate) <= CURDATE() AND DATE(eDate) >= CURDATE()
-  ) AS all_events
-  ORDER BY sDate;
+    echo"<h2 style='padding-left: 30px;'>Today's Reminder</h2>";
+    $sql = "SELECT mr.*, m.name AS medicine_name, m.description AS medicine_description, m.image AS medicine_image 
+    FROM MedicationReminder mr
+    JOIN Medicine m ON mr.medID = m.medID
+    WHERE DATE(mr.sDate) <= CURDATE() AND DATE(mr.eDate) >= CURDATE() AND ssn = '$ssn'";
 
-  $result = mysqli_query($conn, $sql);
+$result = mysqli_query($conn, $sql);
 
-  
+if ($result) {
+if (mysqli_num_rows($result) > 0) {
+    echo '<div style="display: flex; flex-wrap: wrap;">'; // Start flexbox container
 
+    // Output data of each row
+    while ($row = mysqli_fetch_assoc($result)) {
+        echo '<div style="border: 1px solid #ccc; padding: 10px; margin: 10px;">'; // Start individual reminder box
+        echo "<p><strong>Medication Reminder ID:</strong> " . $row["medRemID"] . "</p>";
+        echo "<p><strong>Medication Name:</strong> " . $row["medicine_name"] . "</p>";
+        echo "<p><strong>Description:</strong> " . $row["medicine_description"] . "</p>";
+        echo "<p><strong>Dosage:</strong> " . $row["dosage"] . "</p>";
+        echo "<p><strong>Start Date:</strong> " . $row["sDate"] . "</p>";
+        echo "<p><strong>End Date:</strong> " . $row["eDate"] . "</p>";
+        echo "<p><strong>Reminder Type:</strong> " . $row["remType"] . "</p>";
+        echo '</div>'; // End individual reminder box
+    }
 
-  
-    ";
+    echo '</div>'; // End flexbox container
+} else {
+    echo "No reminders for today.";
+}
+} else {
+echo "Error: " . mysqli_error($conn);
+}
+
     break;
 
   case 'all':
@@ -334,7 +367,56 @@ if (isset($_SESSION['addSuccess']) && $_SESSION['addSuccess']) {
 </footer>
   <!--Hamburger-->
   <script src="app.js"></script> 
+
+  <!--Calendar javascript-->
   <script src="calendar.js"></script>
+
+<!--Push Notification-->
+<script>
+
+$(document).ready(function(){
+
+// updating the view with notifications using ajax
+
+function load_unseen_notification(view = ''){
+
+ $.ajax({
+
+  url:"fetchData.php",
+  method:"POST",
+  data:{view:view},
+  dataType:"json",
+  success:function(data){
+
+   $('.dropdown-menu').html(data.notification);
+
+   if(data.unseen_notification > 0){
+    $('.count').html(data.unseen_notification);
+   }
+
+  }
+
+ });
+
+}
+
+load_unseen_notification();
+// load new notifications
+
+$(document).on('click', '.dropdown-toggle', function(){
+
+$('.count').html('');
+load_unseen_notification('yes');
+
+});
+
+setInterval(function(){
+  load_unseen_notification();;
+}, 5000);
+
+});
+
+</script>
 </body>
 </html>
 

@@ -196,7 +196,7 @@ if(isset($_POST['submitBS'])) {
 
 <div class="forms">
     <div class="form" id="form1">
-        <!-- Form 1 content goes here -->
+        <!-- Healthcare Appointment -->
         <h2>Appointment</h2>
         <form id="eventForm" action="addEvent.php" method="POST">
 
@@ -223,7 +223,7 @@ if(isset($_POST['submitBS'])) {
     </div>
 
     <div class="form" id="form2">
-        <!-- Form 2 content goes here -->
+        <!-- Mediction Reminder -->
         <h2>Medication Reminder</h2>
         <form id="eventForm" action="addEvent.php" method="POST">
 
@@ -267,8 +267,8 @@ if(isset($_POST['submitBS'])) {
     </div>
 
     <div class="form" id="form3">
-        <!-- Form 3 content goes here -->
-        <h2>Appointment</h2>
+        <!-- Blood Sugar Testing Reminder -->
+        <h2>Blood Sugar Testing</h2>
         <form id="eventForm" action="addEvent.php" method="POST">
 
         <label for="eventTitle">Event Title:</label>
@@ -295,28 +295,29 @@ if(isset($_POST['submitBS'])) {
 </div>
 
 <script>
-    // Function to switch between forms
-    function showForm(index) {
-        var forms = document.querySelectorAll('.form');
-        var tabs = document.querySelectorAll('.tab');
+// Function to switch between forms
+function showForm(index) {
+    var forms = document.querySelectorAll('.form');
+    var tabs = document.querySelectorAll('.tab');
 
-        // Hide all forms and reset tab colors
-        forms.forEach(function(form) {
-            form.style.display = 'none';
-        });
-        tabs.forEach(function(tab) {
-            tab.style.backgroundColor = '#f0f0f0';
-        });
-
-        // Show the selected form and set tab color
-        forms[index].style.display = 'block';
-        tabs[index].style.backgroundColor = '#ddd';
-    }
-    
-    // Call showForm with index 0 to display the default form on page load
-    document.addEventListener('DOMContentLoaded', function() {
-        showForm(0);
+    // Hide all forms and reset tab colors
+    forms.forEach(function(form) {
+        form.style.display = 'none';
     });
+    tabs.forEach(function(tab) {
+        tab.style.backgroundColor = '#f0f0f0';
+    });
+
+    // Show the selected form and set tab color
+    forms[index].style.display = 'block';
+    tabs[index].style.backgroundColor = '#ddd';
+}
+    
+// Call showForm with index 0 to display the default form on page load
+document.addEventListener('DOMContentLoaded', function() {
+    showForm(0);
+});
+
 </script>
 
 

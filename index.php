@@ -34,6 +34,7 @@
   </form>
 
   <a href="notif.php"><button>CHECK NOTIF</button></a>
+  <a href="homepage.php"><button>Homepage</button></a>
 
 
  </div>
