@@ -192,4 +192,46 @@
      
 
       
-     
+      .record-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      
+      .record-container h2 {
+        margin-bottom: 10px;
+      }
+      
+      .record-container label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+      }
+      
+      .record-container input[type="text"],
+      .record-container input[type="number"],
+      .record-container input[type="time"] {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+      }
+      
+      .record-container input[type="radio"] {
+        margin-right: 10px;
+      }
+      
+      .record-container input[type="submit"] {
+        padding: 10px 20px;
+        background-color: #0C479D;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      
+      .record-container input[type="submit"]:hover {
+        background-color: #083167;
+      }

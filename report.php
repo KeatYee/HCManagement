@@ -19,7 +19,7 @@ $sql = "SELECT r.date, bs.timing, AVG(bs.value) AS average_value
         FROM Records r
         INNER JOIN BloodSugar bs ON r.recordID = bs.recordID
         WHERE r.recordType = 'Blood Sugar'
-        GROUP BY r.date, bs.timing";
+        GROUP BY r.date, bs.timing"; //**put the date range, use today's date
 $result = $conn->query($sql);
 
 // Initialize an array to store the formatted data

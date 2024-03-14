@@ -204,19 +204,7 @@ echo "Error: " . mysqli_error($conn);
 ?>
 
 </div>
-<script>
-function openNav() {
-  document.getElementById("main").style.marginLeft = "25%";
-  document.getElementById("mySidebar").style.width = "25%";
-  document.getElementById("mySidebar").style.display = "block";
-  document.getElementById("openNav").style.display = 'none';
-}
-function closeNav() {
-  document.getElementById("main").style.marginLeft = "0%";
-  document.getElementById("mySidebar").style.display = "none";
-  document.getElementById("openNav").style.display = "inline-block";
-}
-</script>
+
 
 <script>
 $(document).ready(function() {
@@ -371,52 +359,9 @@ if (isset($_SESSION['addSuccess']) && $_SESSION['addSuccess']) {
   <!--Calendar javascript-->
   <script src="calendar.js"></script>
 
-<!--Push Notification-->
-<script>
+  <!--Push Notification-->
+  <script src="pushNotif.js"></script>
 
-$(document).ready(function(){
-
-// updating the view with notifications using ajax
-
-function load_unseen_notification(view = ''){
-
- $.ajax({
-
-  url:"fetchData.php",
-  method:"POST",
-  data:{view:view},
-  dataType:"json",
-  success:function(data){
-
-   $('.dropdown-menu').html(data.notification);
-
-   if(data.unseen_notification > 0){
-    $('.count').html(data.unseen_notification);
-   }
-
-  }
-
- });
-
-}
-
-load_unseen_notification();
-// load new notifications
-
-$(document).on('click', '.dropdown-toggle', function(){
-
-$('.count').html('');
-load_unseen_notification('yes');
-
-});
-
-setInterval(function(){
-  load_unseen_notification();;
-}, 5000);
-
-});
-
-</script>
 </body>
 </html>
 

@@ -27,7 +27,7 @@ else{
 
 	$primaryKeyColumn = '';
     switch ($eventType) {
-        case 'Appointment':
+        case 'appointment':
             $primaryKeyColumn = 'apptID';
             break;
         case 'medicationReminder':

@@ -71,7 +71,8 @@ CREATE TABLE BSTestingAlert (
     title VARCHAR(50),
     sDate DATETIME,
     eDate DATETIME,
-    alertType VARCHAR(10)
+    alertType VARCHAR(10),
+    status INT(1)
 );
 
 -- Appointment Table
@@ -82,7 +83,8 @@ CREATE TABLE Appointment (
     sDate DATETIME,
     eDate DATETIME,
     location VARCHAR(100),
-    remType VARCHAR(10)
+    remType VARCHAR(10),
+    status INT(1)
 );
 
 -- Records Table
