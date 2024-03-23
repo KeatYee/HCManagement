@@ -114,29 +114,32 @@ while ($result = mysqli_fetch_array($fetch_event3)) {
 
 <div class="sidebar-notif">
 
-<div class="sidebar bar-block" style="display:none" id="mySidebar">
-  <button class="bar-item btnClose" onclick="closeNav()">Close &times;</button>
-  <a href="?action=calendar" class="bar-item">Calendar</a>
-  <a href="?action=today" class="bar-item">Today's</a>
-  <a href="?action=all" class="bar-item">All Events</a>
-</div>
- 
-<div class="openNav-notif">
-  <button id="openNav" class="button btnOpen" onclick="openNav()">
-  <i class='bx bxs-right-arrow'></i>
-  </button>
+  <!--sidebar link-->
+  <div class="sidebar bar-block" style="display:none" id="mySidebar">
+    <button class="bar-item btnClose" onclick="closeNav()">Close &times;</button>
+    <a href="?action=calendar" class="bar-item">Calendar</a>
+    <a href="?action=today" class="bar-item">Today's</a>
+    <a href="?action=all" class="bar-item">All Events</a>
+  </div>
 
-  <ul class="nav navbar-nav navbar-right">
-     <li class="dropdown">
-      <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-        <span class="label label-pill label-danger count" style="border-radius:10px;"></span> 
-        <span class="glyphicon glyphicon-bell" style="font-size:18px;"></span>
-      </a>
-      <ul class="dropdown-menu"></ul>
-     </li>
-  </ul>
+  <!--sidebar icon-->
+  <div class="openNav-notif">
+      <button id="openNav" class="button btnOpen" onclick="openNav()">
+        <i class='bx bxs-right-arrow'></i>
+      </button>
 
-</div>
+      <!--notification icon-->
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+          <span class="label label-pill label-danger count" style="border-radius:10px;"></span> 
+          <span class="glyphicon glyphicon-bell" style="font-size:18px;"></span>
+          </a>
+          <ul class="dropdown-menu"></ul>
+        </li>
+      </ul>
+
+  </div>
 
 </div>
 

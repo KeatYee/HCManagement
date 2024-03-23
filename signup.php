@@ -6,34 +6,35 @@ session_start();
  $pass="";
  $name="";
  
- if(isset($_POST['submit'])){ //Validate submit
+if(isset($_POST['submit'])){ //Validate submit
 	if(!empty($_POST['email'])){
         if(filter_var($_POST['email'],FILTER_VALIDATE_EMAIL)){ //Validate email
             $email=$_POST['email'];
 			
 		}	
-        else{
+    else{
             $emailerror= "Email format is incorrect!";//Alert message red
 		}
-    }
-    else{
+  }
+  else{
         $emailerror= "Email is required";
 	}
 	
 	if(!empty($_POST['password'])){
 		
-        $pattern='/^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#%&])[0-9A-Za-z!@#$%&]{8,12}$/'; //(?=.*[A-Za-z]) means at least one A-Za-z, 
+    $pattern='/^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#%&])[0-9A-Za-z!@#$%&]{8,12}$/'; //(?=.*[A-Za-z]) means at least one A-Za-z, 
                                                                                    //!@#$%& as special character, {8,12} 8-12character
-        if(preg_match($pattern,$_POST['password'])){ //Validate password
-            $pass=$_POST['password'];
-        }
-        else{
-            $passerror= "Password at least 8-12 with a uppercase, 
-                  lowercase, number and special character!";//Alert message red
-		}		  
+    if(preg_match($pattern,$_POST['password'])){ //Validate password
+        $pass = password_hash($_POST['password'], PASSWORD_DEFAULT);// Password hashing
+
     }
     else{
-        $passerror= "Password is required";
+      $passerror= "Password at least 8-12 with a uppercase, 
+                  lowercase, number and special character!";//Alert message red
+		}		  
+  }
+  else{
+    $passerror= "Password is required";
 	}
 	
     if(!empty($_POST['username'])){
@@ -59,10 +60,10 @@ session_start();
         $count=mysqli_num_rows($result);
 
         if($count > 0) {
-            $errormsg="Email is already used";
+            $emailerror="Email is already used";
             $email="";
-        }
-		else {
+  }
+	else {
             $code=rand(1,9999);
             $ssn="U".$code;
             $sql="INSERT INTO Users(ssn,name,email,password)
@@ -79,10 +80,10 @@ session_start();
         }
 		
 		
-    }
+  }
 	
     
- }	
+}	
  
 // Close the database connection
 mysqli_close($conn);

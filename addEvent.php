@@ -22,8 +22,41 @@ if (isset($_GET['start']) && isset($_GET['end'])) {
 //Appointment-------------------
 if(isset($_POST['submitAppt'])) {
 
-    if (!empty($_POST['eventTitle']) && !empty($_POST['eventStartDate']) 
-    && !empty($_POST['eventEndDate']) && !empty($_POST['location']) && !empty($_POST['reminderType'])) {
+    // Validation for appointment
+    $titleError = $startError = $endError = $locError = $remError = "";
+    $hasErrors = false;
+
+    if (empty($_POST['eventTitle'])) {
+        $titleError = "Please enter a title.";
+        $hasErrors = true;
+    }
+    if (empty($_POST['eventStartDate'])) {
+        $startError = "Please select a start date.";
+        $hasErrors = true;
+    }
+    if (empty($_POST['eventEndDate'])) {
+        $endError = "Please select an end date.";
+        $hasErrors = true;
+    }
+    if (empty($_POST['location'])) {
+        $locError = "Please enter location.";
+        $hasErrors = true;
+    }
+    if (empty($_POST['reminderType'])) {
+        $remError = "Please choose a reminder type.";
+        $hasErrors = true;
+    }
+    //Check if start date is earlier than end date
+    if (!empty($_POST['eventStartDate']) && !empty($_POST['eventEndDate'])) {
+        $startDate = strtotime($_POST['eventStartDate']);
+        $endDate = strtotime($_POST['eventEndDate']);
+        if ($startDate >= $endDate) {
+            $endError = "End date must be later than start date.";
+            $hasErrors = true;
+        }
+    }
+
+    if (!$hasErrors) {
 
         // Perform database insertion for appointment
         $title = $_POST['eventTitle'];
@@ -48,33 +81,52 @@ if(isset($_POST['submitAppt'])) {
         }
 
     }
-    else {
-        // Handle validation error for appointment
-        if (empty($_POST['eventTitle'])) {
-            $titleError = "Please enter a title.";
-        }
-        if (empty($_POST['eventStartDate'])) {
-            $startError = "Please select a start date.";
-        }
-        if (empty($_POST['eventEndDate'])) {
-            $endError = "Please select an end date.";
-        }
-        if (empty($_POST['location'])) {
-            $locError = "Please enter location.";
-        }
-        if (empty($_POST['reminderType'])) {
-            $remError = "Please choose a reminder type.";
-        }
-
-    }
 }
 
 
 //Medication Reminder-------------------
 if(isset($_POST['submitMed'])) {
 
-    if (!empty($_POST['eventTitle']) && !empty($_POST['eventStartDate']) && !empty($_POST['eventEndDate'])
-     && !empty($_POST['medicine']) && !empty($_POST['dosage']) && !empty($_POST['reminderType'])) {
+    // Validation for appointment
+    $titleError = $startError = $endError = $medError = $dsgError = $remError = "";
+    $hasErrors = false;
+
+    // Handle validation error for appointment
+    if (empty($_POST['eventTitle'])) {
+        $titleError = "Please enter a title.";
+        $hasErrors = true;
+    }
+    if (empty($_POST['eventStartDate'])) {
+        $startError = "Please select a start date.";
+        $hasErrors = true;
+    }
+    if (empty($_POST['eventEndDate'])) {
+        $endError = "Please select an end date.";
+        $hasErrors = true;
+    }
+    if (empty($_POST['medicine'])) {
+        $medError = "Please choose your medicine.";
+        $hasErrors = true;
+    }
+    if (empty($_POST['dosage'])) {
+        $dsgError = "Please enter medicine dosage.";
+        $hasErrors = true;
+    }
+    if (empty($_POST['reminderType'])) {
+        $remError = "Please choose a reminder type.";
+        $hasErrors = true;
+    }
+    //Check if start date is earlier than end date
+    if (!empty($_POST['eventStartDate']) && !empty($_POST['eventEndDate'])) {
+        $startDate = strtotime($_POST['eventStartDate']);
+        $endDate = strtotime($_POST['eventEndDate']);
+        if ($startDate >= $endDate) {
+            $endError = "End date must be later than start date.";
+            $hasErrors = true;
+        }
+    }
+
+    if (!$hasError) {
 
         // Perform database insertion for appointment
         $title = $_POST['eventTitle'];
@@ -100,35 +152,41 @@ if(isset($_POST['submitMed'])) {
         }
 
     }
-    else {
-        // Handle validation error for appointment
-        if (empty($_POST['eventTitle'])) {
-            $titleError = "Please enter a title.";
-        }
-        if (empty($_POST['eventStartDate'])) {
-            $startError = "Please select a start date.";
-        }
-        if (empty($_POST['eventEndDate'])) {
-            $endError = "Please select an end date.";
-        }
-        if (empty($_POST['medicine'])) {
-            $locError = "Please choose your medicine.";
-        }
-        if (empty($_POST['dosage'])) {
-            $locError = "Please enter medicine dosage.";
-        }
-        if (empty($_POST['reminderType'])) {
-            $remError = "Please choose a reminder type.";
-        }
-
-    }
 }
 
 //Blood Sugar Testing Alert-------------------
 if(isset($_POST['submitBS'])) {
+      // Validation for appointment
+      $titleError = $startError = $endError = $remError = "";
+      $hasErrors = false;  
 
-    if (!empty($_POST['eventTitle']) && !empty($_POST['eventStartDate']) && !empty($_POST['eventEndDate'])
-     && !empty($_POST['reminderType'])) {
+    if (empty($_POST['eventTitle'])) {
+        $titleError = "Please enter a title.";
+        $hasErrors = true;  
+    }
+    if (empty($_POST['eventStartDate'])) {
+        $startError = "Please select a start date.";
+        $hasErrors = true;  
+    }
+    if (empty($_POST['eventEndDate'])) {
+        $endError = "Please select an end date.";
+        $hasErrors = true;  
+    }
+    if (empty($_POST['reminderType'])) {
+        $remError = "Please choose a reminder type.";
+        $hasErrors = true;  
+    }
+    //Check if start date is earlier than end date
+    if (!empty($_POST['eventStartDate']) && !empty($_POST['eventEndDate'])) {
+        $startDate = strtotime($_POST['eventStartDate']);
+        $endDate = strtotime($_POST['eventEndDate']);
+        if ($startDate >= $endDate) {
+            $endError = "End date must be later than start date.";
+            $hasErrors = true;  
+        }
+    }
+
+    if (!$hasError) {
 
         // Perform database insertion for appointment
         $title = $_POST['eventTitle'];
@@ -149,22 +207,6 @@ if(isset($_POST['submitBS'])) {
 
             header("Location:calendar.php");
             exit();
-        }
-
-    }
-    else {
-        // Handle validation error for appointment
-        if (empty($_POST['eventTitle'])) {
-            $titleError = "Please enter a title.";
-        }
-        if (empty($_POST['eventStartDate'])) {
-            $startError = "Please select a start date.";
-        }
-        if (empty($_POST['eventEndDate'])) {
-            $endError = "Please select an end date.";
-        }
-        if (empty($_POST['reminderType'])) {
-            $remError = "Please choose a reminder type.";
         }
 
     }
@@ -189,34 +231,43 @@ if(isset($_POST['submitBS'])) {
 
 <div class="tabs-container">
 <div class="tabs">
-    <div class="tab" onclick="showForm(0)">Tab 1</div>
-    <div class="tab" onclick="showForm(1)">Tab 2</div>
-    <div class="tab" onclick="showForm(2)">Tab 3</div>
+    <div class="tab" onclick="showForm(0)">Healthcare Appointment</div>
+    <div class="tab" onclick="showForm(1)">Medication Reminder</div>
+    <div class="tab" onclick="showForm(2)">Blood Sugar Testing Alert</div>
 </div>
 
 <div class="forms">
     <div class="form" id="form1">
         <!-- Healthcare Appointment -->
-        <h2>Appointment</h2>
         <form id="eventForm" action="addEvent.php" method="POST">
 
-        <label for="eventTitle">Event Title:</label>
+        <label for="eventTitle">Event Title</label><br>
         <input type="text" id="eventTitle" name="eventTitle" required>
+        <span class="error"><?php if(isset($titleError)) echo $titleError; ?></span>
+        <br>
 
-        <label for="eventStartDate">Start Date and Time:</label>
+        <label for="eventStartDate">Start Date and Time</label><br>
         <input type="datetime-local" id="eventStartDate" name="eventStartDate" required>
+        <span class="error"><?php if(isset($startError)) echo $startError; ?></span>
+        <br>
 
-        <label for="eventEndDate">End Date and Time:</label>
+        <label for="eventEndDate">End Date and Time</label><br>
         <input type="datetime-local" id="eventEndDate" name="eventEndDate" required>
+        <span class="error"><?php if(isset($endError)) echo $endError; ?></span>
+        <br>
 
-        <label for="location">Location:</label>
+        <label for="location">Location</label><br>
         <input type="text" id="location" name="location" required>
+        <span class="error"><?php if(isset($loctError)) echo $locError; ?></span>
+        <br>
 
-        <label for="reminderType">Reminder Type:</label>
+        <label for="reminderType">Reminder Type</label><br>
         <select id="reminderType" name="reminderType">
             <option value="email">Email</option>
             <option value="popup">Popup</option>
         </select>
+        <span class="error"><?php if(isset($remError)) echo $remError; ?></span>
+        <br>
 
         <input type="submit" name="submitAppt" value="CREATE" class="submit-btn"/>
         </form>
@@ -224,17 +275,22 @@ if(isset($_POST['submitBS'])) {
 
     <div class="form" id="form2">
         <!-- Mediction Reminder -->
-        <h2>Medication Reminder</h2>
         <form id="eventForm" action="addEvent.php" method="POST">
 
-        <label for="eventTitle">Event Title:</label>
+        <label for="eventTitle">Event Title:</label><br>
         <input type="text" id="eventTitle" name="eventTitle" required>
+        <span class="error"><?php if(isset($titleError)) echo $titleError; ?></span>
+        <br>
 
-        <label for="eventStartDate">Start Date and Time:</label>
+        <label for="eventStartDate">Start Date and Time:</label><br>
         <input type="datetime-local" id="eventStartDate" name="eventStartDate" required>
+        <span class="error"><?php if(isset($startError)) echo $startError; ?></span>
+        <br>
 
-        <label for="eventEndDate">End Date and Time:</label>
+        <label for="eventEndDate">End Date and Time:</label><br>
         <input type="datetime-local" id="eventEndDate" name="eventEndDate" required>
+        <span class="error"><?php if(isset($endError)) echo $endError; ?></span>
+        <br>
 
         <!--PHP code to retrieve medicine options-->
 	    <?php
@@ -247,20 +303,26 @@ if(isset($_POST['submitBS'])) {
 		            $medOptions[$row['medID']] = $row['name'];
             	}
 	    ?>
-        <label for="medicine">Medicine:</label>
+        <label for="medicine">Medicine:</label><br>
         <?php foreach ($medOptions as $medID => $name) { ?>
         <input type="radio" id="medicine" name="medicine" value="<?php echo $medID; ?>">
         <?php echo json_encode($name); ?>
         <?php } ?>
+        <span class="error"><?php if(isset($medError)) echo $medError; ?></span>
+        <br>
 
-        <label for="dosage">Dosage:</label>
+        <label for="dosage">Dosage:</label><br>
         <input type="number" id="dosage" name="dosage" required>
+        <span class="error"><?php if(isset($dsgError)) echo $dsgError; ?></span>
+        <br>
 
-        <label for="reminderType">Reminder Type:</label>
+        <label for="reminderType">Reminder Type:</label><br>
         <select id="reminderType" name="reminderType">
             <option value="email">Email</option>
             <option value="popup">Popup</option>
         </select>
+        <span class="error"><?php if(isset($remError)) echo $remError; ?></span>
+        <br>
 
         <input type="submit" name="submitMed" value="CREATE" class="submit-btn"/>
         </form>
@@ -268,7 +330,6 @@ if(isset($_POST['submitBS'])) {
 
     <div class="form" id="form3">
         <!-- Blood Sugar Testing Reminder -->
-        <h2>Blood Sugar Testing</h2>
         <form id="eventForm" action="addEvent.php" method="POST">
 
         <label for="eventTitle">Event Title:</label>

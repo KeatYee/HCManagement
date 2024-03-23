@@ -5,6 +5,8 @@ include 'DBconnect.php'; // Include database connection
 $email="";
 $pass="";
 $name="";
+$emailerror="";
+$passerror="";
 
 // Check if the user is already logged in
   if (isset($_SESSION['ssn'])) {
@@ -21,41 +23,38 @@ $name="";
   if(isset($_POST['submit'])) {//Validate submit
 	if(!empty($_POST['email']) && !empty($_POST['password'])) {
     
-        $email = $_POST['email']; 
-        $pass = $_POST['password'];
+    $email = $_POST['email']; 
+    $pass = $_POST['password'];
 
-        $sql = "SELECT * FROM Users WHERE email='$email'";
-        $result = mysqli_query($conn,$sql);
-        $count=mysqli_num_rows($result);
+    $sql = "SELECT * FROM Users WHERE email='$email'";
+    $result = mysqli_query($conn,$sql);
+    $count=mysqli_num_rows($result);
 
-        if ($count == 1) {
-        
-           $row = mysqli_fetch_assoc($result);
+    if ($count == 1) {
+        $row = mysqli_fetch_assoc($result);
+        $hashedPass = $row['password'];
 
-        if ($_POST['password'] == $row['password']){
+        if (password_verify($_POST['password'], $hashedPass)){
 			   
-			   // Set a session variable to indicate successful login
-				$_SESSION['loginSuccess'] = true;
-			   
-                  $_SESSION['ssn'] = $row['ssn']; 
-                  $_SESSION['email'] = $row['email']; 
-                  $_SESSION['password'] = $row['password']; 
+			    // Set a session variable to indicate successful login
+				  $_SESSION['loginSuccess'] = true;
+          $_SESSION['ssn'] = $row['ssn']; 
+          $_SESSION['email'] = $row['email']; 
+          $_SESSION['password'] = $row['password']; 
   
-                  header("Location:homepage.php");
-                  exit();
-
-           }
-           else {
-             $passerror = "Incorrect password";
-           }
+          header("Location:homepage.php");
+          exit();
         }
         else {
-             $errormsg = "Email not found";
+          $passerror = "Incorrect password";
         }
+      }
+      else {
+        $emailerror = "Email not found";
+      }
 
     }
-    else 
-    {
+    else {
         if(!empty($_POST['email'])){
 
             if(filter_var($_POST['email'],FILTER_VALIDATE_EMAIL)) {//Validate email
@@ -66,7 +65,7 @@ $name="";
                 $emailerror= "Email format is incorrect!";//Alert message red
             }	
         }
-        else   {
+        else{
             $emailerror= "Email is required";
         }
     
@@ -153,7 +152,6 @@ mysqli_close($conn);
 	    </div>
 
 	    <div class="remember-forgot">
-	        <label><input type="checkbox">Remember me</label>
 		    <a href="forgotpass.php">Forgot password</a>
 	    </div>
 	

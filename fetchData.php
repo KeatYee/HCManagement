@@ -5,7 +5,7 @@ include('DBconnect.php');
 // Retrieve user information from the session
 $ssn = $_SESSION['ssn'];
 
-
+//mark them as seen when user view notification
 if(isset($_POST['view'])){
     if($_POST["view"] != ''){
 
@@ -27,78 +27,66 @@ if(isset($_POST['view'])){
 
     }
 
-    //fetch event
-    $query_med = "SELECT * FROM medicationReminder 
-              ORDER BY medRemID DESC LIMIT 5";
-    $result_med = mysqli_query($conn, $query_med);
+    // Get today's date and time
+    $now = date("Y-m-d H:i:s");
 
-    $query_appt = "SELECT * FROM Appointment 
-              ORDER BY apptID DESC LIMIT 5";
-    $result_appt = mysqli_query($conn, $query_appt);
+   // Fetch today notifications from the combined table
+   $query_combined = "
+   (SELECT medRemID AS id, title, dosage AS description, 'Medication Reminder' AS type, sDate, eDate 
+   FROM MedicationReminder WHERE eDate >= CURDATE())
+   UNION
+   (SELECT testingID AS id, title, sDate AS description, 'Blood Sugar Testing Alert' AS type, sDate, eDate 
+   FROM BSTestingAlert WHERE eDate >= CURDATE())
+   UNION
+   (SELECT apptID AS id, title, location AS description, 'Appointment' AS type, sDate, eDate 
+   FROM Appointment WHERE eDate >= CURDATE())
+   ORDER BY sDate DESC";
 
-    $query_bs = "SELECT * FROM BSTestingAlert 
-              ORDER BY testingID DESC LIMIT 5";
-    $result_bs = mysqli_query($conn, $query_bs);
+   $result_combined = mysqli_query($conn, $query_combined);
+  // echo $query_combined;
 
 
-    $output = '';
+  $output = '';
 
-    if(mysqli_num_rows($result_med) > 0 || mysqli_num_rows($result_appt) > 0 
-    || mysqli_num_rows($result_bs) > 0){
-      while($row = mysqli_fetch_array($result_med)){
-        $output .= '
-        <li>
-        <a href="#">
-        <strong>'.$row["title"].'</strong><br />
-        <small><em>'.$row["dosage"].'</em></small>
-        </a>
-        </li>
-      ';
+  if(mysqli_num_rows($result_combined) > 0) {
+      while($row = mysqli_fetch_array($result_combined)){
+        
+          $output .= '
+          <li>
+              <a href="#">
+                  <strong>'.$row["title"].'</strong><br />
+                  <small><em>'.$row["description"].'</em></small><br />
+              </a>
+          </li>
+          ';
       }
+  }
+  else {
+    $output .= "$query_combined";
 
-      while($row = mysqli_fetch_array($result_appt)){
-        $output .= '
-        <li>
-        <a href="#">
-        <strong>'.$row["title"].'</strong><br />
-        <small><em>'.$row["location"].'</em></small>
-        </a>
-        </li>
-      ';
-      }
+      $output .= '
+      <li>
+        <a href="#" class="text-bold text-italic">No Notifications Found !!!!  </a>
+       
+      </li>';
+  }
 
-      while($row = mysqli_fetch_array($result_bs)){
-        $output .= '
-        <li>
-        <a href="#">
-        <strong>'.$row["title"].'</strong><br />
-        <small><em>'.$row["sDate"].'</em></small>
-        </a>
-        </li>
-      ';
-      }
+    // Count unseen notifications
+    $query_count = "(SELECT COUNT(*) AS count 
+                    FROM medicationReminder WHERE status = 0 AND ssn = '$ssn')
+                    UNION
+                    (SELECT COUNT(*) AS count 
+                    FROM Appointment WHERE status = 0 AND ssn = '$ssn')
+                    UNION
+                    (SELECT COUNT(*) AS count 
+                    FROM BSTestingAlert WHERE status = 0 AND ssn = '$ssn')";
+    
+    $result_count = mysqli_query($conn, $query_count);
+    $count = 0;
+
+    while ($row = mysqli_fetch_array($result_count)) {
+        $count += $row['count'];
     }
-    else{
-        $output .= '<li><a href="#" class="text-bold text-italic">No Noti Found</a></li>';
-    }
-
-
-    $status_query1 = "SELECT * FROM medicationReminder 
-                     WHERE status=0";
-    $result_query1 = mysqli_query($conn, $status_query1);
-    $count1 = mysqli_num_rows($result_query1);
-
-    $status_query2 = "SELECT * FROM Appointment 
-                     WHERE status=0";
-    $result_query2 = mysqli_query($conn, $status_query2);
-    $count2 = mysqli_num_rows($result_query2);
-
-    $status_query3 = "SELECT * FROM BSTestingAlert 
-                     WHERE status=0";
-    $result_query3 = mysqli_query($conn, $status_query3);
-    $count3 = mysqli_num_rows($result_query3);
-
-    $count = $count1 + $count2 + $count3;
 
     $data = array(
        'notification' => $output,

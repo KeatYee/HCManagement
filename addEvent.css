@@ -44,3 +44,34 @@
   border: 1px solid #ccc;
   box-sizing: border-box;
 }
+
+input[type=text], input[type=datetime-local],
+input[type=number],input[type=radio],select{
+  width: 100%;
+	padding: 12px 20px;
+	margin: 8px 0;
+	display: inline-block;
+	border: 1px solid #ccc;
+	border-radius: 10px;
+	box-sizing: border-box;
+	cursor:pointer;
+}
+
+.submit-btn {
+  background-color: #4CAF50;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.submit-btn:hover {
+  background-color: #28712c;
+}
+
+
+.error {
+  color: red;
+}

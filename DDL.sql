@@ -3,7 +3,7 @@ CREATE TABLE Users (
     ssn CHAR(5) PRIMARY KEY,
     name CHAR(10),
     email VARCHAR(50),
-    password VARCHAR(12),
+    password VARCHAR(255),
     birthdate DATE,
     diabetesType VARCHAR(20),
     sex CHAR(1)

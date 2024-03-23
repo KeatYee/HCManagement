@@ -177,7 +177,6 @@ nav{
   background-color: #444; 
 }
 
-/* button with the right arrow icon */
 .sidebar {
   position: fixed;
   top: 20px;
@@ -185,7 +184,7 @@ nav{
   z-index: 1000; /* Ensure the button is above other content */
 }
 
-.sidebar button {
+.btnClose {
   background-color: #008080; 
   color: white; 
   border: none;
@@ -195,10 +194,20 @@ nav{
   transition: background-color 0.3s ease;
 }
 
-.sidebar button:hover {
-  background-color: #006666; 
+.btnClose:hover {
+  background-color: #539696; 
 }
-
+.btnOpen{
+  border-radius: 50%;
+  border:none;
+  width: 50px;
+  height:50px;
+  margin:5px;
+}
+.btnOpen:hover{
+  background-color: #8ecfcf; 
+  transition: background-color 0.3s ease;
+}
 /* right arrow icon */
 .sidebar button i {
   font-size: 24px; 
