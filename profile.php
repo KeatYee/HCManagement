@@ -106,8 +106,6 @@ if (!isset($_SESSION['ssn'])) {
   </div>
 
 <div class="content">	
-
-
 <!--Pop-up Edit form--> 
 
 <div id="editNameForm" class="edit-form-container">
@@ -247,8 +245,9 @@ if(mysqli_num_rows($result) > 0) {
         echo "<div class='med' id='med-" . $row['medID'] . "'>";
         // Check if image data exists
         if(!empty($row['image'])) {
-          echo "<img src='data:image/jpeg;base64," . base64_encode($row['image']) . "' alt='Medicine Image' width='600' height='400'>";
-      } else {
+          echo "<img src='data:image/jpeg;base64," . base64_encode($row['image']) . "' alt='Medicine Image' style='width: 600;>";
+      } 
+      else {
           // If no image data, display default image 'med.jpg'
           echo "<img src='Img/defaultMedicine.jpg' alt='Default Medicine Image' width='600' height='400'>";
       }

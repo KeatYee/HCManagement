@@ -62,11 +62,10 @@ if(isset($_POST['view'])){
       }
   }
   else {
-    $output .= "$query_combined";
 
       $output .= '
       <li>
-        <a href="#" class="text-bold text-italic">No Notifications Found !!!!  </a>
+        <a href="#" class="text-bold text-italic">No Notifications</a>
        
       </li>';
   }

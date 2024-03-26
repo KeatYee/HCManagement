@@ -12,6 +12,7 @@ if (isset($_POST['submit'])) {
     $desc = $_POST['desc'];
     $MY_FILE = $_FILES['file']['tmp_name'];
 
+
     // To open the file and store its contents in $file_contents
     $file = fopen($MY_FILE, 'r');
     $file_contents = fread($file, filesize($MY_FILE));

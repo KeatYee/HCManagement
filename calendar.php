@@ -116,7 +116,7 @@ while ($result = mysqli_fetch_array($fetch_event3)) {
 
   <!--sidebar link-->
   <div class="sidebar bar-block" style="display:none" id="mySidebar">
-    <button class="bar-item btnClose" onclick="closeNav()">Close &times;</button>
+    <button class="bar-item-close btnClose" onclick="closeNav()">Close &times;</button>
     <a href="?action=calendar" class="bar-item">Calendar</a>
     <a href="?action=today" class="bar-item">Today's</a>
     <a href="?action=all" class="bar-item">All Events</a>
@@ -154,7 +154,7 @@ switch ($action) {
   echo"<div class='container'>";
     echo"<div id='calendar'></div>";
   echo"</div>";
-  echo"<div class='btn-container'>";
+  echo"<div class='addEvent-btn'>";
     echo"<a href='addEvent.php'>+</a>";
   echo"</div>";
     break;

@@ -59,41 +59,7 @@ while ($row = $result->fetch_assoc()) {
   <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
   <!--Google Chart-->
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-  <script type="text/javascript" src="chart1.js">
-    google.charts.load('current', {'packages':['corechart']});
-google.charts.setOnLoadCallback(drawVisualization);
-
-function drawVisualization() {
-      // Create a DataTable and add columns
-      var data = new google.visualization.DataTable();
-            data.addColumn('string', 'Date');
-            data.addColumn('number', 'Fasting');
-            data.addColumn('number', 'Before Meal');
-            data.addColumn('number', 'After Meal');
-            data.addColumn('number', 'Bedtime');
-
-    // Add rows from the PHP data
-    <?php foreach ($chartData as $row): ?>
-        data.addRow([<?= "'" . $row['date'] . "'" ?>,
-            <?= isset($row['Fasting']) ? $row['Fasting'] : 'null' ?>,
-            <?= isset($row['Before Meal']) ? $row['Before Meal'] : 'null' ?>,
-            <?= isset($row['After Meal']) ? $row['After Meal'] : 'null' ?>,
-            <?= isset($row['Bedtime']) ? $row['Bedtime'] : 'null' ?>]);
-    <?php endforeach; ?>    
-
- // Define chart options
-    var options = {
-        title: 'Blood Sugar Readings by Date and Timing',
-        vAxis: {title: 'Average Blood Sugar'},
-        hAxis: {title: 'Date'},
-        seriesType: 'bars',
-        series: {3: {type: 'line'}} // Display a line for average blood sugar
-    };
-
-  var chart = new google.visualization.ComboChart(document.getElementById('chart_div'));
-  chart.draw(data, options);
-}
-  </script>
+  <script type="text/javascript" src="chart1.js"></script>
      
 </head>
 <!--top nav bar-->

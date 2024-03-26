@@ -155,17 +155,24 @@ nav{
 /* sidebar */
 .sidebar {
   position: fixed;
-  top: 0;
-  left: -250px; /* Hide the sidebar off-screen */
-  width: 250px;
   height: 100%;
-  background-color: #F0EDCF; 
+  background-color: #E8EBEA; 
   transition: left 0.3s ease;
-  z-index: 1000; /* Ensure the sidebar is above other content */
+  top: 20px;
+  left: 20px;
+  z-index: 1000; /* Ensure the button is above other content */
 }
 
 /* sidebar items */
 .sidebar .bar-item {
+  color: #171F30; 
+  display: block;
+  padding: 25px 20px;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.sidebar .bar-item-close {
   color: white; 
   display: block;
   padding: 10px 20px;
@@ -173,19 +180,19 @@ nav{
   transition: background-color 0.3s ease;
 }
 
-.sidebar .bar-item:hover {
-  background-color: #444; 
+.sidebar .bar-item-close:hover {
+  background-color: #DAB6C8; 
 }
 
-.sidebar {
-  position: fixed;
-  top: 20px;
-  left: 20px;
-  z-index: 1000; /* Ensure the button is above other content */
+.sidebar .bar-item:hover {
+  background-color: #5389A6;
+  font-weight: 800;
+  color: white;
+  text-align: center;
 }
 
 .btnClose {
-  background-color: #008080; 
+  background-color: #5389A6; 
   color: white; 
   border: none;
   padding: 10px 20px;
@@ -195,8 +202,9 @@ nav{
 }
 
 .btnClose:hover {
-  background-color: #539696; 
+  background-color: #DAB6C8 ; 
 }
+
 .btnOpen{
   border-radius: 50%;
   border:none;
@@ -205,31 +213,31 @@ nav{
   margin:5px;
 }
 .btnOpen:hover{
-  background-color: #8ecfcf; 
+  background-color: #5389A6; 
   transition: background-color 0.3s ease;
-}
-/* right arrow icon */
-.sidebar button i {
-  font-size: 24px; 
-}
-
-
-.btn-container a{
-  text-decoration:none;
-  color: #fff;
-}
-
-.btn-container a:hover{
-  text-decoration:none;
-  color: #fff;
 }
 
 #openNav{
   margin-top:12px;
 }
 
-/* Add Button */
-.btn-container {
+/* right arrow icon */
+.sidebar button i {
+  font-size: 24px; 
+}
+
+/*Right bottom add button */
+.addEvent-btn a{
+  text-decoration:none;
+  color: #fff;
+}
+
+.addEvent-btn a:hover{
+  text-decoration:none;
+  color: #fff;
+}
+
+.addEvent-btn {
   cursor: pointer;
   position: fixed;
   right: 20px;
@@ -247,7 +255,7 @@ nav{
   box-shadow: 0px 0px 15px #888;
 }
 
-.btn-container::after {
+.addEvent-btn::after {
   content: 'Create Event';
   font-size: .4em;
   opacity: 0;
@@ -259,25 +267,34 @@ nav{
   transition: 0.2s;
 }
 
-.btn-container:hover::after {
+.addEvent-btn:hover::after {
   opacity: 1;
   left: -96px;
 }
 
 /* calendar buttons */
 .fc-button {
-  background-color: #007bff;
+  background-color: #A6DCEE ;
   color: white;
   border: none;
-  padding: 5px 10px;
+  padding: 10px 15px;
   cursor: pointer;
   border-radius: 5px;
   margin-right: 5px;
 }
 
+.fc-button:hover {
+  background-color: #5389A6 ;
+
+}
+
 /* today button differently */
 .fc-today-button {
-  background-color: #28a745;
+  background-color: #65b578;
+}
+
+.fc-today-button:hover {
+  background-color: #1d632d;
 }
 
 /*  prev and next buttons */
@@ -286,6 +303,10 @@ nav{
   background-color: #dc3545;
 }
 
+.fc-prev-button:hover,
+.fc-next-button:hover {
+  background-color: #dc3545;
+}
 /* button text */
 .fc-button span {
   font-size: 14px;

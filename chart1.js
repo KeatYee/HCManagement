@@ -1,29 +1,51 @@
 google.charts.load('current', {'packages':['corechart']});
-google.charts.setOnLoadCallback(drawVisualization);
+google.charts.setOnLoadCallback(drawChart);
 
-function drawVisualization() {
-  // Some raw data (not necessarily accurate)
-  var data = google.visualization.arrayToDataTable([
-    ['Date', 'Fasting', 'Before Meal', 'After Meal', 'Bedtime'],
-    ['2024-03-01', 120.5, null, null, null],
-    ['2024-03-01', null, 110.8, null, null],
-    ['2024-03-01', null, null, 130.3, null],
-    ['2024-03-01', null, null, null, 140.6],
-    ['2024-03-02', 125.2, null, null, null],
-    ['2024-03-02', null, 115.7, null, null],
-    ['2024-03-02', null, null, 128.9, null],
-    ['2024-03-02', null, null, null, 135.4],
-    // Add more rows for other dates and their corresponding readings
-  ]);
+function drawChart() {
+  var data = new google.visualization.DataTable();
+  data.addColumn('timeofday', 'Time of Day');
+  data.addColumn('number', 'Blood Sugar Level');
+  data.addColumn('number', 'Target'); // Add a new column for the target line
 
-  var options = {
-    title: 'Blood Sugar Readings by Date and Timing',
-    vAxis: {title: 'Average Blood Sugar'},
-    hAxis: {title: 'Date'},
-    seriesType: 'bars',
-    series: {3: {type: 'line'}} // Display a line for average blood sugar
-  };
+// Replace this with your actual blood sugar level data
+    var bloodSugarData = [
+      [[2, 0, 0], 160, 90],     // Example: 2:00 AM, 160 mg/dL
+      [[8, 0, 0], 90, 90],     // Example: 8:00 AM, 90 mg/dL
+      [[10, 30, 0], 120, 90],  // Example: 10:30 AM, 120 mg/dL
+      [[12, 0, 0], 110, 90],   // Example: 12:00 PM, 110 mg/dL
+      // Add more data points as needed
+    ];
 
-  var chart = new google.visualization.ComboChart(document.getElementById('chart_div'));
+    data.addRows(bloodSugarData);
+
+    var options = {
+      title: 'Blood Sugar Level Throughout the Day',
+      curveType: 'function',
+      legend: { position: 'bottom' },
+      pointSize: 5, // Size of the dots
+      pointShape: 'circle', // Shape of the dots
+      series: {
+        0: { // Blood Sugar Level series
+          lineWidth: 2 // Adjust the line width as needed
+        },
+        1: { // Target Line series
+          color: 'green', // Color of the line
+          lineWidth: 2, // Adjust the line width as needed
+          lineDashStyle: [4, 4], // Dashed line style
+          pointSize: 0, // Set point size to zero to hide dots
+          visibleInLegend: false // Don't show this series in the legend
+        }
+      },
+      vAxis: {
+        viewWindow: {
+          min: 0,  // Minimum y-axis value
+          max: 200 // Maximum y-axis value
+        }
+      }
+    };
+    
+
+  var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+
   chart.draw(data, options);
 }
