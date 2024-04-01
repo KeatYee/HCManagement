@@ -228,10 +228,6 @@ case 'today' :
 case 'med' : 
 
   echo "<h2>Medication</h2>";
-  echo "<div class='addMedBtn'>";
-  echo "<button id='addMedBtn' onclick=\"openEditForm('addMedForm')\">Add</button>";
-  echo "</div>";
-
   echo "<div class='med-container'>";
 // Fetch data from the database
 $query = "SELECT * FROM Medicine"; // Modify this query according to your database structure
@@ -245,12 +241,12 @@ if(mysqli_num_rows($result) > 0) {
         echo "<div class='med' id='med-" . $row['medID'] . "'>";
         // Check if image data exists
         if(!empty($row['image'])) {
-          echo "<img src='data:image/jpeg;base64," . base64_encode($row['image']) . "' alt='Medicine Image' style='width: 600;>";
-      } 
-      else {
+          echo "<img src='data:image/jpeg;base64," . base64_encode($row['image']) . "' alt='Medicine Image'>";
+        } 
+        else {
           // If no image data, display default image 'med.jpg'
-          echo "<img src='Img/defaultMedicine.jpg' alt='Default Medicine Image' width='600' height='400'>";
-      }
+          echo "<img src='Img/defaultMedicine.jpg' alt='Default Medicine Image'>";
+        }
         echo "<div class='name'>" . $row['name'] . "</div>";
         echo "<div class='desc'>" . $row['description'] . "</div>";
         echo "<button class='deleteBtn' onclick='deleteMedicine(" . $row['medID'] . ")'>Delete</button>";
@@ -262,6 +258,9 @@ if(mysqli_num_rows($result) > 0) {
 }
 
   echo "</div>";
+  echo"<div class='addMed-btn'>";
+  echo"<a href='#' onclick=\"openEditForm('addMedForm')\">+</a>";
+  echo"</div>";
 
 
       break;
