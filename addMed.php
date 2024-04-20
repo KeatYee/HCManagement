@@ -10,15 +10,25 @@ include 'DBconnect.php'; // Include database connection
 if (isset($_POST['submit'])) {
     $name = $_POST['name'];
     $desc = $_POST['desc'];
-    $MY_FILE = $_FILES['file']['tmp_name'];
+    
 
-
-    // To open the file and store its contents in $file_contents
-    $file = fopen($MY_FILE, 'r');
-    $file_contents = fread($file, filesize($MY_FILE));
-    fclose($file);
-    // escape some stcharacters that might appear in  file_contents
+// Check if an image was uploaded
+    if(!empty($_FILES['file']['name'])){
+        $MY_FILE = $_FILES['file']['tmp_name'];
+        // To open the file and store its contents in $file_contents
+        $file = fopen($MY_FILE, 'r');
+        $file_contents = fread($file, filesize($MY_FILE));
+        fclose($file);
+        // escape some stcharacters that might appear in  file_contents
     $file_contents = addslashes($file_contents);
+
+    }
+    else{
+
+    }
+
+
+    
 
     // Update the name in the database
     $sql = "INSERT INTO Medicine (name,description,image)

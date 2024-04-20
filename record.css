@@ -1,237 +1,433 @@
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    text-decoration: none;
-    list-style: none;
-    font-family: 'Open Sans', sans-serif;
-    }
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  text-decoration: none;
+  list-style: none;
+  font-family: 'Open Sans', sans-serif;
+}
 
-  
-  .logo {
-    display: flex;
-    align-items: center; 
-  }
-  
-  .logo p {
-    color: #0C479D;
-    font-weight:800;
-    font-size: 2rem;
-    margin-left: 40px; 
-  }
-  
-  .logo img {
-    width: 75px;
-    height: 75px;
-  }
-  
-  nav{
-  height:90px;
-  display:flex;
+/* Header styles */
+.logo {
+  display: flex;
+  align-items: center;
+}
+
+.logo p {
+  color: #0C479D;
+  font-weight: 800;
+  font-size: 2rem;
+  margin-left: 40px;
+}
+
+.logo img {
+  width: 75px;
+  height: 75px;
+}
+
+nav {
+  height: 90px;
+  display: flex;
   align-items: center;
   justify-content: space-between;
-  padding:30px 55px;
+  padding: 30px 55px;
   background-color: #ffffff;
   z-index: 2;
-  }
-  
-  .nav-links{
-  display:flex;
-  align-items: flex-end;
-  }
-  
-  .nav-links li a{
-  color:#7A7A7A;
-  font-weight:550;
-  font-size: 1.5rem;
-  margin:5px 15px;
-  }
-  
-  .nav-links li a:hover,
-  .nav-links li a.active{
-  color:#0C479D;
-  }
-  
+}
 
-  .hamburger{
-  margin-left:20px;
-  cursor:pointer;
-  display:none;
-  } 
-  
-  .hamburger div{
-  width:30px;
-  height:2px;
-  margin:6px 0;
-  background:#7A7A7A;
+.nav-links {
+  display: flex;
+  align-items: flex-end;
+}
+
+.nav-links li a {
+  color: #7A7A7A;
+  font-weight: 550;
+  font-size: 1.5rem;
+  margin: 5px 15px;
+}
+
+.nav-links li a:hover,
+.nav-links li a.active {
+  color: #0C479D;
+}
+
+.hamburger {
+  margin-left: 20px;
+  cursor: pointer;
+  display: none;
+}
+
+.hamburger div {
+  width: 30px;
+  height: 2px;
+  margin: 6px 0;
+  background: #7A7A7A;
+}
+
+@media only screen and (max-width: 768px) {
+  /* Mobile styles */
+  nav {
+    position: relative;
+    padding: 0 20px;
+    z-index: 2;
   }
-  
-  @media only screen and (max-width: 768px) {
-  
-  nav{
-    position:relative;
-    padding:0 20px;
-    z-index:2;
+
+  .hamburger {
+    display: block;
   }
-  
-  .hamburger{
-    display:block;
-  } 
-  
-  .nav-links{
-    margin:0;
-    position:fixed;
-    display:flex;
+
+  .nav-links {
+    margin: 0;
+    position: fixed;
+    display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-evenly;
-    gap:20px;
-    height:auto;
-    top:-250%; 
-    left:0;
+    gap: 20px;
+    height: auto;
+    top: -250%;
+    left: 0;
     width: 100%;
-    padding:30px;
+    padding: 30px;
     transition: 0.3s slide-down;
+    background-color: #ffffff;
+    opacity: 0.9;
   }
-  
-  .nav-links.active{
-    opacity:0.9;
-    top:90px;
-    background-color:#ffffff;
+
+  .nav-links.active {
+    top: 90px;
   }
-  
-  @keyframes slide-down{
-    0%{
-      top:-250%;
+
+  /* Animation for mobile navigation */
+  @keyframes slide-down {
+    0% {
+      top: -250%;
       opacity: 0;
     }
-  
-    50%{
-      top:0%;
-      opacity:0.1;
+
+    100% {
+      top: 90px;
+      opacity: 1;
     }
-  
-    75%{
-      top:25px;
-      opacity:0.3;
-    }
-  
-    100%{
-      top:90px;
-      opacity:1;
-    }
-  
   }
-  
+
   .nav-links li a {
-    display:block;
+    display: block;
     text-align: center;
     color: #7A7A7A;
     font-size: 1.3rem;
-    margin:5px 0;
-    padding:10px 100px;
+    margin: 5px 0;
+    padding: 10px 100px;
     transition: 0.2s;
   }
-  
 }
 
-      footer {
-        color: #0C479D;
-        background-color:#0C479D;
-        width: 100%;
-        background-color: rgba(0, 0, 0, 0.3);
-        text-align: center;
-        bottom: 0;
-        font-family: "Raleway", sans-serif;
-        font-size:23px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 50px;
-      }
-      
-      .footer-content {
-        display: flex; 
-        flex-wrap: wrap; 
-        width: 100%; 
-      }
-      
-      .about,
-      .contact,
-      .social-media {
-        flex:1;
-        text-align: left; 
-      }
-      .about{
-      margin-left:50px;
-      }	
-      .contact{
-        margin-left:175px;  
-        margin-right:100px;
-      }
-      .social-media{
-      
-        margin-left:50px;
-        text-align:center;
-      }
-      .social-icons{
-      font-size:30px;	
-      text-align:center;
-      }	
-      footer a {
-        text-decoration: none;
-        font-family: "Raleway", sans-serif;
-        color: #444444;
-      }
-      
-      footer a:hover {
-        background-color: white;
-        background: transparent;
-        color: white;
-      }
-     
+/* Footer styles */
+footer {
+  color: #0C479D;
+  background-color: #0C479D;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.3);
+  text-align: center;
+  bottom: 0;
+  font-family: "Raleway", sans-serif;
+  font-size: 23px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 50px;
+}
 
-      
-      .record-container {
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 20px;
-      }
-      
-      .record-container h2 {
-        margin-bottom: 10px;
-      }
-      
-      .record-container label {
-        display: block;
-        margin-bottom: 5px;
-        font-weight: bold;
-      }
-      
-      .record-container input[type="text"],
-      .record-container input[type="number"],
-      .record-container input[type="time"] {
-        width: 100%;
-        padding: 8px;
-        margin-bottom: 15px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        box-sizing: border-box;
-      }
-      
-      .record-container input[type="radio"] {
-        margin-right: 10px;
-      }
-      
-      .record-container input[type="submit"] {
-        padding: 10px 20px;
-        background-color: #0C479D;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-      }
-      
-      .record-container input[type="submit"]:hover {
-        background-color: #083167;
-      }
+.footer-content {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.about,
+.contact,
+.social-media {
+  flex: 1;
+  text-align: left;
+}
+
+.about {
+  margin-left: 50px;
+}
+
+.contact {
+  margin-left: 175px;
+  margin-right: 100px;
+}
+
+.social-media {
+  margin-left: 50px;
+  text-align: center;
+}
+
+.social-icons {
+  font-size: 30px;
+  text-align: center;
+}
+
+footer a {
+  text-decoration: none;
+  font-family: "Raleway", sans-serif;
+  color: #444444;
+}
+
+footer a:hover {
+  background-color: white;
+  background: transparent;
+  color: white;
+}
+
+/* Record form styles */
+.record-container {
+  
+  background-color: #F5F5F5;
+  margin-left:23%;
+  margin-right:20%;
+  margin-top:6%;
+  margin-bottom:5%;
+  padding: 100px;
+  border-radius: 10px;
+  box-shadow: 0 0 13px rgba(0, 0, 0, 0.1);
+  width:1100px;
+  justify-content: center;
+  align-items: center;
+}
+
+.record-box {
+  flex-basis: 60%; /* Set the width of each box */
+  margin-bottom: 40px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  color:#CCCCCC;
+  box-sizing: border-box; /* Include padding and border in the box size */
+}
+
+
+h1{
+  text-transform: uppercase;
+  font-size: 50px;
+ font-family: 'Montserrat', sans-serif;
+ text-align: center;
+margin-top: 2px;
+ margin-bottom:20px;
+ color: #333333;
+}
+
+h2{
+  font-size:40px;
+}
+
+.record-box.time {
+  background-color: #0C4396; /* Yellow for Blood Sugar */
+}
+
+.record-box.blood-sugar {
+  background-color: #0C4396; /* Yellow for Blood Sugar */
+}
+
+.record-box.blood-pressure {
+  background-color:#0C4396; /* Green for Blood Pressure */
+}
+
+
+.record-box.meal {
+  background-color:  #0C4396; /* Light Blue for Meal */
+}
+
+.record-box.body-weight {
+  background-color: #0C4396; /* Light Salmon for Body Weight */
+}
+
+.record-box.insulin-dose {
+  background-color: #0C4396; /* Light Pink for Insulin Dose */
+}
+
+.record-box.medication-intake {
+  background-color: #0C4396; /* Gold for Medication Intake */
+}
+
+/* Style for all input elements */
+input {
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box; /* Include padding and border in the box size */
+}
+
+/* Style for specific input types */
+input[type="number"],
+input[type="date"],
+input[type="time"],
+input[type="text"],
+select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    font-size: 16px;
+    background-color: #ebe9e9;
+    outline: none;
+    margin-top: 20px;
+}
+
+/*style specific for medication box*/
+.flexMed{
+	display: flex;
+  gap: 18px;
+	margin-bottom:20px;
+  }
+
+/* Style for specific input types on focus */
+input[type="number"]:focus,
+input[type="date"]:focus,
+input[type="time"]:focus,
+input[type="text"]:focus
+{
+  border-color : #007bff;
+  box-shadow : 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+/* Custom checkboxes */
+input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  display: inline-block;
+  vertical-align: middle;
+  cursor: pointer;
+  position: relative;
+}
+
+/* Custom radio buttons */
+input[type="radio"] {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 20px;
+  height: 20px;
+  margin:10px;
+  border: 2px solid #ccc;
+  border-radius: 50%;
+  display: inline-block;
+  vertical-align: middle;
+  cursor: pointer;
+  position: relative;
+}
+
+/* Checked state for checkboxes and radios */
+input[type="checkbox"]:checked,
+input[type="radio"]:checked {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+/* Styles for the checkmark in checkboxes */
+input[type="checkbox"]::before {
+  content: "";
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 2px solid white;
+  border-top: none;
+  border-right: none;
+  background-color: transparent;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+/* Styles for the checkmark in checked checkboxes */
+input[type="checkbox"]:checked::before {
+  opacity: 1;
+}
+
+/* Styles for the dot in radio buttons */
+input[type="radio"]::before {
+  content: "";
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background-color: white;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+/* Styles for the dot in checked radio buttons */
+input[type="radio"]:checked::before {
+  opacity: 1;
+}
+
+.clearButton{
+  padding: 5px 13px; 
+  margin: 10px; 
+  background-color: #8e8888; 
+  color: #ffffff; 
+  border: none; 
+  cursor: pointer; 
+  font-size: 12px; 
+  border-radius: 5px; 
+}
+
+.clearButton:hover{
+  background-color: #d32f2f; 
+}
+
+
+input[type="submit"] {
+  margin-top:50px;
+	border: none;
+	width:90%;
+	color:#ffffff;
+	height:55px;
+	background:rgba(255,255,255,0.3);
+	border:1px solid rgba(0,0,0,0.5);
+	outline:none;
+	margin: auto;
+	margin-top: 10px;
+	border-radius:20px;
+	display: flex;
+ 	align-items: center;
+  justify-content: center;
+  padding: 0;
+	box-shadow:0 0 10px rgba(0,0,0,0.1);
+	cursor:pointer;
+	font-size:20px;
+	background-color:#0C479D;
+	font-weight:500;
+	transition: all 1s;
+  }
+
+  input[type="submit"]:hover {
+  border:2px solid 	#125AC2;
+	background-color:	#125AC2;
+  color:black;
+	
+}
+
+.error{
+  padding:20px;
+  background-color: #ff7c7cb5;
+  font-size: 20px;
+}

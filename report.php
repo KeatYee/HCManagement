@@ -14,33 +14,20 @@ if (!isset($_SESSION['ssn'])) {
 	$email = $_SESSION['email'];
 	$password = $_SESSION['password']; 
 
+// Get today's date
+$today = date("Y-m-d");
+
+// Calculate the start date for the date range (e.g., 7 days ago)
+$start_date = date("Y-m-d", strtotime('-30 days'));
+
 // Fetch blood sugar data from MySQL
-$sql = "SELECT r.date, bs.timing, AVG(bs.value) AS average_value 
-        FROM Records r
-        INNER JOIN BloodSugar bs ON r.recordID = bs.recordID
-        WHERE r.recordType = 'Blood Sugar'
-        GROUP BY r.date, bs.timing"; //**put the date range, use today's date
-$result = $conn->query($sql);
-
-// Initialize an array to store the formatted data
-$chartData = [];
-
-// Process fetched data and format it for Google Charts
-while ($row = $result->fetch_assoc()) {
-    $date = $row['date'];
-    $timing = $row['timing'];
-    $value = $row['average_value'];
-
-    // Add data to the formatted array
-    if (!isset($chartData[$date])) {
-        $chartData[$date] = ['date' => $date];
-    }
-
-    // Assign blood sugar value to the appropriate timing column
-    $chartData[$date][$timing] = $value;
-}
-
-
+$sql = "SELECT r.date, r.time, AVG(bs.value) AS average_value 
+FROM Records r
+INNER JOIN BloodSugar bs ON r.recordID = bs.recordID
+WHERE r.recordType = 'Blood Sugar'
+AND r.date BETWEEN '$start_date' AND '$today' -- Enclose date values in quotes
+GROUP BY r.date, bs.timing"; //**put the date range, use today's date
+$result = mysqli_query($conn, $sql);
 
 
 
@@ -88,7 +75,39 @@ while ($row = $result->fetch_assoc()) {
   </div>
 </nav>
 <body>
-<div id="chart_div" style="width: 900px; height: 500px;"></div>
+<div id="chart_div" style="width: 1500px; height: 500px;"></div>
+<hr>
+<div id="chart_div2" style="width: 1500px; height: 500px;"></div>
+
+ <div id="sql_result">
+
+ <?php
+  echo "Start Date: $start_date<br>";
+  echo "Today's Date: $today";
+  // Fetch blood sugar data from MySQL
+$sql = "SELECT r.date, r.time, AVG(bs.value) AS average_value 
+FROM Records r
+INNER JOIN BloodSugar bs ON r.recordID = bs.recordID
+WHERE r.recordType = 'Blood Sugar'
+AND r.date BETWEEN '2024-03-11' AND '2024-04-10' -- Enclose date values in quotes
+GROUP BY r.date, bs.timing"; //**put the date range, use today's date
+$result = $conn->query($sql);
+
+ // Display SQL query result
+ if ($result && $result->num_rows > 0) {
+     echo "<h2>SQL Query Result:</h2>";
+     echo "<table>";
+     while($row = $result->fetch_assoc()) {
+         echo "<tr><td>Date:</td><td>" . $row["date"]. "</td><td>Time:</td><td>" . $row["time"]. "</td><td>Average Value:</td><td>" . $row["average_value"]. "</td></tr>";
+     }
+     echo "</table>";
+ } else {
+     echo "<p>No data available.</p>";
+ }
+ ?>
+</div>
+
+
   <!--Hamburger-->
   <script src="app.js"></script>
 </body>

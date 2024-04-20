@@ -96,12 +96,14 @@ if (!isset($_SESSION['ssn'])) {
 <div class="container">
   <!-- Side Navigation Bar -->
   <div class="sidebar">
-        <a href="?action=acc">Profile</a>
-        <a href="?action=today">Today</a>
-        <a href="?action=med">Medicine</a>
+        <a href="?action=acc" <?php if(isset($_GET['action']) && $_GET['action'] == 'acc') echo 'class="active"'; ?>><i class='bx bxs-user-circle' style="font-size:30px;"></i>&nbsp Profile </a>
+        <a href="?action=today" <?php if(isset($_GET['action']) && $_GET['action'] == 'today') echo 'class="active"'; ?>><i class='bx bxs-calendar-star'  style="font-size:30px;"></i>&nbsp Today</a>
+        <a href="?action=med" <?php if(isset($_GET['action']) && $_GET['action'] == 'med') echo 'class="active"'; ?>><i class='bx bxs-capsule' style="font-size:30px;"></i>&nbsp Medicine</a>
 		<div class="btn">
-		    <button id='deleteButton'><i class='fas fa-trash-alt'>&nbsp </i>Delete Account</button>
-		    <button id='logoutButton'><i class='fas fa-sign-out-alt'>&nbsp </i>Logout</button>
+        <button id='resetButton'><i class='bx bxs-lock' style="font-size:2.3vh;"></i>&nbsp </i>Reset Password</button>
+		    <button id='deleteButton'><i class='fas fa-trash-alt' style="font-size:2vh;">&nbsp </i>Delete Account</button><br>
+		    <button id='logoutButton'><i class='fas fa-sign-out-alt' style="font-size:2vh;">&nbsp </i>Logout</button><br>
+
 		</div>
   </div>
 
@@ -167,15 +169,33 @@ if (!isset($_SESSION['ssn'])) {
   </div>
 </div>
 
+<div id="editPicForm" class="edit-form-container">
+  <div class="edit-form-content">
+	<h2>Update Personal Details</h2>
+    <span class="close" onclick="closeEditForm('editPicForm')">&times;</span>
+      <form id="editForm" enctype="multipart/form-data">
+        <label for="profilePic"><b>Profile Image</b></label>
+        <input type="file" name="file" value="" id="profilePic">
+        <p class="error"><?php if (!empty($error)){echo $error;}  ?></p>
+			  <div class="update">
+          <button name="submitPic" id="updateBtn" type="submit"><strong>Change</strong></button>
+          <button name ="deletePic" id="removeBtn" type="submit">
+            <i class='fas fa-trash-alt'></i>
+          </button>
+			  </div>
+      </form>
+  </div>
+</div>
+
 <div id="addMedForm" class="edit-form-container">
   <div class="edit-form-content">
 	<h2>Add Your Medicine</h2>
     <span class="close" onclick="closeEditForm('addMedForm')">&times;</span>
       <form action="addMed.php" method="post" id="editForm" enctype="multipart/form-data">
 			  <label for="medName"><b>Name</b></label>
-        <input type="text" name="name" id="medName">
+        <input type="text" name="name" id="medName" required>
         <label for="medDesc"><b>Description</b></label>
-        <input type="text" name="desc" id="medDesc">
+        <input type="text" name="desc" id="medDesc" required>
         <label for="medPic"><b>Image</b></label>
         <input type="file" name="file" value="" id="medPic">
 			  <div class="update">
@@ -199,9 +219,14 @@ if (isset($_GET['action'])) {
 //for account	
 case 'acc':
   echo "<div class='acc'>";
-    echo "<h2>Your Detail</h2>";
+    echo "<h2>Personal Information</h2>";
+    echo "<div class='accContainer'>";
     echo "<form class='accForm'>";
-    
+
+
+
+    echo "<label for='email'><strong>Email</strong></label><br> 
+    <input type='text' id='email' value='$email' readonly >";
    
     echo "<label for='username'><strong>Username</strong></label><br> 
     <input type='text' id='username' value='$name' readonly onclick=\"openEditForm('editNameForm')\">";
@@ -216,7 +241,31 @@ case 'acc':
     <input type='text' id='diabetesType' value='$diabetesType' readonly onclick=\"openEditForm('editDiabetesForm')\">";
    
     echo "</form>";
+
+    echo "<div class='accPic'>";
+    echo "<div class='profilePic'>";
+      // Fetch data from the database
+      $query = "SELECT profilePic FROM Users WHERE ssn = '$ssn'"; 
+      $result = mysqli_query($conn, $query);
+       // Fetch the row from the result set
+      while($row = mysqli_fetch_assoc($result)) {
+        if (mysqli_num_rows($result) > 0 && !empty($row['profilePic']) ) {
+          echo "<img src='data:image/jpeg;base64," . base64_encode($row['profilePic']) . "' alt='Profile Image'>";
+        }   
+        else {
+          // If no image data, display default image
+          echo "<img src='Img/defaultProfile.jpg' alt='Default Profile Image'>";
+        }
+      }
+      echo "</div>";
+      echo"<div>";
+        echo "<button class='btnPic' onclick=\"openEditForm('editPicForm')\">Change Photo</button>";
+      echo "</div>";
+
     echo "</div>";
+
+    echo"</div>";
+  echo "</div>";  
 
     break;
 
@@ -230,14 +279,11 @@ case 'med' :
   echo "<h2>Medication</h2>";
   echo "<div class='med-container'>";
 // Fetch data from the database
-$query = "SELECT * FROM Medicine"; // Modify this query according to your database structure
+$query = "SELECT * FROM Medicine"; 
 $result = mysqli_query($conn, $query);
 
-// Check if there are any rows in the result
 if(mysqli_num_rows($result) > 0) {
-    // Loop through each row of data
     while($row = mysqli_fetch_assoc($result)) {
-        // Output HTML dynamically using the fetched data
         echo "<div class='med' id='med-" . $row['medID'] . "'>";
         // Check if image data exists
         if(!empty($row['image'])) {
@@ -253,7 +299,6 @@ if(mysqli_num_rows($result) > 0) {
         echo "</div>";
     }
 } else {
-    // Output a message if no rows are found in the database
     echo "No data found";
 }
 

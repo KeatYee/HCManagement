@@ -139,63 +139,59 @@
  /*Body*/
 /*side nav bar*/
 .sidebar {
-	height:130vh;
-    width: 160px;
-    padding-top: 50px;
+	height: 82%;
+  width: 200px;
+  padding-top: 50px;
 	position:fixed;
 	left:0;
-	background-color:#26331E;
+	background-color:#e8e8e8;
+  opacity: 0.7;
+  margin-left:20px;
+  margin-bottom: 20px;
+  margin-top:20px;
+  border-radius: 30px;
  }
 
 .sidebar a {
-    display: block;
-    color: white;
-    padding: 16px;
+  display: block;
+  color: black;
+  font-size: 2vh;
+  padding: 16px;
+  margin:10px;
 	text-decoration: none;
   }
 
 .sidebar a:hover {
-    background-color:#C7D5BD;
-	color: #3A4D2D;
+  font-weight: bolder;
+}
+
+.sidebar a.active{
+  background-color: #b3c6e3;
+  border-radius: 30px;
 }
 
 .btn{
 	margin-top:300px;
+  margin-left:20px;
 }
 
- #logoutButton {
-    background-color:#C7D5BD;
-	color: #3A4D2D;
-	padding: 14px 38px;
-	margin: 8px 0 0 8px;
-	border: none;
-	border-radius: 25px;
+ #logoutButton, #deleteButton, #resetButton{
+  color: black;
+  border: none;
+  font-size: 1.8vh;
 	cursor: pointer;
+  padding:10px;
 
 	}
 	
-#logoutButton:hover {
-	opacity:0.7;
-	}
-	
-#deleteButton {
-    background-color:#6E2419;
-	color: white;
-	padding: 14px 18px;
-	margin: 8px 0 10px 8px;
-	border: none;
-	border-radius: 25px;
-	cursor: pointer;
+#logoutButton:hover, #deleteButton:hover,#resetButton:hover {
+	font-weight: bolder;
 }
-
-#deleteButton:hover {
-	opacity:0.7;
-	}
 
 /*main content*/      
 .content {
 	padding: 10px;
-	margin-left:200px;
+	margin-left:250px;
 }
 
 
@@ -212,13 +208,13 @@
 }
 
 .edit-form-content {
-    background-color:rgba(255,255,255,0.6);
+  background-color:rgba(255,255,255,0.6);
 	backdrop-filter:blur(20px);
-    margin: 15% auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 50%;
-    position: relative;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 50%;
+  position: relative;
 }
 
 .edit-form-content input[type=text]{
@@ -262,7 +258,18 @@
 }
 
 #updateBtn:hover {
-	opacity:0.7;
+	font-weight: bolder;
+}
+
+#deleteBtn{
+	color: #a40f0f;
+	border: none;
+	cursor: pointer;
+
+}
+
+#deleteBtn:hover {
+	font-weight: bolder;
 }
 
 .update{
@@ -272,23 +279,72 @@
 
 /*acc*/
 
-.acc label{
-	padding:5px;
+.accContainer{
+  display:flex;
+  flex:1;
 }
 
 .accForm{
-	width:800px;
+  background-color:#e8e8e8d0;
+  padding:5vh;
+  border-radius: 30px;
+  width:800px;
 }
+
+h2{
+  margin-bottom: 5vh;
+  margin-top:1vh;
+  font-size: 3vh;
+}
+
+.acc label{
+	padding:5px;
+  font-size: 1.8vh;
+}
+
 .acc input[type=text], input[type=password], 
 input[type=number], input[type=email]{
 	width: 100%;
 	padding: 12px 20px;
-	margin: 8px 0;
+	margin: 8px 0 16px 0;
+  font-size: 2vh;
 	display: inline-block;
 	border: 1px solid #ccc;
 	border-radius: 10px;
 	box-sizing: border-box;
 	cursor:pointer;
+}
+
+.accPic{
+  background-color:#e8e8e8d0;
+  padding:5vh;
+  border-radius: 30px;
+  margin-left:3vh;
+
+}
+
+.profilePic {
+  align-items: center;
+  padding:28px;
+}
+
+.profilePic img{
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  border-radius:50%;
+}
+
+.btnPic{
+  font: 1.5vh;
+  padding:18px 30px;
+  display: block;
+  margin: auto;
+  margin-top: 9vh;
+}
+
+.btnPic:hover{
+  font-weight: bolder;
 }
 
 /*med*/

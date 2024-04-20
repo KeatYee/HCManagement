@@ -1,4 +1,5 @@
 
+
 window.onload = function() {
     var currentAction = window.location.search;
     if (currentAction.indexOf('action=acc') === -1 &&
@@ -50,6 +51,32 @@ function deleteMedicine(medID) {
         document.body.appendChild(form);
         form.submit();
     }
+}
+
+function submitForm() {
+    var form = document.getElementById("editForm");
+    var formData = new FormData(form);
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "editAcc.php", true);
+    xhr.onload = function() {
+        if (xhr.status == 200) {
+            var response = JSON.parse(xhr.responseText);
+            if (response.error) {
+                document.getElementById("errorMessage").innerText = response.error;
+            } else {
+                // Form submitted successfully, do any necessary actions
+                alert("Profile picture updated successfully!");
+                closeEditForm('editPicForm'); // Close the popup form
+            }
+        } else {
+            alert("Error: " + xhr.statusText);
+        }
+    };
+    xhr.onerror = function() {
+        alert("Request failed");
+    };
+    xhr.send(formData);
 }
 
 

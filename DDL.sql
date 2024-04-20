@@ -9,7 +9,8 @@ CREATE TABLE Users (
     password VARCHAR(255),
     birthdate DATE,
     diabetesType VARCHAR(20),
-    sex CHAR(1)
+    sex CHAR(1),
+    profilePic MEDIUMBLOB
 );
 
 -- Feedback Table
@@ -111,12 +112,25 @@ INSERT INTO Records (ssn, time, date, recordType) VALUES
 ('U2072', '16:15:00', '2024-03-09', 'Blood Sugar'),
 ('U2072', '17:30:00', '2024-03-10', 'Blood Sugar');
 
+INSERT INTO Records (ssn, time, date, recordType) VALUES
+('U2147', '08:30:00', '2024-04-01', 'Blood Sugar'),
+('U2147', '09:45:00', '2024-04-02', 'Blood Sugar'),
+('U2147', '10:15:00', '2024-04-03', 'Blood Sugar'),
+('U2147', '11:30:00', '2024-04-04', 'Blood Sugar'),
+('U2147', '12:45:00', '2024-04-05', 'Blood Sugar'),
+('U2147', '13:15:00', '2024-04-06', 'Blood Sugar'),
+('U2147', '14:30:00', '2024-04-07', 'Blood Sugar'),
+('U2147', '15:45:00', '2024-04-08', 'Blood Sugar'),
+('U2147', '16:15:00', '2024-04-09', 'Blood Sugar'),
+('U2147', '17:30:00', '2024-04-10', 'Blood Sugar');
+
 -- MedicationIntake Table
 CREATE TABLE MedicationIntake (
     medIntakeID INT PRIMARY KEY AUTO_INCREMENT,
     medID INT REFERENCES Medicine(medID),
     recordID INT REFERENCES Records(recordID),
-    dosage INT(4)
+    dosage DECIMAL(5,2),
+    unit VARCHAR(255)
 );
 
 -- BloodPressure Table
@@ -139,7 +153,7 @@ CREATE TABLE Meal (
 CREATE TABLE BodyWeight (
     weightID INT PRIMARY KEY AUTO_INCREMENT,
     recordID INT REFERENCES Records(recordID),
-    weightValue DECIMAL(3,2)
+    weightValue DECIMAL(5,2)
 );
 
 -- InsulinDose Table
@@ -169,3 +183,15 @@ INSERT INTO BloodSugar (recordID, value, timing) VALUES
 (8, 135.4, 'Bedtime'),
 (9, 145.1, 'Fasting'),
 (10, 118.6, 'Before Meal');
+
+INSERT INTO BloodSugar (recordID, value, timing) VALUES
+(12, 120.5, 'Fasting'),
+(13, 110.8, 'Before Meal'),
+(14, 140.6, 'Bedtime'),
+(15, 125.2, 'Fasting'),
+(16, 115.7, 'Before Meal'),
+(17, 128.9, 'After Meal'),
+(18, 135.4, 'Bedtime'),
+(19, 145.1, 'Fasting'),
+(20, 145.1, 'Fasting'),
+(21, 118.6, 'Before Meal');
