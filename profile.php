@@ -279,7 +279,7 @@ case 'med' :
   echo "<h2>Medication</h2>";
   echo "<div class='med-container'>";
 // Fetch data from the database
-$query = "SELECT * FROM Medicine"; 
+$query = "SELECT * FROM Medicine WHERE ssn = '$ssn'";
 $result = mysqli_query($conn, $query);
 
 if(mysqli_num_rows($result) > 0) {

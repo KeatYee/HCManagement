@@ -30,9 +30,9 @@ if (isset($_POST['submit'])) {
 
     
 
-    // Update the name in the database
-    $sql = "INSERT INTO Medicine (name,description,image)
-    VALUES('$name','$desc','$file_contents')";
+    // Add medicine to the database
+    $sql = "INSERT INTO Medicine (ssn, name, description, image)
+    VALUES('$ssn','$name','$desc','$file_contents')";
     $result = mysqli_query($conn, $sql);
 
     // Handle the result of the update operation

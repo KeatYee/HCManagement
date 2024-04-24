@@ -426,7 +426,7 @@ if (isset($_POST['submit'])) {
     <h3>Select Medication:</h3><br>
 
     <?php
-    $medOptionsQuery = "SELECT medID, name FROM Medicine";
+    $medOptionsQuery = "SELECT medID, name FROM Medicine WHERE ssn ='$ssn'";
     $medOptionsResult = mysqli_query($conn, $medOptionsQuery);
 
     $medOptions = array();

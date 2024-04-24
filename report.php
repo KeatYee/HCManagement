@@ -17,19 +17,141 @@ if (!isset($_SESSION['ssn'])) {
 // Get today's date
 $today = date("Y-m-d");
 
-// Calculate the start date for the date range (e.g., 7 days ago)
-$start_date = date("Y-m-d", strtotime('-30 days'));
+//all------------------------------------------------
+  $bloodSugarQuery1 = "SELECT r.date, b.value, b.timing 
+                    FROM Records r 
+                    INNER JOIN BloodSugar b ON r.recordID = b.recordID
+                    WHERE r.ssn = '$ssn'";
+  $result1 = mysqli_query($conn, $bloodSugarQuery1);
 
-// Fetch blood sugar data from MySQL
-$sql = "SELECT r.date, r.time, AVG(bs.value) AS average_value 
-FROM Records r
-INNER JOIN BloodSugar bs ON r.recordID = bs.recordID
-WHERE r.recordType = 'Blood Sugar'
-AND r.date BETWEEN '$start_date' AND '$today' -- Enclose date values in quotes
-GROUP BY r.date, bs.timing"; //**put the date range, use today's date
-$result = mysqli_query($conn, $sql);
+  $afterMealData = array();
+  $beforeMealData = array();
+  $fastingData = array();
 
+  // Loop through the fetched data and organize it by timing category
+  while ($row = mysqli_fetch_assoc($result1)) {
+    $date = $row['date'];
+    $value = $row['value'];
+    $timing = $row['timing'];
 
+    // Depending on the timing category, add the data to the appropriate array
+    if ($timing == 'after_meal') {
+      $afterMealData[$date] = $value;
+    } elseif ($timing == 'before_meal') {
+      $beforeMealData[$date] = $value;
+    } elseif ($timing == 'fasting') {
+      $fastingData[$date] = $value;
+    }
+  }
+
+//week--------------------------------------------------
+  $bloodSugarQuery2 = "SELECT r.date, b.value, b.timing 
+                    FROM Records r 
+                    INNER JOIN BloodSugar b ON r.recordID = b.recordID
+                    WHERE r.date >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)";
+  $result2 = mysqli_query($conn, $bloodSugarQuery2);
+
+  $afterMealWeekData = array();
+  $beforeMealWeekData = array();
+  $fastingWeekData = array();
+
+  while ($row = mysqli_fetch_assoc($result2)) {
+    $date = $row['date'];
+    $value = $row['value'];
+    $timing = $row['timing'];
+
+    // Depending on the timing category, add the data to the appropriate array
+    if ($timing == 'after_meal') {
+      $afterMealWeekData[$date] = $value;
+    } elseif ($timing == 'before_meal') {
+      $beforeMealWeekData[$date] = $value;
+    } elseif ($timing == 'fasting') {
+      $fastingWeekData[$date] = $value;
+    }
+  }
+//month--------------------------------------------------
+  $sql="SELECT r.date, b.value, b.timing 
+      FROM Records r 
+      INNER JOIN BloodSugar b ON r.recordID = b.recordID
+      WHERE r.ssn = '$ssn' 
+      AND MONTH(r.date) = MONTH(CURDATE())
+      AND YEAR(r.date) = YEAR(CURDATE())";
+  $result = mysqli_query($conn, $sql);
+
+  $afterMealMonthData = array();
+  $beforeMealMonthData = array();
+  $fastingMonthData = array();
+
+  while ($row = mysqli_fetch_assoc($result)) {
+    $date = $row['date'];
+    $value = $row['value'];
+    $timing = $row['timing'];
+
+    // Depending on the timing category, add the data to the appropriate array
+    if ($timing == 'after_meal') {
+      $afterMealMonthData[$date] = $value;
+    } elseif ($timing == 'before_meal') {
+      $beforeMealMonthData[$date] = $value;
+    } elseif ($timing == 'fasting') {
+      $fastingMonthData[$date] = $value;
+    }
+  }
+
+//count
+$bloodSugarQuery4 = "SELECT r.date, b.value, b.timing 
+                    FROM Records r 
+                    INNER JOIN BloodSugar b ON r.recordID = b.recordID
+                    WHERE r.ssn = '$ssn'";
+$result4 = mysqli_query($conn, $bloodSugarQuery4);                    
+// Initialize counters for categories
+$normalCount = 0;
+$lowCount = 0;
+$highCount = 0;
+
+// Loop through fetched records and categorize them
+while ($row = mysqli_fetch_assoc($result4)) {
+  $value = $row['value'];
+
+  if ($value >= 72 && $value <= 99) {
+      $normalCount++;
+  } elseif ($value < 72) {
+      $lowCount++;
+  } else {
+      $highCount++;
+  }
+}
+//data array for donut 
+$dataArray = [
+  ['Category', 'Count'],
+  ['Normal', $normalCount],
+  ['Low', $lowCount],
+  ['High', $highCount]
+];
+
+//highest n lowest n average
+$highestQuery = "SELECT MAX(bs.value) AS highest_value
+FROM BloodSugar bs
+INNER JOIN Records r ON bs.recordID = r.recordID
+WHERE r.ssn = '$ssn'";
+$highestResult = mysqli_query($conn, $highestQuery);
+$highestRow = mysqli_fetch_assoc($highestResult);
+$highestValue = $highestRow['highest_value'];
+
+$lowestQuery = "SELECT MIN(bs.value) AS lowest_value
+FROM BloodSugar bs
+INNER JOIN Records r ON bs.recordID = r.recordID
+WHERE r.ssn = '$ssn'";
+$lowestResult = mysqli_query($conn, $lowestQuery);
+$lowestRow = mysqli_fetch_assoc($lowestResult);
+$lowestValue = $lowestRow['lowest_value'];
+
+$avgQuery = "SELECT AVG(bs.value) AS avg_value
+FROM BloodSugar bs
+INNER JOIN Records r ON bs.recordID = r.recordID
+WHERE r.ssn = '$ssn'";
+$avgResult = mysqli_query($conn, $avgQuery);
+$avgRow = mysqli_fetch_assoc($avgResult);
+$avgValue = number_format($avgRow['avg_value'], 2);
 
 ?>
 <!DOCTYPE html>
@@ -46,8 +168,226 @@ $result = mysqli_query($conn, $sql);
   <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
   <!--Google Chart-->
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-  <script type="text/javascript" src="chart1.js"></script>
+  <!--Graph to retrieve month data-->
+  <script type="text/javascript">
+    // Load the Visualization API and the corechart package.
+    google.charts.load('current', {'packages':['corechart']});
+        
+   // Set a callback to run when the Google Visualization API is loaded.
+    google.charts.setOnLoadCallback(drawMonthChart);
+
+    function drawMonthChart() {
+      // Define the data format
+      var data = new google.visualization.DataTable();
+      data.addColumn('date', 'Date');
+      data.addColumn('number', 'After Meal');
+      data.addColumn('number', 'Before Meal');
+      data.addColumn('number', 'Fasting');
+      data.addColumn('number', 'Target'); // target line
+
+       var bloodSugarData = [
+            <?php
+            // Output the data in the required format
+            foreach ($afterMealMonthData as $date => $value) {
+                echo "[new Date('$date'), $value, null, null, 90], ";
+            }
+            foreach ($beforeMealMonthData as $date => $value) {
+                echo "[new Date('$date'), null, $value, null, 90], ";
+            }
+            foreach ($fastingMonthData as $date => $value) {
+                echo "[new Date('$date'), null, null, $value, 90], ";
+            }
+            ?>
+        ];
+
+      // Add data to the DataTable
+      data.addRows(bloodSugarData);
+
+      // Function to get the name of the current month
+    function getCurrentMonthName() {
+      var months = [
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+      ];
+      var currentMonthIndex = new Date().getMonth();
+      return months[currentMonthIndex];
+    }
+
+      // Set chart options
+      var options = {
+        title: getCurrentMonthName(),
+        curveType: 'function',
+        pointSize: 5, // Size of the dots
+        legend: { position: 'bottom' },
+        series: {
+            0: { color: 'red' },    // After Meal
+            1: { color: 'green' },  // Before Meal
+            2: { color: 'blue' },   // Fasting
+            3: { color: 'green',
+              lineDashStyle: [4, 4],
+              pointSize: 0 }  //target line
+        },
+        tooltip: { 
+          trigger: 'selection' // Only show tooltip on selection, not hover
+        }
+       
+      };
+
+      // Instantiate and draw the chart
+      var chart = new google.visualization.LineChart(document.getElementById('chart_div1'));
+      chart.draw(data, options);
+    }
+
+  </script> 
+  <!--Graph to retrieve all data-->
+  <script type="text/javascript">
+    // Load the Visualization API and the corechart package.
+    google.charts.load('current', {'packages':['corechart']});
+        
+     // Set a callback to run when the Google Visualization API is loaded.
+   google.charts.setOnLoadCallback(drawAllChart);
+
+    function drawAllChart() {
+      // Define the data format
+      var data = new google.visualization.DataTable();
+      data.addColumn('date', 'Date');
+      data.addColumn('number', 'After Meal');
+      data.addColumn('number', 'Before Meal');
+      data.addColumn('number', 'Fasting');
+      data.addColumn('number', 'Target'); // target line
+
+       // PHP arrays to hold the data fetched from the database for each timing category
+       var bloodSugarData = [
+            <?php
+            // Output the data in the required format
+            foreach ($afterMealData as $date => $value) {
+                echo "[new Date('$date'), $value, null, null, 90], ";
+            }
+            foreach ($beforeMealData as $date => $value) {
+                echo "[new Date('$date'), null, $value, null, 90], ";
+            }
+            foreach ($fastingData as $date => $value) {
+                echo "[new Date('$date'), null, null, $value, 90], ";
+            }
+            ?>
+        ];
+
+      // Add data to the DataTable
+      data.addRows(bloodSugarData);
+
+      // Set chart options
+      var options = {
+        title: 'All',
+        curveType: 'function',
+        pointSize: 5, // Size of the dots
+        legend: { position: 'bottom' },
+        series: {
+            0: { color: 'red' },    // After Meal
+            1: { color: 'green' },  // Before Meal
+            2: { color: 'blue' },   // Fasting
+            3: { color: 'green',
+              lineDashStyle: [4, 4],
+              pointSize: 0 }  //target line
+        },
+        tooltip: { 
+          trigger: 'selection' // Only show tooltip on selection, not hover
+        }
+       
+      };
+
+      // Instantiate and draw the chart
+      var chart = new google.visualization.LineChart(document.getElementById('chart_div2'));
+      chart.draw(data, options);
+    }
+
+  
+  </script>
+ <!--Graph to retrieve week data-->
+ <script type="text/javascript">
+        // Load the Visualization API and the corechart package.
+        google.charts.load('current', {'packages':['corechart']});
+        
+        // Set a callback to run when the Google Visualization API is loaded.
+      google.charts.setOnLoadCallback(drawWeekChart);
+   
+       function drawWeekChart() {
+         // Define the data format
+         var data = new google.visualization.DataTable();
+         data.addColumn('date', 'Date');
+         data.addColumn('number', 'After Meal');
+         data.addColumn('number', 'Before Meal');
+         data.addColumn('number', 'Fasting');
+         data.addColumn('number', 'Target'); // target line
+   
+          // PHP arrays to hold the data fetched from the database for each timing category
+          var bloodSugarData = [
+               <?php
+               // Output the data in the required format
+               foreach ($afterMealWeekData as $date => $value) {
+                   echo "[new Date('$date'), $value, null, null, 90], ";
+               }
+               foreach ($beforeMealWeekData as $date => $value) {
+                   echo "[new Date('$date'), null, $value, null, 90], ";
+               }
+               foreach ($fastingWeekData as $date => $value) {
+                   echo "[new Date('$date'), null, null, $value, 90], ";
+               }
+               ?>
+           ];
+   
+         // Add data to the DataTable
+         data.addRows(bloodSugarData);
+   
+         // Set chart options
+         var options = {
+           title: 'Week',
+           curveType: 'function',
+           pointSize: 5, // Size of the dots
+           legend: { position: 'bottom' },
+           series: {
+               0: { color: 'red' },    // After Meal
+               1: { color: 'green' },  // Before Meal
+               2: { color: 'blue' },   // Fasting
+               3: { color: 'green',
+                 lineDashStyle: [4, 4],
+                 pointSize: 0 }  //target line
+           },
+           tooltip: { 
+             trigger: 'selection' // Only show tooltip on selection, not hover
+           }
+          
+         };
+   
+         // Instantiate and draw the chart
+         var chart = new google.visualization.LineChart(document.getElementById('chart_div3'));
+         chart.draw(data, options);
+       }
+   
+  </script>
+<!--Donut Graph-->
+<script type="text/javascript">
+    // Load the Visualization API and the corechart package.
+    google.charts.load('current', {'packages':['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+       var data = google.visualization.arrayToDataTable(<?php echo json_encode($dataArray); ?>);
+      
+       var options = {
+                title: 'Blood Sugar Categories',
+                pieHole: 0.4,
+                legend: 'none',
+                colors: ['#4CAF50', '#F44336', '#FFC107']
+        };
+
+
+      var chart = new google.visualization.PieChart(document.getElementById('chart_donut'));
+      chart.draw(data, options);
+      }
+
+  </script>
      
+
 </head>
 <!--top nav bar-->
 <nav>
@@ -75,38 +415,46 @@ $result = mysqli_query($conn, $sql);
   </div>
 </nav>
 <body>
-<div id="chart_div" style="width: 1500px; height: 500px;"></div>
-<hr>
-<div id="chart_div2" style="width: 1500px; height: 500px;"></div>
-
- <div id="sql_result">
-
- <?php
-  echo "Start Date: $start_date<br>";
-  echo "Today's Date: $today";
-  // Fetch blood sugar data from MySQL
-$sql = "SELECT r.date, r.time, AVG(bs.value) AS average_value 
-FROM Records r
-INNER JOIN BloodSugar bs ON r.recordID = bs.recordID
-WHERE r.recordType = 'Blood Sugar'
-AND r.date BETWEEN '2024-03-11' AND '2024-04-10' -- Enclose date values in quotes
-GROUP BY r.date, bs.timing"; //**put the date range, use today's date
-$result = $conn->query($sql);
-
- // Display SQL query result
- if ($result && $result->num_rows > 0) {
-     echo "<h2>SQL Query Result:</h2>";
-     echo "<table>";
-     while($row = $result->fetch_assoc()) {
-         echo "<tr><td>Date:</td><td>" . $row["date"]. "</td><td>Time:</td><td>" . $row["time"]. "</td><td>Average Value:</td><td>" . $row["average_value"]. "</td></tr>";
-     }
-     echo "</table>";
- } else {
-     echo "<p>No data available.</p>";
- }
- ?>
+<div class="tab">
+  <button class="tablinks active" onclick="openTab(event, 'month')">Month</button>
+  <button class="tablinks" onclick="openTab(event, 'all')">All</button>
+  <button class="tablinks" onclick="openTab(event, 'week')">Week</button>
 </div>
 
+<div id="month" class="tabcontent">
+<button onclick="goBackMonth()">Previous Month</button>
+  <button onclick="goForwardMonth()">Next Month</button>
+  <div id="chart_div1" class="line_graph" ></div>
+</div>
+
+<div id="all" class="tabcontent">
+  <div id="chart_div2" class="line_graph" ></div>
+</div>
+
+<div id="week" class="tabcontent">
+  <div id="chart_div3" class="line_graph" ></div>
+</div>
+
+<hr>
+<div class="countBS">
+  <div id="chart_donut" style="width: 70%; height: 500px;"></div>
+  <div class="count">
+    <h2> <?php echo ($normalCount+ $lowCount+ $highCount)?> Times Tested</h2>
+    <h3>Normal</h3>
+    <p><?php echo $normalCount?></p>
+    <h3>Low</h3>
+    <p><?php echo $lowCount?></p>
+    <h3>High</h3>
+    <p><?php echo $highCount?></p>
+  </div>
+</div>
+<hr>
+<h3>Highest</h3>
+<p><?php echo $highestValue?></p>
+<h3>Lowest</h3>
+<p><?php echo $lowestValue?></p>
+<h3>Average</h3>
+<p><?php echo $avgValue?></p>
 
   <!--Hamburger-->
   <script src="app.js"></script>
@@ -136,5 +484,41 @@ $result = $conn->query($sql);
     </div>
 
 </footer>
+<script>
 
+  function openTab(evt, tabName) {
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+      tabcontent[i].style.display = "none";
+    }
+
+    var tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+      tablinks[i].classList.remove("active"); // Remove the 'active' class from all tab buttons
+    }
+
+    document.getElementById(tabName).style.display = "block";
+
+    // Add the 'active' class to the clicked tab button
+    evt.currentTarget.classList.add("active");
+
+    // If the tab name corresponds to a graph, initialize the chart
+    if (tabName === 'month') {
+      drawMonthChart(); 
+    } else if (tabName === 'all') {
+      drawAllChart(); 
+    } else if (tabName === 'week') {
+      drawWeekChart();
+    }
+  }
+
+
+  document.addEventListener('DOMContentLoaded', function() {
+    openTab(event, 'all'); // Select the "All" tab by default
+  });
+
+
+
+</script>
 </html>

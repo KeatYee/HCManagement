@@ -49,6 +49,7 @@ CREATE TABLE Report (
 -- Medicine Table
 CREATE TABLE Medicine (
     medID INT PRIMARY KEY AUTO_INCREMENT,
+    ssn CHAR(5) REFERENCES Users(ssn),
     name VARCHAR(255),
     description VARCHAR(255),
     image MEDIUMBLOB

@@ -294,7 +294,7 @@ if(isset($_POST['submitBS'])) {
 
         <!--PHP code to retrieve medicine options-->
 	    <?php
-	        $medOptionsQuery = "SELECT medID, name FROM Medicine";
+	        $medOptionsQuery = "SELECT medID, name FROM Medicine WHERE ssn ='$ssn'";
 	        $medOptionsResult = mysqli_query($conn, $medOptionsQuery);
 
 	        $medOptions = array();
@@ -305,9 +305,10 @@ if(isset($_POST['submitBS'])) {
 	    ?>
         <label for="medicine">Medicine:</label><br>
         <?php foreach ($medOptions as $medID => $name) { ?>
-        <input type="radio" id="medicine" name="medicine" value="<?php echo $medID; ?>">
-        <?php echo json_encode($name); ?>
+            <input type="radio" id="medicine_<?php echo $medID; ?>" name="medicine" value="<?php echo $medID; ?>">
+            <label for="medicine_<?php echo $medID; ?>"><?php echo htmlspecialchars($name); ?></label><br>
         <?php } ?>
+
         <span class="error"><?php if(isset($medError)) echo $medError; ?></span>
         <br>
 
