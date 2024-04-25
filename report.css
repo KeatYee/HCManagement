@@ -188,11 +188,119 @@ nav{
 /*Donut*/
 .countBS{
   display:flex;
+  margin-top: 30px;
 
 }
 
 .chart_donut{
   flex:1;
+}
+
+.count{
+  flex:1;
+  margin-top: 50px;
+  margin-left: 100px;
+
+}
+
+.count h2{
+  padding:10px;
+}
+
+.title{
+  padding:20px 20px;
+  border-radius: 20px;
+  border:1px solid #ccc;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+#norTitle{
+  background-color: #4CAF50;
+  position: relative;
+  cursor: pointer;
+}
+
+#loTitle{
+  background-color: #F44336;
+  position: relative;
+  cursor: pointer;
+}
+
+#hiTitle{
+  background-color: #FFC107;
+  position: relative;
+  cursor: pointer;
+}
+
+
+#norTitle:hover::after,
+#loTitle:hover::after,
+#hiTitle:hover::after {
+  content: attr(data-message); /* Display the message */
+  position: absolute;
+  top: 100%; /* Position it just below the title */
+  left: 0;
+  background-color: #fff; /* Background color for the message */
+  border: 1px solid #ccc;
+  padding: 5px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+
+.num{
+  flex:1;
+  line-height: 100px;
+  margin-left: 20px;
+  margin-top: 66px;
+}
+
+.num p {
+  font-size: 20px;
+}
+
+/*box*/
+.box {
+ flex:1;
+ padding:60px 20px;
+ margin:30px 18px;
+ border: #0C479D 1px solid;
+ border-radius: 30px;
+ transition: background-color 0.3s;
+ cursor:pointer;
+}
+
+.box:hover {
+  background-color: rgb(206, 221, 255); 
+}
+
+.box h3 {
+  font-size: 30px;
+  text-align: center;
+}
+
+.box p {
+  text-align: center;
+  font-size: 20px;
+  padding-top: 10px;
+}
+
+.container {
+  display: flex;
+}
+
+/*PDF*/
+.btnContainer{
+  text-align: center;
+  padding:50px;
+}
+
+.btnPdf{
+  padding:30px 50px;
+  border:none;
+  cursor: pointer;
+  font-size: 20px;
 }
 
 /*Footer*/

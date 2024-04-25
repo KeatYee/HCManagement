@@ -269,10 +269,66 @@ case 'acc':
 
     break;
 
-case 'today' : 
-  echo "Today";
-    
-    break;
+    case 'today':
+      echo "<h2>What I have to do today?</h2>";
+  
+      // Get today's date
+      $todayDate = date('Y-m-d');
+  
+      // Fetch medication reminders for today
+      $sqlMedication = "SELECT *, m.name FROM MedicationReminder mr
+                        INNER JOIN Medicine m ON mr.medID = m.medID
+                        WHERE mr.ssn = '$ssn' AND DATE(mr.sDate) <= '$todayDate' 
+                        AND DATE(mr.eDate) >= '$todayDate'";
+      $resultMedication = mysqli_query($conn, $sqlMedication);
+  
+      // Fetch blood sugar testing alerts for today
+      $sqlTestingAlert = "SELECT * FROM BSTestingAlert 
+                          WHERE ssn = '$ssn' AND DATE(sDate) <= '$todayDate' 
+                          AND DATE(eDate) >= '$todayDate'";
+      $resultTestingAlert = mysqli_query($conn, $sqlTestingAlert);
+  
+      // Fetch appointments for today
+      $sqlAppointment = "SELECT * FROM Appointment 
+                          WHERE ssn = '$ssn' AND DATE(sDate) <= '$todayDate' 
+                          AND DATE(eDate) >= '$todayDate'";
+      $resultAppointment = mysqli_query($conn, $sqlAppointment);
+  
+      // Check if there are any reminders for today
+      if (mysqli_num_rows($resultMedication) == 0 && mysqli_num_rows($resultTestingAlert) == 0 && mysqli_num_rows($resultAppointment) == 0) {
+          echo "<p>No reminders today.</p>";
+      } else {
+        echo "<h3>Medication Reminders</h3>";
+        while ($row = mysqli_fetch_assoc($resultMedication)) {
+            echo "<div class='reminder-box'>";
+            echo "<div class='reminder-title'>{$row['title']}</div>";
+            echo "<div class='reminder-details'>Start Date: {$row['sDate']} - End Date: {$row['eDate']}</div>";
+            echo "<div class='reminder-details'>{$row['name']}</div>";
+            echo "<div class='reminder-details'>{$row['dosage']}</div>";
+            echo "</div>";
+        }
+
+        echo "<h3>Blood Sugar Testing Alerts</h3>";
+        while ($row = mysqli_fetch_assoc($resultTestingAlert)) {
+            echo "<div class='reminder-box'>";
+            echo "<div class='reminder-title'>{$row['title']}</div>";
+            echo "<div class='reminder-details'>Start Date: {$row['sDate']} - End Date: {$row['eDate']}</div>";
+            echo "</div>";
+        }
+
+        echo "<h3>Appointments</h3>";
+        while ($row = mysqli_fetch_assoc($resultAppointment)) {
+            echo "<div class='reminder-box'>";
+            echo "<div class='reminder-title'>{$row['title']}</div>";
+            echo "<div class='reminder-details'>Start Date: {$row['sDate']} - End Date: {$row['eDate']}</div>";
+            echo "<div class='reminder-details'>{$row['location']}</div>";
+            echo "</div>";
+        }
+      }
+  
+      break;
+  
+  
 
 case 'med' : 
 
@@ -319,10 +375,7 @@ default:
 }
 
 ?>		
-	
-	
   </div>
-
 </div>
 
 <!--Hamburger-->

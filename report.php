@@ -28,21 +28,25 @@ $today = date("Y-m-d");
   $beforeMealData = array();
   $fastingData = array();
 
-  // Loop through the fetched data and organize it by timing category
-  while ($row = mysqli_fetch_assoc($result1)) {
-    $date = $row['date'];
-    $value = $row['value'];
-    $timing = $row['timing'];
+  if($result1){
+        // Loop through the fetched data and organize it by timing category
+    while ($row = mysqli_fetch_assoc($result1)) {
+      $date = $row['date'];
+      $value = $row['value'];
+      $timing = $row['timing'];
 
-    // Depending on the timing category, add the data to the appropriate array
-    if ($timing == 'after_meal') {
-      $afterMealData[$date] = $value;
-    } elseif ($timing == 'before_meal') {
-      $beforeMealData[$date] = $value;
-    } elseif ($timing == 'fasting') {
-      $fastingData[$date] = $value;
+      // Depending on the timing category, add the data to the appropriate array
+      if ($timing == 'after_meal') {
+        $afterMealData[$date] = $value;
+      } elseif ($timing == 'before_meal') {
+        $beforeMealData[$date] = $value;
+      } elseif ($timing == 'fasting') {
+        $fastingData[$date] = $value;
+      }
     }
   }
+
+  
 
 //week--------------------------------------------------
   $bloodSugarQuery2 = "SELECT r.date, b.value, b.timing 
@@ -55,18 +59,20 @@ $today = date("Y-m-d");
   $beforeMealWeekData = array();
   $fastingWeekData = array();
 
-  while ($row = mysqli_fetch_assoc($result2)) {
-    $date = $row['date'];
-    $value = $row['value'];
-    $timing = $row['timing'];
+  if($result2){
+    while ($row = mysqli_fetch_assoc($result2)) {
+      $date = $row['date'];
+      $value = $row['value'];
+      $timing = $row['timing'];
 
-    // Depending on the timing category, add the data to the appropriate array
-    if ($timing == 'after_meal') {
-      $afterMealWeekData[$date] = $value;
-    } elseif ($timing == 'before_meal') {
-      $beforeMealWeekData[$date] = $value;
-    } elseif ($timing == 'fasting') {
-      $fastingWeekData[$date] = $value;
+      // Depending on the timing category, add the data to the appropriate array
+      if ($timing == 'after_meal') {
+        $afterMealWeekData[$date] = $value;
+      } elseif ($timing == 'before_meal') {
+        $beforeMealWeekData[$date] = $value;
+      } elseif ($timing == 'fasting') {
+        $fastingWeekData[$date] = $value;
+      }
     }
   }
 //month--------------------------------------------------
@@ -81,13 +87,13 @@ $today = date("Y-m-d");
   $afterMealMonthData = array();
   $beforeMealMonthData = array();
   $fastingMonthData = array();
-
+if($result){
   while ($row = mysqli_fetch_assoc($result)) {
     $date = $row['date'];
     $value = $row['value'];
     $timing = $row['timing'];
 
-    // Depending on the timing category, add the data to the appropriate array
+    
     if ($timing == 'after_meal') {
       $afterMealMonthData[$date] = $value;
     } elseif ($timing == 'before_meal') {
@@ -96,6 +102,8 @@ $today = date("Y-m-d");
       $fastingMonthData[$date] = $value;
     }
   }
+}
+
 
 //count
 $bloodSugarQuery4 = "SELECT r.date, b.value, b.timing 
@@ -166,17 +174,32 @@ $avgValue = number_format($avgRow['avg_value'], 2);
   <script src="https://kit.fontawesome.com/410ff7000d.js" crossorigin="anonymous"></script>
   <!--Boxicons-->
   <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <!--jsPDF Library-->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.min.js"></script>
   <!--Google Chart-->
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
   <!--Graph to retrieve month data-->
   <script type="text/javascript">
     // Load the Visualization API and the corechart package.
     google.charts.load('current', {'packages':['corechart']});
-        
-   // Set a callback to run when the Google Visualization API is loaded.
     google.charts.setOnLoadCallback(drawMonthChart);
 
+    var currentMonthIndex = 0; // Initialize current month index
+
+      // Function to navigate to the previous month
+      function goBackMonth() {
+        currentMonthIndex--;
+        drawMonthChart();
+      }
+
+      // Function to navigate to the next month
+      function goForwardMonth() {
+        currentMonthIndex++;
+        drawMonthChart();
+      }
+
     function drawMonthChart() {
+      var currentMonth = new Date().getMonth() + currentMonthIndex;
       // Define the data format
       var data = new google.visualization.DataTable();
       data.addColumn('date', 'Date');
@@ -204,18 +227,11 @@ $avgValue = number_format($avgRow['avg_value'], 2);
       data.addRows(bloodSugarData);
 
       // Function to get the name of the current month
-    function getCurrentMonthName() {
-      var months = [
-      "January", "February", "March", "April", "May", "June",
-      "July", "August", "September", "October", "November", "December"
-      ];
-      var currentMonthIndex = new Date().getMonth();
-      return months[currentMonthIndex];
-    }
+    
 
       // Set chart options
       var options = {
-        title: getCurrentMonthName(),
+        title: getCurrentMonthName(currentMonth),
         curveType: 'function',
         pointSize: 5, // Size of the dots
         legend: { position: 'bottom' },
@@ -232,11 +248,20 @@ $avgValue = number_format($avgRow['avg_value'], 2);
         }
        
       };
+      
 
       // Instantiate and draw the chart
       var chart = new google.visualization.LineChart(document.getElementById('chart_div1'));
       chart.draw(data, options);
     }
+
+     function getCurrentMonthName(monthIndex) {
+            var months = [
+                "January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"
+            ];
+            return months[monthIndex % 12];
+        }
 
   </script> 
   <!--Graph to retrieve all data-->
@@ -374,7 +399,6 @@ $avgValue = number_format($avgRow['avg_value'], 2);
        var data = google.visualization.arrayToDataTable(<?php echo json_encode($dataArray); ?>);
       
        var options = {
-                title: 'Blood Sugar Categories',
                 pieHole: 0.4,
                 legend: 'none',
                 colors: ['#4CAF50', '#F44336', '#FFC107']
@@ -415,76 +439,124 @@ $avgValue = number_format($avgRow['avg_value'], 2);
   </div>
 </nav>
 <body>
-<div class="tab">
-  <button class="tablinks active" onclick="openTab(event, 'month')">Month</button>
-  <button class="tablinks" onclick="openTab(event, 'all')">All</button>
-  <button class="tablinks" onclick="openTab(event, 'week')">Week</button>
-</div>
-
-<div id="month" class="tabcontent">
-<button onclick="goBackMonth()">Previous Month</button>
-  <button onclick="goForwardMonth()">Next Month</button>
-  <div id="chart_div1" class="line_graph" ></div>
-</div>
-
-<div id="all" class="tabcontent">
-  <div id="chart_div2" class="line_graph" ></div>
-</div>
-
-<div id="week" class="tabcontent">
-  <div id="chart_div3" class="line_graph" ></div>
-</div>
-
-<hr>
-<div class="countBS">
-  <div id="chart_donut" style="width: 70%; height: 500px;"></div>
-  <div class="count">
-    <h2> <?php echo ($normalCount+ $lowCount+ $highCount)?> Times Tested</h2>
-    <h3>Normal</h3>
-    <p><?php echo $normalCount?></p>
-    <h3>Low</h3>
-    <p><?php echo $lowCount?></p>
-    <h3>High</h3>
-    <p><?php echo $highCount?></p>
+<div id="makepdf">
+  <div class="tab">
+    <button class="tablinks active" onclick="openTab(event, 'month')">Month</button>
+    <button class="tablinks" onclick="openTab(event, 'all')">All</button>
+    <button class="tablinks" onclick="openTab(event, 'week')">Week</button>
   </div>
+
+  <div id="month" class="tabcontent">
+      <button onclick="goBackMonth()">Previous Month</button>
+      <button onclick="goForwardMonth()">Next Month</button>
+      <div id="chart_div1" class="line_graph" ></div>
+  </div>
+
+  <div id="all" class="tabcontent">
+    <div id="chart_div2" class="line_graph" ></div>
+  </div>
+
+  <div id="week" class="tabcontent">
+    <div id="chart_div3" class="line_graph" ></div>
+  </div>
+
+  <hr>
+  <div class="countBS">
+    <div id="chart_donut" style="width:500px; height: 500px;"></div>
+    <div class="count">
+
+      <h2> <?php echo ($normalCount+ $lowCount+ $highCount)?> Times Tested</h2>
+      <div class="title" id="norTitle" data-message="Normal value is between 72 and 99 mg/dL">
+        <h3>Normal</h3>
+      </div>
+
+      <div class="title" id="loTitle" data-message="Low value is less than 72 mg/dL">
+        <h3>Low</h3>
+      </div>
+
+      <div class="title" id="hiTitle" data-message="High value is more than 99 mg/dL">
+        <h3>High</h3>
+      </div>
+  
+    </div>
+
+    <div class="num">
+      <p><?php echo $normalCount?> times</p>
+      <p><?php echo $lowCount?> times</p>
+      <p><?php echo $highCount?> times</p>
+    </div>
+  </div>
+  <hr>
+
+  <div class="container" id="container">
+    <div class="box">
+      <h3>Highest</h3>
+      <p id="highest"><?php echo $highestValue; ?></p><p>mg/dL</p>
+    </div>
+    <div class="box">
+      <h3>Lowest</h3>
+      <p id="lowest"><?php echo $lowestValue; ?></p><p>mg/dL</p>
+    </div>
+    <div class="box">
+      <h3>Average</h3>
+      <p id="average"><?php echo $avgValue; ?></p><p>mg/dL</p>
+    </div>
+  </div>
+  <hr>
+
 </div>
-<hr>
-<h3>Highest</h3>
-<p><?php echo $highestValue?></p>
-<h3>Lowest</h3>
-<p><?php echo $lowestValue?></p>
-<h3>Average</h3>
-<p><?php echo $avgValue?></p>
 
-  <!--Hamburger-->
-  <script src="app.js"></script>
-</body>
-<footer>
-  <div class="footer-content">
+<div class="btnContainer">
+  <button class=btnPdf id="generate-pdf">Generate PDF</button>
+</div>
 
-    <div class="about">
-      <h3>About Foodbank</h3>
-      <p style="color:white;">ØHungers is a Malaysian NGO food bank collecting <br>and distributing edible food to charities and families.</p>
-    </div>
 
-    <div class="contact">
-      <h3>Contact Us</h3>
-      <p style="color:white;">Email: ØHungers@gmail.com</p>
-      <p style="color:white;">Phone: +601-2879819</p>
-      <p style="color:white;">Address: 1495 Jalan Kong Kong Batu 26 Ladang Lim Lim 81750 Masai Johor Malaysia</p>
-    </div>
-   
-    <div class="social-media">
-      <h3>Follow Us</h3>
-	      <div class="social-icons">
-	        <a href="#"><i class="fab fa-facebook"></i></a>
-          <a href="#"><i class="fab fa-twitter"></i></a>
-          <a href="#"><i class="fab fa-instagram"></i></a>
-        </div>
-    </div>
-
-</footer>
+<!--Hamburger-->
+<script src="app.js"></script>
 <script>
+  let countingStarted = false; // Flag to track whether counting has started
+
+  document.addEventListener('scroll', function() {
+    // Get the position of the container element
+    const container = document.getElementById('container');
+    const containerPosition = container.getBoundingClientRect().top;
+
+    // Check if the container is in the viewport and counting hasn't started yet
+    const isInViewport = containerPosition < window.innerHeight && !countingStarted;
+
+    if (isInViewport) {
+      startCounting(); // Call your counting function when the container is in the viewport
+      countingStarted = true; // Set the flag to indicate that counting has started
+    }
+  });
+
+  function startCounting() {
+    // Get the target values for counting
+    const highestValue = <?php echo $highestValue; ?>;
+    const lowestValue = <?php echo $lowestValue; ?>;
+    const avgValue = <?php echo $avgValue; ?>;
+  
+   // Call the counting function for each number
+    countToValue('highest', highestValue, 2000); 
+    countToValue('lowest', lowestValue, 2000);
+    countToValue('average', avgValue, 2000); 
+  }
+
+  function countToValue(id, targetValue, speed) {
+    let currentValue = 0;
+    const element = document.getElementById(id);
+    const increment = targetValue / (speed / 10); // Calculate the increment based on speed
+
+    const interval = setInterval(function() {
+      if (currentValue >= targetValue) {
+        clearInterval(interval); // Stop the interval when target value is reached
+      }
+      else {
+        currentValue += increment; // Increment the current value
+        element.textContent = currentValue.toFixed(2); // Update the displayed value
+      }
+    }, 10); // Update every 10 milliseconds
+  } 
 
   function openTab(evt, tabName) {
     var i, tabcontent, tablinks;
@@ -516,9 +588,44 @@ $avgValue = number_format($avgRow['avg_value'], 2);
 
   document.addEventListener('DOMContentLoaded', function() {
     openTab(event, 'all'); // Select the "All" tab by default
+
   });
 
-
-
+  let button = document.getElementById("generate-pdf");
+        button.addEventListener("click", function () {
+            let doc = new jsPDF("p", "mm", [300, 300]);
+            let makePDF = document.querySelector("#makepdf");
+ 
+            // fromHTML Method
+            doc.fromHTML(makePDF);
+            doc.save("output.pdf");
+        });
 </script>
+</body>
+<footer>
+  <div class="footer-content">
+
+    <div class="about">
+      <h3>About Foodbank</h3>
+      <p style="color:white;">ØHungers is a Malaysian NGO food bank collecting <br>and distributing edible food to charities and families.</p>
+    </div>
+
+    <div class="contact">
+      <h3>Contact Us</h3>
+      <p style="color:white;">Email: ØHungers@gmail.com</p>
+      <p style="color:white;">Phone: +601-2879819</p>
+      <p style="color:white;">Address: 1495 Jalan Kong Kong Batu 26 Ladang Lim Lim 81750 Masai Johor Malaysia</p>
+    </div>
+   
+    <div class="social-media">
+      <h3>Follow Us</h3>
+	      <div class="social-icons">
+	        <a href="#"><i class="fab fa-facebook"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+        </div>
+    </div>
+
+</footer>
+
 </html>

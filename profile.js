@@ -22,10 +22,17 @@ function closeEditForm(formId) {
 }
 
 
+// Reset button click event listener
+document.getElementById("resetButton").addEventListener("click", function() {
+    window.location.href = "resetPass.php";
+
+ });
+
  // Logout button click event listener
 document.getElementById("logoutButton").addEventListener("click", function() {
-    window.location.href = "logout.php";
-    
+    if (confirm("Are you sure you want to logout your account?")) {
+        window.location.href = "logout.php";
+    }
 });
 
 // Delete button click event listener

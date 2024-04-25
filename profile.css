@@ -347,6 +347,24 @@ input[type=number], input[type=email]{
   font-weight: bolder;
 }
 
+/*Today*/
+.reminder-box {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  padding: 10px;
+  background-color: #f9f9f9;
+}
+
+.reminder-title {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.reminder-details {
+  color: #666;
+}
+
 /*med*/
 div.med-container {
     display: flex;
