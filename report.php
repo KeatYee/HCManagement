@@ -103,6 +103,34 @@ if($result){
     }
   }
 }
+//day--------------------------------------------------
+  $sql="SELECT r.date, b.value, b.timing 
+      FROM Records r 
+      INNER JOIN BloodSugar b ON r.recordID = b.recordID
+      WHERE r.ssn = '$ssn' 
+      AND DATE(r.date) = CURDATE()";
+  $result = mysqli_query($conn, $sql);
+
+  $afterMealDayData = array();
+  $beforeMealDayData = array();
+  $fastingDayData = array();
+
+if($result){
+  while ($row = mysqli_fetch_assoc($result)) {
+    $date = $row['date'];
+    $value = $row['value'];
+    $timing = $row['timing'];
+
+    
+    if ($timing == 'after_meal') {
+      $afterMealDayData[$date] = $value;
+    } elseif ($timing == 'before_meal') {
+      $beforeMealDayData[$date] = $value;
+    } elseif ($timing == 'fasting') {
+      $fastingDayData[$date] = $value;
+    }
+  }
+}
 
 
 //count
@@ -389,6 +417,68 @@ $avgValue = number_format($avgRow['avg_value'], 2);
        }
    
   </script>
+  <!--Graph to retrieve Day data-->
+ <script type="text/javascript">
+        // Load the Visualization API and the corechart package.
+        google.charts.load('current', {'packages':['corechart']});
+        
+        // Set a callback to run when the Google Visualization API is loaded.
+      google.charts.setOnLoadCallback(drawDayChart);
+   
+       function drawDayChart() {
+         // Define the data format
+         var data = new google.visualization.DataTable();
+         data.addColumn('date', 'Date');
+         data.addColumn('number', 'After Meal');
+         data.addColumn('number', 'Before Meal');
+         data.addColumn('number', 'Fasting');
+         data.addColumn('number', 'Target'); // target line
+   
+          // PHP arrays to hold the data fetched from the database for each timing category
+          var bloodSugarData = [
+               <?php
+               // Output the data in the required format
+               foreach ($afterMealDayData as $date => $value) {
+                   echo "[new Date('$date'), $value, null, null, 90], ";
+               }
+               foreach ($beforeMealDayData as $date => $value) {
+                   echo "[new Date('$date'), null, $value, null, 90], ";
+               }
+               foreach ($fastingDayData as $date => $value) {
+                   echo "[new Date('$date'), null, null, $value, 90], ";
+               }
+               ?>
+           ];
+   
+         // Add data to the DataTable
+         data.addRows(bloodSugarData);
+   
+         // Set chart options
+         var options = {
+           title: 'Day',
+           curveType: 'function',
+           pointSize: 5, // Size of the dots
+           legend: { position: 'bottom' },
+           series: {
+               0: { color: 'red' },    // After Meal
+               1: { color: 'green' },  // Before Meal
+               2: { color: 'blue' },   // Fasting
+               3: { color: 'green',
+                 lineDashStyle: [4, 4],
+                 pointSize: 0 }  //target line
+           },
+           tooltip: { 
+             trigger: 'selection' // Only show tooltip on selection, not hover
+           }
+          
+         };
+   
+         // Instantiate and draw the chart
+         var chart = new google.visualization.LineChart(document.getElementById('chart_div4'));
+         chart.draw(data, options);
+       }
+   
+  </script>
 <!--Donut Graph-->
 <script type="text/javascript">
     // Load the Visualization API and the corechart package.
@@ -441,9 +531,10 @@ $avgValue = number_format($avgRow['avg_value'], 2);
 <body>
 <div id="makepdf">
   <div class="tab">
-    <button class="tablinks active" onclick="openTab(event, 'month')">Month</button>
     <button class="tablinks" onclick="openTab(event, 'all')">All</button>
+    <button class="tablinks active" onclick="openTab(event, 'month')">Month</button>
     <button class="tablinks" onclick="openTab(event, 'week')">Week</button>
+    <button class="tablinks" onclick="openTab(event, 'day')">Day</button>
   </div>
 
   <div id="month" class="tabcontent">
@@ -458,6 +549,10 @@ $avgValue = number_format($avgRow['avg_value'], 2);
 
   <div id="week" class="tabcontent">
     <div id="chart_div3" class="line_graph" ></div>
+  </div>
+
+  <div id="day" class="tabcontent">
+    <div id="chart_div4" class="line_graph" ></div>
   </div>
 
   <hr>

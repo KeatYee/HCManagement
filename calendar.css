@@ -275,7 +275,7 @@ nav{
 /* calendar buttons */
 .fc-button {
   background-color: #A6DCEE ;
-  color: white;
+  color: rgb(0, 0, 0);
   border: none;
   padding: 10px 15px;
   cursor: pointer;
@@ -287,7 +287,6 @@ nav{
   background-color: #5389A6 ;
 
 }
-
 /* today button differently */
 .fc-today-button {
   background-color: #65b578;
@@ -300,12 +299,12 @@ nav{
 /*  prev and next buttons */
 .fc-prev-button,
 .fc-next-button {
-  background-color: #dc3545;
+  background-color: #0C4396;
 }
 
 .fc-prev-button:hover,
 .fc-next-button:hover {
-  background-color: #dc3545;
+  background-color: #0C4396;
 }
 /* button text */
 .fc-button span {
@@ -313,16 +312,16 @@ nav{
   font-weight: bold;
 }
 
- /*Footer*/
- footer {
+ /* Footer styles */
+footer {
   color: #0C479D;
-  background-color:#0C479D;
+  background-color: #0C479D;
   width: 100%;
   background-color: rgba(0, 0, 0, 0.3);
   text-align: center;
   bottom: 0;
   font-family: "Raleway", sans-serif;
-  font-size:23px;
+  font-size: 23px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -330,42 +329,45 @@ nav{
 }
 
 .footer-content {
-        display: flex; 
-        flex-wrap: wrap; 
-        width: 100%; 
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
 }
-      
+
 .about,
 .contact,
 .social-media {
-  flex:1;
-  text-align: left; 
-}      
-      .about{
-      margin-left:50px;
-      }	
-      .contact{
-        margin-left:175px;  
-        margin-right:100px;
-      }
-      .social-media{
-      
-        margin-left:50px;
-        text-align:center;
-      }
-      .social-icons{
-      font-size:30px;	
-      text-align:center;
-      }	
-      footer a {
-        text-decoration: none;
-        font-family: "Raleway", sans-serif;
-        color: #444444;
-      }
-      
-      footer a:hover {
-        background-color: white;
-        background: transparent;
-        color: white;
-      }
-    
+  flex: 1;
+  text-align: left;
+}
+
+.about {
+  margin-left: 50px;
+}
+
+.contact {
+  margin-left: 175px;
+  margin-right: 100px;
+}
+
+.social-media {
+  margin-left: 50px;
+  text-align: center;
+}
+
+.social-icons {
+  font-size: 30px;
+  text-align: center;
+}
+
+footer a {
+  text-decoration: none;
+  font-family: "Raleway", sans-serif;
+  color: #444444;
+}
+
+footer a:hover {
+  background-color: white;
+  background: transparent;
+  color: white;
+}

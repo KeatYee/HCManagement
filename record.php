@@ -434,9 +434,9 @@ if (isset($_POST['submit'])) {
     while ($row = mysqli_fetch_assoc($medOptionsResult)) {
         $medOptions[$row['medID']] = $row['name'];
     }
-    ?>
+    
 
-    <?php foreach ($medOptions as $medID => $name) { ?>
+     foreach ($medOptions as $medID => $name) { ?>
 
         <input type="checkbox" id="medicine<?php echo $medID; ?>" name="medID[]" value="<?php echo $medID; ?>">
         <?php echo $name; ?> <br>

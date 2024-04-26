@@ -2,6 +2,14 @@
 session_start();
 include('DBconnect.php');
 
+require 'vendor/phpmailer/phpmailer/src/Exception.php';
+require 'vendor/phpmailer/phpmailer/src/PHPMailer.php';
+require 'vendor/phpmailer/phpmailer/src/SMTP.php';
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+
 // Check if the user is logged in
 if (!isset($_SESSION['ssn'])) {
     echo "<script> alert('You need to log in to access calendar');";
@@ -12,13 +20,27 @@ if (!isset($_SESSION['ssn'])) {
 // Retrieve user information from the session
 $ssn = $_SESSION['ssn'];
 
-// Retrieve selected date range from URL parameters
-if (isset($_GET['start']) && isset($_GET['end'])) {
-    $start = $_GET['start'];
-    $end = $_GET['end'];
+$mail = new PHPMailer(true); // Passing true enables exceptions
 
-}
+try {
+    $mail->isSMTP();
+    $mail->Host       = 'in-v3.mailjet.com';
+    $mail->SMTPAuth   = true;
+    $mail->Username   = 'a3b69cf2784aed36ba6f0c4540c4dbcf'; // Your Hotmail email address
+    $mail->Password   = '22cb5ff3cc1c5e039ace6d8cb285127e';     // Your Hotmail password
+    $mail->SMTPSecure = 'tls';
+    $mail->Port       = 587;
 
+    
+  //Recipients
+  $mail->setFrom('diacareapplication@gmail.com', 'DiaCare');
+  $mail->addAddress('diacareapplication@gmail.com', 'DiaCare');
+
+
+  // Retrieve user's email from the database
+  $user_email_result = mysqli_query($conn, "SELECT email FROM users WHERE ssn = '$ssn'");
+  $user_email_row = mysqli_fetch_assoc($user_email_result);
+  $user_email = $user_email_row['email'];
 //Appointment-------------------
 if(isset($_POST['submitAppt'])) {
 
@@ -76,6 +98,16 @@ if(isset($_POST['submitAppt'])) {
             // Set a session variable to indicate event added successful
 			$_SESSION['addSuccess'] = true;
 
+            if ($remType == 'email') {
+                 // Send email to user
+                 $mail->addAddress($user_email);
+                 $mail->isHTML(true);
+                 $mail->Subject = 'Appointment Reminder';
+                 $mail->Body    = "Appointment Reminder: <br><br> Title: $title <br> Start Date: $startDate <br> End Date: $endDate 
+                 <br> Location: $location <br> Reminder Type: $remType";
+                 $mail->send();
+            }
+
             header("Location:calendar.php");
             exit();
         }
@@ -104,14 +136,25 @@ if(isset($_POST['submitMed'])) {
         $endError = "Please select an end date.";
         $hasErrors = true;
     }
-    if (empty($_POST['medicine'])) {
+    if (empty($_POST['medID'])) {
         $medError = "Please choose your medicine.";
         $hasErrors = true;
+    }else{
+        $medIDs = $_POST['medID'];
+        $dosage_amounts = $_POST['dosage_amount'];
+        $dosage_units = $_POST['dosage_unit'];
+
+        // Check if dosage amount and unit are entered for each selected medication
+        foreach ($medIDs as $key => $medID) {
+            // Check if the corresponding dosage amount and unit are empty
+            if (empty($dosage_amounts[$key]) || empty($dosage_units[$key])) {
+                $dsgError = "Dosage amount and unit are required for all selected medications.";
+                $hasErrors = true;
+                break; 
+            }
+        }
     }
-    if (empty($_POST['dosage'])) {
-        $dsgError = "Please enter medicine dosage.";
-        $hasErrors = true;
-    }
+    
     if (empty($_POST['reminderType'])) {
         $remError = "Please choose a reminder type.";
         $hasErrors = true;
@@ -126,26 +169,40 @@ if(isset($_POST['submitMed'])) {
         }
     }
 
-    if (!$hasError) {
+    if (!$hasErrors) {
 
         // Perform database insertion for appointment
         $title = $_POST['eventTitle'];
         $startDate = date("Y-m-d\TH:i:s", strtotime($_POST['eventStartDate']));
         $endDate = date("Y-m-d\TH:i:s", strtotime($_POST['eventEndDate']));
-        $medicine = $_POST['medicine'];
-        $dosage = $_POST['dosage'];
         $remType = $_POST['reminderType'];
 
-        $sql = "INSERT INTO MedicationReminder(medID, ssn, title, dosage, sDate, eDate, remType)
-                VALUES('$medicine', '$ssn', '$title', '$dosage', '$startDate', '$endDate', '$remType')";
-        $result = mysqli_query($conn, $sql);
+        foreach ($_POST['medID'] as $key => $medID) {
+            $dosage_amount = $_POST['dosage_amount'][$key];
+            $dosage_unit = $_POST['dosage_unit'][$key];
 
+            $sql = "INSERT INTO MedicationReminder(medID, ssn, title, dosage, unit, sDate, eDate, remType)
+            VALUES('$medID', '$ssn', '$title', '$dosage_amount', '$dosage_unit', '$startDate', '$endDate', '$remType')";
+            $result = mysqli_query($conn, $sql);
+
+        }
         if (!$result) {
             die('Error: ' . mysqli_error($conn));
         }
         else{
             // Set a session variable to indicate event added successful
 			$_SESSION['addSuccess'] = true;
+
+            if ($remType == 'email') {
+                // Send email to user
+                $mail->addAddress($user_email);
+                $mail->isHTML(true);
+                $mail->Subject = 'Medication Reminder';
+                $mail->Body    = "Medication Reminder: <br><br> Title: $title <br> 
+                Start Date: $startDate <br> End Date: $endDate 
+                <br> Reminder Type: $remType";
+                $mail->send();
+           }
 
             header("Location:calendar.php");
             exit();
@@ -186,7 +243,7 @@ if(isset($_POST['submitBS'])) {
         }
     }
 
-    if (!$hasError) {
+    if (!$hasErrors) {
 
         // Perform database insertion for appointment
         $title = $_POST['eventTitle'];
@@ -205,12 +262,26 @@ if(isset($_POST['submitBS'])) {
             // Set a session variable to indicate event added successful
 			$_SESSION['addSuccess'] = true;
 
+            if ($remType == 'email') {
+                // Send email to user
+                $mail->addAddress($user_email);
+                $mail->isHTML(true);
+                $mail->Subject = 'Blood Sugar Testing Alert';
+                $mail->Body    = "Blood Sugar Testing Reminder: <br><br> Title: $title <br> Start Date: $startDate <br> End Date: $endDate 
+                <br> Reminder Type: $remType";
+                $mail->send();
+           }
+
             header("Location:calendar.php");
             exit();
         }
 
     }
 }
+
+} catch (Exception $e) {
+    echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+    }
 
 ?>
 <!DOCTYPE html>
@@ -242,7 +313,7 @@ if(isset($_POST['submitBS'])) {
         <form id="eventForm" action="addEvent.php" method="POST">
 
         <label for="eventTitle">Event Title</label><br>
-        <input type="text" id="eventTitle" name="eventTitle" required>
+        <input type="text" id="eventTitle" name="eventTitle"  placeholder="Annual wellness visit" required>
         <span class="error"><?php if(isset($titleError)) echo $titleError; ?></span>
         <br>
 
@@ -257,7 +328,7 @@ if(isset($_POST['submitBS'])) {
         <br>
 
         <label for="location">Location</label><br>
-        <input type="text" id="location" name="location" required>
+        <input type="text" id="location" name="location" placeholder="Cheras" required>
         <span class="error"><?php if(isset($loctError)) echo $locError; ?></span>
         <br>
 
@@ -278,7 +349,7 @@ if(isset($_POST['submitBS'])) {
         <form id="eventForm" action="addEvent.php" method="POST">
 
         <label for="eventTitle">Event Title:</label><br>
-        <input type="text" id="eventTitle" name="eventTitle" required>
+        <input type="text" id="eventTitle" name="eventTitle" placeholder="Eat Metformin" required>
         <span class="error"><?php if(isset($titleError)) echo $titleError; ?></span>
         <br>
 
@@ -292,28 +363,33 @@ if(isset($_POST['submitBS'])) {
         <span class="error"><?php if(isset($endError)) echo $endError; ?></span>
         <br>
 
-        <!--PHP code to retrieve medicine options-->
-	    <?php
-	        $medOptionsQuery = "SELECT medID, name FROM Medicine WHERE ssn ='$ssn'";
-	        $medOptionsResult = mysqli_query($conn, $medOptionsQuery);
+    <!--PHP code to retrieve medicine options-->
+	<?php
+    $medOptionsQuery = "SELECT medID, name FROM Medicine WHERE ssn ='$ssn'";
+    $medOptionsResult = mysqli_query($conn, $medOptionsQuery);
 
-	        $medOptions = array();
+    $medOptions = array();
 
-	        while ($row = mysqli_fetch_assoc($medOptionsResult)) {
-		            $medOptions[$row['medID']] = $row['name'];
-            	}
-	    ?>
-        <label for="medicine">Medicine:</label><br>
-        <?php foreach ($medOptions as $medID => $name) { ?>
-            <input type="radio" id="medicine_<?php echo $medID; ?>" name="medicine" value="<?php echo $medID; ?>">
-            <label for="medicine_<?php echo $medID; ?>"><?php echo htmlspecialchars($name); ?></label><br>
-        <?php } ?>
+    while ($row = mysqli_fetch_assoc($medOptionsResult)) {
+        $medOptions[$row['medID']] = $row['name'];
+    }
+    
+
+    foreach ($medOptions as $medID => $name) { ?>
+
+        <input type="checkbox" id="medicine<?php echo $medID; ?>" name="medID[]" value="<?php echo $medID; ?>">
+        <?php echo $name; ?> <br>
+        
+        <label for="dosage<?php echo $medID; ?>">Dosage:</label>
+        <div class="flexMed">
+        <input type="text" id="dosage_amount<?php echo $medID; ?>" name="dosage_amount[]" placeholder="2"><br>
+        <input type="text" id="dosage_unit<?php echo $medID; ?>" name="dosage_unit[]" placeholder="pills"><br>
+        </div>
+
+    <?php } ?>
 
         <span class="error"><?php if(isset($medError)) echo $medError; ?></span>
         <br>
-
-        <label for="dosage">Dosage:</label><br>
-        <input type="number" id="dosage" name="dosage" required>
         <span class="error"><?php if(isset($dsgError)) echo $dsgError; ?></span>
         <br>
 

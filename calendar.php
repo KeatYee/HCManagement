@@ -12,6 +12,17 @@ if (!isset($_SESSION['ssn'])) {
 // Retrieve user information from the session
 $ssn = $_SESSION['ssn'];
 
+if (isset($_SESSION['addSuccess']) && $_SESSION['addSuccess']) {
+    // Display SweetAlert message using JavaScript
+    echo '<script>';
+    echo 'Swal.fire("Congrats!", "Your event is added!", "success");';
+    echo '</script>';
+
+    // Unset the session variable
+    unset($_SESSION['addSuccess']);
+}
+
+
 $fetch_event1 = mysqli_query($conn, "SELECT * FROM Appointment WHERE ssn = '$ssn'");
 $fetch_event2 = mysqli_query($conn, "SELECT * FROM medicationReminder WHERE ssn = '$ssn'");
 $fetch_event3 = mysqli_query($conn, "SELECT * FROM bsTestingAlert WHERE ssn = '$ssn'");
@@ -79,6 +90,9 @@ while ($result = mysqli_fetch_array($fetch_event3)) {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.js"></script> 
     
+<!--Javascript Alert for adding event successful-->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.6/dist/sweetalert2.all.min.js"></script>
+
 </head>
 <!--top nav bar-->
 <header>
@@ -108,9 +122,6 @@ while ($result = mysqli_fetch_array($fetch_event3)) {
 </nav>
 </header>
 <body>
-
-
-
 
 <div class="sidebar-notif">
 
@@ -208,7 +219,6 @@ echo "Error: " . mysqli_error($conn);
 
 </div>
 
-
 <script>
 $(document).ready(function() {
 
@@ -237,32 +247,32 @@ $(document).ready(function() {
 
       // Redirect to add event page
       window.location.href = "addEvent.php?start=" + formattedStart + "&end=" + formattedEnd;
-},
+    },
     editable: true, // Enables dragging and resizing events
     eventDrop: function(event, delta, revertFunc) {
     // This function is called when an event is dropped
 
-    alert(event.title + " was dropped on " + event.start.format());
-      if (!confirm("Are you sure about this change?")) {
-        revertFunc();
-      }
-      else {
-        var start = $.fullCalendar.formatDate(event.start, "Y-MM-DD HH:mm:ss");
-        var end = $.fullCalendar.formatDate(event.end, "Y-MM-DD HH:mm:ss");
-        var title = event.title;
-        var id = event.id;
-        var eventType = event.eventType;
+      alert(event.title + " was dropped on " + event.start.format());
+        if (!confirm("Are you sure about this change?")) {
+          revertFunc();
+        }
+        else {
+          var start = $.fullCalendar.formatDate(event.start, "Y-MM-DD HH:mm:ss");
+          var end = $.fullCalendar.formatDate(event.end, "Y-MM-DD HH:mm:ss");
+          var title = event.title;
+          var id = event.id;
+          var eventType = event.eventType;
 
-        // Send AJAX request to updateEvent.php with event details
-        $.ajax({
-        url: "updateEvent.php",
-        type: "POST",
-        data: { title: title, start: start, end: end, id: id, eventType: eventType },
-          success: function() {
-            alert("Event Updated Successfully");
-          }
-        });
-      }
+          // Send AJAX request to updateEvent.php with event details
+          $.ajax({
+          url: "updateEvent.php",
+          type: "POST",
+          data: { title: title, start: start, end: end, id: id, eventType: eventType },
+            success: function() {
+              alert("Event Updated Successfully");
+            }
+          });
+        }
 
     },
     eventOverlap: true,
@@ -292,7 +302,7 @@ $(document).ready(function() {
       }
     },
     eventClick: function(event) {
-    // This function is called when an event is clicked
+      // This function is called when an event is clicked
 
       if (confirm("Are you sure you want to remove it?")) {
         var id = event.id;
@@ -317,19 +327,7 @@ $(document).ready(function() {
 </script> 
 
 
-<!--Javascript Alert for adding event successful-->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.6/dist/sweetalert2.all.min.js"></script>
-<?php
-if (isset($_SESSION['addSuccess']) && $_SESSION['addSuccess']) {
-    // Display SweetAlert message using JavaScript
-    echo '<script>';
-    echo 'Swal.fire("Congrats!", "Your event is added!", "success");';
-    echo '</script>';
 
-    // Unset the session variable
-    unset($_SESSION['addSuccess']);
-}
-?>
 
 <footer>
   <div class="footer-content">

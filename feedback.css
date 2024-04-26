@@ -67,8 +67,31 @@ background:#7A7A7A;
 }
 
 @media only screen and (max-width: 768px) {
+  /* Set a base font size for the body */
+body {
+  font-size: 16px;
+}
 
-nav{
+/* Apply zoom to the body to make everything appear smaller */
+body {
+  zoom: 0.75;
+}
+
+  .dropdown-form {
+    background-color: #F5F5F5;
+    width:1150px;
+    margin: 0px; /* Center the form horizontally */
+    padding: 0px; /* Reduce padding for the form */
+    border-radius: 10px;
+    box-shadow: 0 0 13px rgba(0, 0, 0, 0.1);
+    width: 100%; /* Reduce the width of the form */
+    max-width: 60%; /* Set a maximum width for the form */
+    justify-content: center;
+    align-items: center;
+  }
+
+  
+nav{  
   position:relative;
   padding:0 20px;
   z-index:2;
@@ -149,7 +172,8 @@ nav{
       align-items: center;
       padding: 50px;
     }
-    
+
+
     .footer-content {
       display: flex; 
       flex-wrap: wrap; 
@@ -193,14 +217,14 @@ nav{
 /*Body*/
     .dropdown-form {
             background-color: #F5F5F5;
-            margin-left:23%;
+            margin-left:20%;
             margin-right:20%;
             margin-top:6%;
             margin-bottom:5%;
             padding: 100px;
             border-radius: 10px;
             box-shadow: 0 0 13px rgba(0, 0, 0, 0.1);
-            width:1100px;
+            width:1150px;
             justify-content: center;
             align-items: center;
            

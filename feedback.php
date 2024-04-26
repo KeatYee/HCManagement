@@ -1,3 +1,69 @@
+<?php
+session_start();
+include 'DBconnect.php'; // Include database connection
+
+// Check if the user is logged in
+if (!isset($_SESSION['ssn'])) {
+  echo "<script> alert('You need to log in to access the feedback page.');";
+  echo "window.location.replace('login.php');</script>";
+  exit(); //redirect user to login page
+}
+
+// Retrieve user information from the session
+$ssn = $_SESSION['ssn'];
+
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Get form data
+    $name = trim($_POST["name"]);
+    $email = ($_POST["email"]);
+    $phone = trim($_POST["phone"]);
+    $message = ($_POST["message"]);
+    $date = date("Y-m-d");
+    $time = date("H:i:s");
+
+
+    // **Name Validation:**
+    $allowedChars = '/^[a-zA-Z \-\']+$/'; // Allow letters, spaces, hyphens, and apostrophes
+    if (!preg_match($allowedChars, $name)) {
+      echo "<script>alert('Name can only contain letters, spaces, hyphens, and apostrophes.'); window.location.href='feedback.php';</script>";
+    exit();
+    }
+
+    // Validate email
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        // Show alert message
+        echo "<script>alert('Invalid email format');</script>";
+    }
+
+    $allowedChars = '/^[0-9+\-()]+$/'; // Allow digits, +, -, and ()
+    if (!preg_match($allowedChars, $phone)) {
+      echo "<script>alert('Invalid phone number format. Allowed characters: 0-9, +, -, and ().'); window.location.href='feedback.php';</script>";
+      exit();
+    }
+    
+  
+        // SQL query to insert data into the database
+        $sql = "INSERT INTO feedback (ssn, date, time, comment, email) 
+        VALUES ('$ssn', '$date', '$time', '$message', '$email')";
+        $result = mysqli_query($conn, $sql);
+
+        if ($result) {
+            // Show success message
+            echo "<script>";
+            echo "alert('We have received your feedback!');";
+            echo "window.location.href = 'feedback.php';"; 
+            echo "</script>";
+        } else {
+            echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+        }
+
+    // Close the database connection
+    mysqli_close($conn);
+
+}
+?>
+
 <!DOCTYPE html>
 <html>
 
@@ -57,12 +123,11 @@
             <p>@diacare</p>
         </div>
 
-        <form class="user-input" action="submit_form.php" method="post">
-            <input type="text" name="name" placeholder="Name">
-            <input type="text" name="user_id" placeholder="User ID">
-            <input type="email" name="email" placeholder="Email">
-            <input type="tel" name="phone" placeholder="Phone Number">
-            <textarea name="message" placeholder="Your Message"></textarea>
+        <form class="user-input" action="feedback.php" method="post">
+            <input type="text" name="name" placeholder="Name" required>
+            <input type="email" name="email" placeholder="Email" required>
+            <input type="tel" name="phone" placeholder="Phone Number" required>
+            <textarea name="message" placeholder="Your Message" required></textarea>
             <button type="submit" class="btn">Submit</button>
         </form>
     </div>
