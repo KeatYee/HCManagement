@@ -183,6 +183,36 @@ nav{
 .line_graph{
   width:1500px;
   height:500px;
+  margin:0 auto;
+}
+
+/*month graph*/
+.monthBtn{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+}
+
+.previousBtn{
+  padding:20px 30px;
+  border:none;
+  background-color: #0C479D;
+  color: #ffffff;
+  cursor: pointer;
+  margin:20px;
+  border-radius: 15px;
+
+}
+
+.nextBtn{
+  padding:20px 30px;
+  border:none;
+  background-color: #161f2b;
+  color: #ffffff;
+  cursor: pointer;
+  margin:20px;
+  border-radius: 15px;
 }
 
 /*Donut*/

@@ -4,7 +4,7 @@ include 'DBconnect.php'; // Include database connection
 
 // Check if the user is logged in
 if (!isset($_SESSION['ssn'])) {
-    echo "<script> alert('You need to log in to access the profile page.');";
+    echo "<script> alert('You need to log in to access the report page.');";
 	  echo "window.location.replace('login.php');</script>";
     exit(); //redirect user to login page
 }
@@ -76,33 +76,70 @@ $today = date("Y-m-d");
     }
   }
 //month--------------------------------------------------
-  $sql="SELECT r.date, b.value, b.timing 
-      FROM Records r 
-      INNER JOIN BloodSugar b ON r.recordID = b.recordID
-      WHERE r.ssn = '$ssn' 
-      AND MONTH(r.date) = MONTH(CURDATE())
-      AND YEAR(r.date) = YEAR(CURDATE())";
-  $result = mysqli_query($conn, $sql);
+// Array of month names
+$months = [
+  "January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"
+];
 
-  $afterMealMonthData = array();
-  $beforeMealMonthData = array();
-  $fastingMonthData = array();
-if($result){
-  while ($row = mysqli_fetch_assoc($result)) {
-    $date = $row['date'];
-    $value = $row['value'];
-    $timing = $row['timing'];
-
-    
-    if ($timing == 'after_meal') {
-      $afterMealMonthData[$date] = $value;
-    } elseif ($timing == 'before_meal') {
-      $beforeMealMonthData[$date] = $value;
-    } elseif ($timing == 'fasting') {
-      $fastingMonthData[$date] = $value;
-    }
-  }
+// Retrieve the month index from the query parameter or default to the current month
+$currentMonthIndex = isset($_GET['month']) ? intval($_GET['month']) : date('n')- 1;
+// If the adjusted month index is negative, set it to 11 (December)
+if ($currentMonthIndex < 0) {
+  $currentMonthIndex = 11;
 }
+// Get the month name based on the current month index
+$currentMonthName = $months[$currentMonthIndex];
+
+function fetchMonthData($currentMonthIndex, $conn, $ssn) {
+
+  $sql = "SELECT r.date, b.value, b.timing 
+        FROM Records r 
+        LEFT JOIN BloodSugar b ON r.recordID = b.recordID
+        WHERE r.ssn = '$ssn' 
+        AND MONTH(r.date) = " . ($currentMonthIndex + 1) . "
+        AND YEAR(r.date) = YEAR(CURDATE())";
+
+
+ 
+  $result = mysqli_query($conn, $sql);
+  $monthData = [
+      'afterMeal' => [],
+      'beforeMeal' => [],
+      'fasting' => []
+  ];
+
+  if ($result) {
+      while ($row = mysqli_fetch_assoc($result)) {
+          $date = $row['date'];
+          $value = $row['value'];
+          $timing = $row['timing'];
+
+          // Add the data to the appropriate array
+          if ($timing == 'after_meal') {
+              $monthData['afterMeal'][$date] = $value;
+          } elseif ($timing == 'before_meal') {
+              $monthData['beforeMeal'][$date] = $value;
+          } elseif ($timing == 'fasting') {
+              $monthData['fasting'][$date] = $value;
+          }
+      }
+  }
+
+  // Fill in missing data with null values
+  foreach (['afterMeal', 'beforeMeal', 'fasting'] as $category) {
+      if (empty($monthData[$category])) {
+          $monthData[$category] = [];
+      }
+  }
+
+  return $monthData;
+}
+
+
+// Call the function passing required parameters
+$monthData = fetchMonthData($currentMonthIndex, $conn, $ssn);
+
 //day--------------------------------------------------
   $sql="SELECT r.date, b.value, b.timing 
       FROM Records r 
@@ -210,25 +247,12 @@ $avgValue = number_format($avgRow['avg_value'], 2);
   <script type="text/javascript">
     // Load the Visualization API and the corechart package.
     google.charts.load('current', {'packages':['corechart']});
-    google.charts.setOnLoadCallback(drawMonthChart);
+    google.charts.setOnLoadCallback(function() {
+        drawMonthChart(<?php echo json_encode($monthData); ?>);
+    });
 
-    var currentMonthIndex = 0; // Initialize current month index
-
-      // Function to navigate to the previous month
-      function goBackMonth() {
-        currentMonthIndex--;
-        drawMonthChart();
-      }
-
-      // Function to navigate to the next month
-      function goForwardMonth() {
-        currentMonthIndex++;
-        drawMonthChart();
-      }
-
-    function drawMonthChart() {
-      var currentMonth = new Date().getMonth() + currentMonthIndex;
-      // Define the data format
+    function drawMonthChart(monthData) {
+     
       var data = new google.visualization.DataTable();
       data.addColumn('date', 'Date');
       data.addColumn('number', 'After Meal');
@@ -236,30 +260,21 @@ $avgValue = number_format($avgRow['avg_value'], 2);
       data.addColumn('number', 'Fasting');
       data.addColumn('number', 'Target'); // target line
 
-       var bloodSugarData = [
-            <?php
-            // Output the data in the required format
-            foreach ($afterMealMonthData as $date => $value) {
-                echo "[new Date('$date'), $value, null, null, 90], ";
-            }
-            foreach ($beforeMealMonthData as $date => $value) {
-                echo "[new Date('$date'), null, $value, null, 90], ";
-            }
-            foreach ($fastingMonthData as $date => $value) {
-                echo "[new Date('$date'), null, null, $value, 90], ";
-            }
-            ?>
-        ];
+        // Loop through the fetched month data and add it to the chart data
+        <?php foreach ($monthData['afterMeal'] as $date => $value) { ?>
+            data.addRow([new Date('<?php echo $date ?>'), <?php echo $value ?>, null, null, 90]);
+        <?php } ?>
+        <?php foreach ($monthData['beforeMeal'] as $date => $value) { ?>
+            data.addRow([new Date('<?php echo $date ?>'), null, <?php echo $value ?>, null, 90]);
+        <?php } ?>
+        <?php foreach ($monthData['fasting'] as $date => $value) { ?>
+            data.addRow([new Date('<?php echo $date ?>'), null, null, <?php echo $value ?>, 90]);
+        <?php } ?>
 
-      // Add data to the DataTable
-      data.addRows(bloodSugarData);
-
-      // Function to get the name of the current month
-    
 
       // Set chart options
       var options = {
-        title: getCurrentMonthName(currentMonth),
+        title: 'Month',
         curveType: 'function',
         pointSize: 5, // Size of the dots
         legend: { position: 'bottom' },
@@ -282,14 +297,6 @@ $avgValue = number_format($avgRow['avg_value'], 2);
       var chart = new google.visualization.LineChart(document.getElementById('chart_div1'));
       chart.draw(data, options);
     }
-
-     function getCurrentMonthName(monthIndex) {
-            var months = [
-                "January", "February", "March", "April", "May", "June",
-                "July", "August", "September", "October", "November", "December"
-            ];
-            return months[monthIndex % 12];
-        }
 
   </script> 
   <!--Graph to retrieve all data-->
@@ -531,16 +538,20 @@ $avgValue = number_format($avgRow['avg_value'], 2);
 <body>
 <div id="makepdf">
   <div class="tab">
-    <button class="tablinks" onclick="openTab(event, 'all')">All</button>
-    <button class="tablinks active" onclick="openTab(event, 'month')">Month</button>
+    <button class="tablinks active" onclick="openTab(event, 'all')">All</button>
+    <button class="tablinks" onclick="openTab(event, 'month')">Month</button>
     <button class="tablinks" onclick="openTab(event, 'week')">Week</button>
     <button class="tablinks" onclick="openTab(event, 'day')">Day</button>
   </div>
 
   <div id="month" class="tabcontent">
-      <button onclick="goBackMonth()">Previous Month</button>
-      <button onclick="goForwardMonth()">Next Month</button>
-      <div id="chart_div1" class="line_graph" ></div>
+    <div class="monthBtn">
+      <button class="previousBtn" onclick="navigateMonth(-1)">Previous Month</button>
+      <h2><?php echo $currentMonthName?></h2>
+      <button class="nextBtn" onclick="navigateMonth(1)">Next Month</button>
+    </div>
+
+    <div id="chart_div1" class="line_graph" ></div>
   </div>
 
   <div id="all" class="tabcontent">
@@ -668,16 +679,24 @@ $avgValue = number_format($avgRow['avg_value'], 2);
     document.getElementById(tabName).style.display = "block";
 
     // Add the 'active' class to the clicked tab button
-    evt.currentTarget.classList.add("active");
+    //evt.currentTarget.classList.add("active");
 
     // If the tab name corresponds to a graph, initialize the chart
     if (tabName === 'month') {
-      drawMonthChart(); 
+    <?php 
+        // Retrieve the month index from the query parameter or default to the current month
+        $currentMonthIndex = isset($_GET['month']) ? intval($_GET['month']) : date('n') - 1;
+        $monthData = fetchMonthData($currentMonthIndex, $conn, $ssn);
+    ?>
+    drawMonthChart(<?php echo json_encode($monthData); ?>); 
     } else if (tabName === 'all') {
       drawAllChart(); 
     } else if (tabName === 'week') {
       drawWeekChart();
+    } else if (tabName === 'day') {
+      drawDayChart();
     }
+    
   }
 
 
@@ -695,6 +714,20 @@ $avgValue = number_format($avgRow['avg_value'], 2);
             doc.fromHTML(makePDF);
             doc.save("output.pdf");
         });
+
+  function navigateMonth(delta) {
+      // Get the current URL and parse it
+      var url = new URL(window.location.href);
+      // Get the current month index from the URL query parameter or default to 0
+      var currentMonthIndex = parseInt(url.searchParams.get("month")) || 0;
+      // Update the month index based on the delta
+      currentMonthIndex += delta;
+      // Set the new month index as a query parameter in the URL
+      url.searchParams.set("month", currentMonthIndex);
+      // Reload the page with the updated URL
+      window.location.href = url.toString();
+  }
+      
 </script>
 </body>
 <footer>
