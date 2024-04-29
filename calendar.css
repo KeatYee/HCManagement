@@ -149,7 +149,15 @@ nav{
 
 .navbar-right {
   float: right ;
-  margin-right: -15px;
+  margin-right: 15px;
+}
+
+.label-pill{
+  font-size: 13px;
+}
+
+.glyphicon-bell{
+  font-size: 25px;
 }
 
 /* sidebar */
@@ -172,10 +180,16 @@ nav{
   transition: background-color 0.3s ease;
 }
 
+.sidebar .bar-item:hover {
+  font-weight: 800;
+
+}
+
 .sidebar .bar-item-close {
   color: white; 
   display: block;
   padding: 10px 20px;
+  margin-bottom: 15px;
   text-decoration: none;
   transition: background-color 0.3s ease;
 }
@@ -184,11 +198,27 @@ nav{
   background-color: #DAB6C8; 
 }
 
-.sidebar .bar-item:hover {
-  background-color: #5389A6;
-  font-weight: 800;
-  color: white;
-  text-align: center;
+.sidebar .bar-item-1 {
+  background-color: #f1ffc4; /**appt color*/
+
+}
+
+.sidebar .bar-item-2 {
+  background-color: #ffcaaf; /**bst color*/
+
+}
+
+.sidebar .bar-item-3 {
+  background-color: #a7bed3; /**med rem color*/
+
+}
+
+.bx-calendar-check,
+.bxs-capsule,
+.bx-injection{
+  font-size: 26px;
+  padding-left: 5px;
+  color:#0C4396;
 }
 
 .btnClose {
@@ -211,19 +241,23 @@ nav{
   width: 50px;
   height:50px;
   margin:5px;
+
 }
-.btnOpen:hover{
-  background-color: #5389A6; 
-  transition: background-color 0.3s ease;
+
+.btnOpen i{
+  transition: transform 0.3s ease; 
 }
+
+.btnOpen:hover i {
+
+  transform: rotate(270deg); 
+}
+
+
 
 #openNav{
   margin-top:12px;
-}
-
-/* right arrow icon */
-.sidebar button i {
-  font-size: 24px; 
+  margin-left:20px;
 }
 
 /*Right bottom add button */

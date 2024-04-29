@@ -128,9 +128,9 @@ while ($result = mysqli_fetch_array($fetch_event3)) {
   <!--sidebar link-->
   <div class="sidebar bar-block" style="display:none" id="mySidebar">
     <button class="bar-item-close btnClose" onclick="closeNav()">Close &times;</button>
-    <a href="?action=calendar" class="bar-item">Calendar</a>
-    <a href="?action=today" class="bar-item">Today's</a>
-    <a href="?action=all" class="bar-item">All Events</a>
+    <a href="#" class="bar-item bar-item-1"><i class='bx bx-calendar-check'></i>&nbsp Healthcare Appointment</a>
+    <a href="#" class="bar-item bar-item-2"><i class='bx bx-injection'></i>&nbsp Blood Sugar Testing</a>
+    <a href="#" class="bar-item bar-item-3"><i class='bx bxs-capsule'></i>&nbsp Medication Reminder</a>
   </div>
 
   <!--sidebar icon-->
@@ -144,7 +144,7 @@ while ($result = mysqli_fetch_array($fetch_event3)) {
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
           <span class="label label-pill label-danger count" style="border-radius:10px;"></span> 
-          <span class="glyphicon glyphicon-bell" style="font-size:18px;"></span>
+          <span class="glyphicon glyphicon-bell"></span>
           </a>
           <ul class="dropdown-menu"></ul>
         </li>
@@ -155,68 +155,12 @@ while ($result = mysqli_fetch_array($fetch_event3)) {
 </div>
 
 <div id="main">
-<?php
-
-// Handle actions based on selected link
-if (isset($_GET['action'])) {
-$action = $_GET['action'];
-switch ($action) {
-  case 'calendar':
-  echo"<div class='container'>";
-    echo"<div id='calendar'></div>";
-  echo"</div>";
-  echo"<div class='addEvent-btn'>";
-    echo"<a href='addEvent.php'>+</a>";
-  echo"</div>";
-    break;
-
-  case 'today':
-    echo"<h2 style='padding-left: 30px;'>Today's Reminder</h2>";
-    $sql = "SELECT mr.*, m.name AS medicine_name, m.description AS medicine_description, m.image AS medicine_image 
-    FROM MedicationReminder mr
-    JOIN Medicine m ON mr.medID = m.medID
-    WHERE DATE(mr.sDate) <= CURDATE() AND DATE(mr.eDate) >= CURDATE() AND ssn = '$ssn'";
-
-$result = mysqli_query($conn, $sql);
-
-if ($result) {
-if (mysqli_num_rows($result) > 0) {
-    echo '<div style="display: flex; flex-wrap: wrap;">'; // Start flexbox container
-
-    // Output data of each row
-    while ($row = mysqli_fetch_assoc($result)) {
-        echo '<div style="border: 1px solid #ccc; padding: 10px; margin: 10px;">'; // Start individual reminder box
-        echo "<p><strong>Medication Reminder ID:</strong> " . $row["medRemID"] . "</p>";
-        echo "<p><strong>Medication Name:</strong> " . $row["medicine_name"] . "</p>";
-        echo "<p><strong>Description:</strong> " . $row["medicine_description"] . "</p>";
-        echo "<p><strong>Dosage:</strong> " . $row["dosage"] . "</p>";
-        echo "<p><strong>Start Date:</strong> " . $row["sDate"] . "</p>";
-        echo "<p><strong>End Date:</strong> " . $row["eDate"] . "</p>";
-        echo "<p><strong>Reminder Type:</strong> " . $row["remType"] . "</p>";
-        echo '</div>'; // End individual reminder box
-    }
-
-    echo '</div>'; // End flexbox container
-} else {
-    echo "No reminders for today.";
-}
-} else {
-echo "Error: " . mysqli_error($conn);
-}
-
-    break;
-
-  case 'all':
-    break;
-
-  default:
-  // Display a message if the action is not recognized
-    echo "Invalid action!";
-    break;
-}
-}
-?>
-
+  <div class='container'>
+      <div id='calendar'></div>
+  </div>
+  <div class='addEvent-btn'>
+      <a href='addEvent.php'>+</a>
+  </div>
 </div>
 
 <script>
@@ -325,10 +269,6 @@ $(document).ready(function() {
   });
 });
 </script> 
-
-
-
-
 <footer>
   <div class="footer-content">
 
