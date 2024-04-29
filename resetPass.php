@@ -6,7 +6,24 @@ include 'DBconnect.php';
  $conPass = "";
  $passerror = "";
  $errormsg = "";
+ $email = "";
+
+if(isset($_SESSION['email'])){
+	   $email = $_SESSION['email'];
  
+}
+
+if(isset($_SESSION['admin'])){
+	$email = $_SESSION['admin'];
+ 
+}
+
+if(isset($_SESSION['superuser'])){
+	$email = $_SESSION['superuser'];
+ 
+}
+
+
 if(isset($_POST['submit'])){ 
 	if(!empty($_POST['newPass'])){
         $pattern='/^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#%&])[0-9A-Za-z!@#$%&]{8,12}$/'; 
@@ -22,24 +39,31 @@ if(isset($_POST['submit'])){
 			
 					}
 					else{
-
-						$hashedNewPass = password_hash($newPass, PASSWORD_DEFAULT);
-						$email = $_SESSION['email'];
-
 						$sql_check = "SELECT password FROM Users WHERE email='$email'";
                     	$result_check = mysqli_query($conn, $sql_check);
 
-						if($result_check) {
+						if($result_check && mysqli_num_rows($result_check) > 0) {
 							$row = mysqli_fetch_assoc($result_check);
                         	$currentPassword = $row['password'];
 
 							// Verify if the new password is different from the current password
 							if(!password_verify($newPass, $currentPassword)) {
 								//password update
+								$hashedNewPass = password_hash($_POST['newPass'], PASSWORD_DEFAULT); //password hashing
+
                             	$sql_update = "UPDATE Users SET password='$hashedNewPass' WHERE email='$email'";
                             	$result_update = mysqli_query($conn, $sql_update);
 								if($result_update) {
-									echo "<script>alert('Password reset successfully. You can now log in with your new password.'); window.location.replace('login.php');</script>";
+									// Unset all session variables
+									session_unset();
+
+									// Destroy the session
+									session_destroy();
+
+									echo "<script>";
+									echo "alert('Password reset successfully. You can now log in with your new password.');";
+									echo "window.location.href = 'login.php';"; 
+									echo "</script>";
 									exit(); // Redirect user to login page
 								}
 								else {
@@ -74,12 +98,7 @@ if(isset($_POST['submit'])){
 	  
 
 }
- 
-// Destroy the session to log the user out
-session_destroy();
 
-// Close the database connection
-mysqli_close($conn);
 
 ?>
 

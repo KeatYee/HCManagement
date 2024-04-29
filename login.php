@@ -35,15 +35,41 @@ $passerror="";
         $hashedPass = $row['password'];
 
         if (password_verify($_POST['password'], $hashedPass)){
-			   
-			    // Set a session variable to indicate successful login
-				  $_SESSION['loginSuccess'] = true;
-          $_SESSION['ssn'] = $row['ssn']; 
-          $_SESSION['email'] = $row['email']; 
-          $_SESSION['password'] = $row['password']; 
+              // Set a session variable to indicate successful login
+				      $_SESSION['loginSuccess'] = true;
+
+              //admin login
+              if ($row['role'] == "admin"){
+               
+                $_SESSION['admin'] = $_POST['email'];
+                $_SESSION['role'] = $row['role'];
+                $_SESSION['Adminssn'] = $row['ssn']; 
+
+                header("Location: admin.php");
+                exit();
+
+                //superuser login
+              } else if ($row['role'] == "superuser"){
+         
+                $_SESSION['superuser'] = $_POST['email'];
+                $_SESSION['role'] = $row['role'];
+                $_SESSION['Superssn'] = $row['ssn']; 
+
+
+                header("Location: superuser.php");
+                exit();
+
+                //user login
+              } else{
+                $_SESSION['ssn'] = $row['ssn']; 
+                $_SESSION['email'] = $row['email']; 
+                $_SESSION['password'] = $row['password']; 
   
-          header("Location:homepage.php");
-          exit();
+                header("Location:homepage.php");
+                exit();
+
+              }
+			   
         }
         else {
           $passerror = "Incorrect password";

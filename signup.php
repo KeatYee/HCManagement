@@ -66,8 +66,9 @@ if(isset($_POST['submit'])){ //Validate submit
 	else {
             $code=rand(1,9999);
             $ssn="U".$code;
-            $sql="INSERT INTO Users(ssn,name,email,password)
-			      VALUES('$ssn','$name','$email','$pass')";
+            $role = "user";
+            $sql="INSERT INTO Users(ssn,name,email,password,role)
+			      VALUES('$ssn','$name','$email','$pass','$role')";
             $result=mysqli_query($conn,$sql);
 			
 		     // Set a session variable to indicate successful signup

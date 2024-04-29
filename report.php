@@ -706,14 +706,22 @@ $avgValue = number_format($avgRow['avg_value'], 2);
   });
 
   let button = document.getElementById("generate-pdf");
-        button.addEventListener("click", function () {
-            let doc = new jsPDF("p", "mm", [300, 300]);
-            let makePDF = document.querySelector("#makepdf");
+button.addEventListener("click", function () {
+    let doc = new jsPDF("p", "mm", [300, 300]);
+    let makePDF = document.querySelector("#makepdf");
  
-            // fromHTML Method
-            doc.fromHTML(makePDF);
-            doc.save("output.pdf");
-        });
+    // Calculate vertical offset based on font size and number of lines
+    let size = 12; // Adjust as needed
+    let lines = makePDF.innerText.split('\n');
+    let verticalOffset = size / 72; // Initial offset
+    verticalOffset += (lines.length + 2.5) * size / 72; // Adjusted offset
+
+    // fromHTML Method
+    doc.fromHTML(makePDF, 15, verticalOffset);
+    doc.save("diacare_report.pdf");
+});
+
+
 
   function navigateMonth(delta) {
       // Get the current URL and parse it

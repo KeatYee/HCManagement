@@ -7,11 +7,18 @@ CREATE TABLE Users (
     name CHAR(10),
     email VARCHAR(50),
     password VARCHAR(255),
+    role VARCHAR(255),
     birthdate DATE,
     diabetesType VARCHAR(20),
     sex CHAR(1),
     profilePic MEDIUMBLOB
 );
+-- INSERT admin & superuser for Users table
+ --hash the password b4 insert
+INSERT INTO Users(ssn,name,email,password,role) VALUES
+('A0001','KeatYee','admin1@gmail.com','Admin123@','admin'),
+('A0002','Esther','admin2@gmail.com','Admin123@','admin'),
+('S0001','Diacare','diacare@gmail.com','Super123@','superuser');
 
 -- Feedback Table
 CREATE TABLE Feedback (

@@ -1,8 +1,6 @@
 <?php
-
-// Start session (required for accessing session data)
 session_start();
-include 'DBconnect.php'; // Include database connection
+include 'DBconnect.php'; 
 
 //initialization
  $email="";

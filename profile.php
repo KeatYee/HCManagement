@@ -1,4 +1,3 @@
-
 <?php
 session_start();// Start session
 include 'DBconnect.php'; // Include database connection
@@ -109,6 +108,14 @@ if (!isset($_SESSION['ssn'])) {
 
 <div class="content">	
 <!--Pop-up Edit form--> 
+<div id="editEmailForm" class="edit-form-container">
+  <div class="edit-form-content">
+	<h2>Update Personal Details</h2>
+    <span class="close" onclick="closeEditForm('editEmailForm')">&times;</span>
+          <p>Email cannot be reset !</p>
+      </form>
+  </div>
+</div>
 
 <div id="editNameForm" class="edit-form-container">
   <div class="edit-form-content">
@@ -226,7 +233,7 @@ case 'acc':
 
 
     echo "<label for='email'><strong>Email</strong></label><br> 
-    <input type='text' id='email' value='$email' readonly >";
+    <input type='text' id='email' value='$email' readonly onclick=\"openEditForm('editEmailForm')\">";
    
     echo "<label for='username'><strong>Username</strong></label><br> 
     <input type='text' id='username' value='$name' readonly onclick=\"openEditForm('editNameForm')\">";
@@ -269,8 +276,10 @@ case 'acc':
 
     break;
 
-    case 'today':
+case 'today':
       echo "<h2>What I have to do today?</h2>";
+
+      echo "<div class='today'>";
   
       // Get today's date
       $todayDate = date('Y-m-d');
@@ -300,31 +309,64 @@ case 'acc':
       } else {
         echo "<h3>Medication Reminders</h3>";
         while ($row = mysqli_fetch_assoc($resultMedication)) {
-            echo "<div class='reminder-box'>";
+            echo "<div class='reminder-box medication'>";
+
+            echo "<div class='dropdown'>";
+            echo "<button class='dropdown-btn'><i class='bx bx-dots-horizontal-rounded'></i></button>";
+            echo "<div class='dropdown-content'>";
+            echo "<a href='editEvent.php?id={$row['medRemID']}&eventType=medicationReminder'>Edit</a>";
+            echo "<a href='deleteEvent.php?id={$row['medRemID']}&eventType=medicationReminder'>Delete</a>";
+            echo "</div>";
+            echo "</div>";
+
             echo "<div class='reminder-title'>{$row['title']}</div>";
-            echo "<div class='reminder-details'>Start Date: {$row['sDate']} - End Date: {$row['eDate']}</div>";
+            echo "<div class='reminder-details'><i class='bx bx-calendar'></i>Start Date: {$row['sDate']} - End Date: {$row['eDate']}</div>";
             echo "<div class='reminder-details'>{$row['name']}</div>";
             echo "<div class='reminder-details'>{$row['dosage']}</div>";
+
             echo "</div>";
         }
 
         echo "<h3>Blood Sugar Testing Alerts</h3>";
         while ($row = mysqli_fetch_assoc($resultTestingAlert)) {
-            echo "<div class='reminder-box'>";
+            echo "<div class='reminder-box testing-alert'>";
+
+            echo "<div class='dropdown'>";
+            echo "<button class='dropdown-btn'><i class='bx bx-dots-horizontal-rounded'></i></button>";
+            echo "<div class='dropdown-content'>";
+            echo "<a href='editEvent.php?id={$row['testingID']}&eventType=bsTestingAlert'>Edit</a>";
+            echo "<a href='deleteEvent.php?id={$row['testingID']}&eventType=bsTestingAlert'>Delete</a>";
+            echo "</div>";
+            echo "</div>";
+
             echo "<div class='reminder-title'>{$row['title']}</div>";
-            echo "<div class='reminder-details'>Start Date: {$row['sDate']} - End Date: {$row['eDate']}</div>";
+            echo "<div class='reminder-details'><i class='bx bx-calendar'></i>Start Date: {$row['sDate']} - End Date: {$row['eDate']}</div>";
             echo "</div>";
         }
 
         echo "<h3>Appointments</h3>";
         while ($row = mysqli_fetch_assoc($resultAppointment)) {
-            echo "<div class='reminder-box'>";
+            echo "<div class='reminder-box appointment'>";
+
+            echo "<div class='dropdown'>";
+            echo "<button class='dropdown-btn'><i class='bx bx-dots-horizontal-rounded'></i></button>";
+            echo "<div class='dropdown-content'>";
+            echo "<a href='editEvent.php?id={$row['apptID']}&eventType=Appointment'>Edit</a>";
+            echo "<a href='deleteEvent.php?id={$row['apptID']}&eventType=Appointment'>Delete</a>";
+            echo "</div>";
+            echo "</div>";
+
             echo "<div class='reminder-title'>{$row['title']}</div>";
-            echo "<div class='reminder-details'>Start Date: {$row['sDate']} - End Date: {$row['eDate']}</div>";
+            echo "<div class='reminder-details'><i class='bx bx-calendar'></i>Start Date: {$row['sDate']} - End Date: {$row['eDate']}</div>";
             echo "<div class='reminder-details'>{$row['location']}</div>";
             echo "</div>";
         }
       }
+
+      echo "</div>";
+      echo"<div class='addEvent-btn'>";
+      echo"<a href='addEvent.php'>+</a>";
+      echo"</div>";
   
       break;
   

@@ -1,0 +1,194 @@
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    text-decoration: none;
+    list-style: none;
+    font-family: 'Open Sans', sans-serif;
+    }
+/*Top Nav Bar*/
+.logo {
+    display: flex;
+    align-items: center; 
+}
+  
+.logo p {
+    color: #0C479D;
+    font-weight:800;
+    font-size: 2rem;
+    margin-left: 40px; 
+}
+  
+.logo img {
+    width: 75px;
+    height: 75px;
+}
+
+nav{
+  height:90px;
+  display:flex;
+  align-items: center;
+  justify-content: space-between;
+  padding:30px 55px;
+  background-color: #ffffff;
+  z-index: 2;
+
+}
+
+.nav-links{
+  display:flex;
+  align-items: flex-end;
+}
+
+.nav-links li a{
+  color:#7A7A7A;
+  font-weight:550;
+  font-size: 1.5rem;
+  margin:5px 15px;
+}
+
+.nav-links li a:hover,
+.nav-links li a.active{
+  color:#0C479D;
+}
+
+/*Hamburger*/
+.hamburger{
+  margin-left:20px;
+  cursor:pointer;
+  display:none;
+} 
+
+.hamburger div{
+  width:30px;
+  height:2px;
+  margin:6px 0;
+  background:#7A7A7A;
+}
+
+@media only screen and (max-width: 768px) {
+
+  nav{
+    position:relative;
+    padding:0 20px;
+    z-index:2;
+  }
+
+  .hamburger{
+    display:block;
+  } 
+
+  .nav-links{
+    margin:0;
+    position:fixed;
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    gap:20px;
+    height:auto;
+    top:-250%; 
+    left:0;
+    width: 100%;
+    padding:30px;
+    transition: 0.3s slide-down;
+  }
+
+  .nav-links.active{
+    opacity:0.9;
+    top:90px;
+    background-color:#ffffff;
+  }
+
+  @keyframes slide-down{
+    0%{
+      top:-250%;
+      opacity: 0;
+    }
+
+    50%{
+      top:0%;
+      opacity:0.1;
+    }
+
+    75%{
+      top:25px;
+      opacity:0.3;
+    }
+
+    100%{
+      top:90px;
+      opacity:1;
+    }
+
+  }
+
+  .nav-links li a {
+    display:block;
+    text-align: center;
+    color: #7A7A7A;
+    font-size: 1.3rem;
+    margin:5px 0;
+    padding:10px 100px;
+    transition: 0.2s;
+  }
+
+}
+/* Edit User Form Styles */
+.edit-user-container {
+    max-width: 600px;
+    margin: 50px auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+form {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+form label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 18px;
+}
+
+form input[type="text"],
+form input[type="email"],
+form input[type="date"],
+form select {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 18px;
+}
+
+form select {
+    width: 100%;
+}
+
+form button[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    margin:15px 0 20px;
+    background-color: #0C479D;
+    color: #fff;
+    font-size: 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+form button[type="submit"]:hover {
+    background-color: #05234f;
+}
