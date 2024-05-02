@@ -214,6 +214,19 @@ nav{
   margin:20px;
   border-radius: 15px;
 }
+/*log*/
+.log{
+  text-align: center;
+  text-decoration: none;
+  color: #0C479D;
+  padding:20px;
+  
+}
+
+.log a:hover{
+  font-weight: 800;
+}
+
 
 /*Donut*/
 .countBS{

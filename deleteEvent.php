@@ -47,7 +47,7 @@ if (!isset($_POST['id'], $_POST['eventType'])) {
         if($delete_query){
             echo "<script>";
             echo "alert('Event deleted successfully!');";
-            echo "window.location.href = 'profile.php';"; 
+            echo "window.location.href = 'profile.php?action=today';"; 
             echo "</script>";
         }
     

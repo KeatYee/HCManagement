@@ -136,13 +136,13 @@ session_start(); // Start the session
   <div class="footer-content">
 
     <div class="about">
-      <h3>About Foodbank</h3>
-      <p style="color:white;">ØHungers is a Malaysian NGO food bank collecting <br>and distributing edible food to charities and families.</p>
+      <h3>About diaCare</h3>
+      <p style="color:white;">diaCare is a comprehensive web application for people with diabetes or pre-diabetes </p>
     </div>
 
     <div class="contact">
       <h3>Contact Us</h3>
-      <p style="color:white;">Email: ØHungers@gmail.com</p>
+      <p style="color:white;">Email: diacare888@gmail.com</p>
       <p style="color:white;">Phone: +601-2879819</p>
       <p style="color:white;">Address: 1495 Jalan Kong Kong Batu 26 Ladang Lim Lim 81750 Masai Johor Malaysia</p>
     </div>

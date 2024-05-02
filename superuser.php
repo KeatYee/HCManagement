@@ -101,7 +101,6 @@ function filterTable($conn,$sql){
         <th>Name</th> 
         <th>Email</th> 
         <th>Birthdate</th> 
-        <th>Password</th>
         <th>Gender</th>
         <th>Edit</th> 
         <th>Delete</th>
@@ -113,7 +112,6 @@ while($row = mysqli_fetch_array($search_result)):
     $name=$row['name'];
     $email=$row['email'];
     $birthdate=$row['birthdate'];
-    $diabetesType=$row['diabetesType'];
     $sex=$row['sex'];
 
 ?>
@@ -122,7 +120,6 @@ while($row = mysqli_fetch_array($search_result)):
         <td><?php echo $name?></td>
         <td><?php echo $email?></td>
         <td><?php echo $birthdate?></td>
-        <td><?php echo $diabetesType?></td>
         <td><?php echo $sex?></td> 
         <td><a href="editAdmin.php?ssn=<?=$ssn?>">EDIT</a></td>
         <td><a href="deleteAdmin.php?ssn=<?=$ssn?>">DELETE</a></td>

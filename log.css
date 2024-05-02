@@ -1,0 +1,90 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    text-decoration: none;
+    list-style: none;
+    font-family: 'Open Sans', sans-serif;
+    }
+
+    .close-icon {
+        position: absolute;
+        top: 50px;
+        left: 50px;
+        float:left;
+    }
+    
+    .close-icon a {
+        color: #666;
+        text-decoration: none;
+        font-size: 24px;
+    }
+    
+    .close-icon a:hover {
+        color: #333;
+    }    
+
+
+
+
+#makepdf {
+    width: 80%;
+    margin: 0 auto;
+}
+
+h2 {
+    margin-top: 20px;
+    text-align: center;
+}
+
+table {
+	cursor:pointer;
+	border-collapse: collapse; /*ensure that no space between the cell borders*/
+	border: 1px;
+    margin: 25px auto;
+    font-family: 'Lato', sans-serif;
+    width: 80%;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+
+}
+
+th{
+    background-color:#bdc6d5;
+    color: #252525;
+    text-align: left;
+}
+
+th, td {
+    padding: 12px 45px;
+    text-align: left;
+}
+
+tr{
+    border-bottom: 1px solid #dddddd;
+}
+
+tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+
+tr:last-of-type {
+    border-bottom: 2px solid #C7D5BD;
+}
+
+tr:hover {
+    font-weight: bold;
+    color: #252525;
+}
+
+/*PDF*/
+.btnContainer{
+    text-align: center;
+    padding:50px;
+  }
+  
+  .btnPdf{
+    padding:30px 50px;
+    border:none;
+    cursor: pointer;
+    font-size: 20px;
+  }

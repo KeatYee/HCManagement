@@ -5,7 +5,7 @@ include('DBconnect.php'); // Include database connection
 // Check if the user is logged in
 if (!isset($_SESSION['admin'])) {
     echo "<script> alert('You don't have access to this page');";
-	echo "window.location.replace('login.php');</script>";
+	  echo "window.location.replace('login.php');</script>";
     exit(); //redirect user to login page
 }
 else{
@@ -52,7 +52,7 @@ if (isset($_POST['submitName'])) {
   $newName = $_POST['newName'];
 
   // Update the name in the database
-  $sql = "UPDATE users SET name = '$newName' WHERE ssn = '$ssn'";
+  $sql = "UPDATE users SET name = '$newName' WHERE ssn = '$Adminssn'";
   $result = mysqli_query($conn, $sql);
 
   // Handle the result of the update operation
@@ -70,7 +70,7 @@ if (isset($_POST['submitBd'])) {
   $newBirthdate = $_POST['newBirthdate'];
 
   // Update the name in the database
-  $sql = "UPDATE users SET birthdate = '$newBirthdate' WHERE ssn = '$ssn'";
+  $sql = "UPDATE users SET birthdate = '$newBirthdate' WHERE ssn = '$Adminssn'";
   $result = mysqli_query($conn, $sql);
 
   // Handle the result of the update operation
@@ -88,7 +88,7 @@ if (isset($_POST['submitSex'])) {
   $newSex = $_POST['newSex'];
 
   // Update the name in the database
-  $sql = "UPDATE users SET sex = '$newSex' WHERE ssn = '$ssn'";
+  $sql = "UPDATE users SET sex = '$newSex' WHERE ssn = '$Adminssn'";
   $result = mysqli_query($conn, $sql);
 
   // Handle the result of the update operation

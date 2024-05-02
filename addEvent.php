@@ -171,7 +171,7 @@ if(isset($_POST['submitMed'])) {
 
     if (!$hasErrors) {
 
-        // Perform database insertion for appointment
+        // Perform database insertion for medication reminder
         $title = $_POST['eventTitle'];
         $startDate = date("Y-m-d\TH:i:s", strtotime($_POST['eventStartDate']));
         $endDate = date("Y-m-d\TH:i:s", strtotime($_POST['eventEndDate']));
@@ -410,7 +410,7 @@ if(isset($_POST['submitBS'])) {
         <form id="eventForm" action="addEvent.php" method="POST">
 
         <label for="eventTitle">Event Title:</label>
-        <input type="text" id="eventTitle" name="eventTitle" required>
+        <input type="text" id="eventTitle" name="eventTitle" placeholder="Test blood sugar after lunch" required>
 
         <label for="eventStartDate">Start Date and Time:</label>
         <input type="datetime-local" id="eventStartDate" name="eventStartDate" required>

@@ -18,7 +18,7 @@ if(isset($_POST['id']) && !empty($_POST['id'])) {
     if($result) {
         echo "<script>";
         echo "alert('Medicine deleted successfully.');";
-        echo "window.location.href = 'profile.php';"; 
+        echo "window.location.href = 'profile.php?action=med';"; 
         echo "</script>";
     } else {
         echo "Error deleting medicine: " . mysqli_error($conn);

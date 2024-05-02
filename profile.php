@@ -180,10 +180,9 @@ if (!isset($_SESSION['ssn'])) {
   <div class="edit-form-content">
 	<h2>Update Personal Details</h2>
     <span class="close" onclick="closeEditForm('editPicForm')">&times;</span>
-      <form id="editForm" enctype="multipart/form-data">
+      <form action="editAcc.php" method="post" id="editForm" enctype="multipart/form-data">
         <label for="profilePic"><b>Profile Image</b></label>
         <input type="file" name="file" value="" id="profilePic">
-        <p class="error"><?php if (!empty($error)){echo $error;}  ?></p>
 			  <div class="update">
           <button name="submitPic" id="updateBtn" type="submit"><strong>Change</strong></button>
           <button name ="deletePic" id="removeBtn" type="submit">
@@ -275,7 +274,7 @@ case 'acc':
   echo "</div>";  
 
     break;
-
+//for today	
 case 'today':
       echo "<h2>What I have to do today?</h2>";
 
@@ -371,7 +370,7 @@ case 'today':
       break;
   
   
-
+//for med	
 case 'med' : 
 
   echo "<h2>Medication</h2>";

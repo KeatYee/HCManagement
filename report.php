@@ -243,8 +243,9 @@ $avgValue = number_format($avgRow['avg_value'], 2);
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.min.js"></script>
   <!--Google Chart-->
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  
   <!--Graph to retrieve month data-->
-  <script type="text/javascript">
+<script type="text/javascript">
     // Load the Visualization API and the corechart package.
     google.charts.load('current', {'packages':['corechart']});
     google.charts.setOnLoadCallback(function() {
@@ -299,8 +300,8 @@ $avgValue = number_format($avgRow['avg_value'], 2);
     }
 
   </script> 
-  <!--Graph to retrieve all data-->
-  <script type="text/javascript">
+<!--Graph to retrieve all data-->
+<script type="text/javascript">
     // Load the Visualization API and the corechart package.
     google.charts.load('current', {'packages':['corechart']});
         
@@ -424,8 +425,9 @@ $avgValue = number_format($avgRow['avg_value'], 2);
        }
    
   </script>
-  <!--Graph to retrieve Day data-->
- <script type="text/javascript">
+
+<!--Graph to retrieve Day data-->
+<script type="text/javascript">
         // Load the Visualization API and the corechart package.
         google.charts.load('current', {'packages':['corechart']});
         
@@ -566,6 +568,13 @@ $avgValue = number_format($avgRow['avg_value'], 2);
     <div id="chart_div4" class="line_graph" ></div>
   </div>
 
+  
+  <div class="log">
+    <a href="log.php">
+      See others historical data
+    </a>
+  </div>
+
   <hr>
   <div class="countBS">
     <div id="chart_donut" style="width:500px; height: 500px;"></div>
@@ -609,6 +618,8 @@ $avgValue = number_format($avgRow['avg_value'], 2);
     </div>
   </div>
   <hr>
+
+
 
 </div>
 
@@ -742,13 +753,13 @@ button.addEventListener("click", function () {
   <div class="footer-content">
 
     <div class="about">
-      <h3>About Foodbank</h3>
-      <p style="color:white;">ØHungers is a Malaysian NGO food bank collecting <br>and distributing edible food to charities and families.</p>
+      <h3>About diaCare</h3>
+      <p style="color:white;">diaCare is a comprehensive web application for people with diabetes or pre-diabetes </p>
     </div>
 
     <div class="contact">
       <h3>Contact Us</h3>
-      <p style="color:white;">Email: ØHungers@gmail.com</p>
+      <p style="color:white;">Email: diacare888@gmail.com</p>
       <p style="color:white;">Phone: +601-2879819</p>
       <p style="color:white;">Address: 1495 Jalan Kong Kong Batu 26 Ladang Lim Lim 81750 Masai Johor Malaysia</p>
     </div>

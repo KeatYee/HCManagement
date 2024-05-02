@@ -14,7 +14,6 @@ if(!empty($_GET['ssn'])){
     $name=$row['name'];
     $email=$row['email'];
     $birthdate=$row['birthdate'];
-    $diabetesType=$row['diabetesType'];
     $sex=$row['sex'];
   }
   else{
@@ -29,13 +28,12 @@ if(isset($_POST['submit'])){
     $newName = $_POST['name'];
     $newEmail = $_POST['email'];
     $newBirthdate = $_POST['birthdate'];
-    $newDT = $_POST['diabetesType'];
     $newSex = $_POST['sex'];
 
 
     // Update the name in the database
     $sql = "UPDATE Users SET name = '$newName', email = '$newEmail',
-            birthdate = '$newBirthdate', diabetesType = '$newDT', sex = '$newSex'
+            birthdate = '$newBirthdate', sex = '$newSex'
             WHERE ssn = '$ssn'";
     $result = mysqli_query($conn, $sql);
 
@@ -48,25 +46,6 @@ if(isset($_POST['submit'])){
     } else {
         echo "Error editing admin: " . mysqli_error($conn);
     }
-}
-
-/* admin edit profile  */
-if (isset($_POST['submitName'])) {
-  $newName = $_POST['newName'];
-
-  // Update the name in the database
-  $sql = "UPDATE users SET name = '$newName' WHERE ssn = '$Adminssn'";
-  $result = mysqli_query($conn, $sql);
-
-  // Handle the result of the update operation
-  if ($result) {
-      echo "<script>";
-      echo "alert('Name updated successfully!');";
-      echo "window.location.href = 'adminProfile.php';"; 
-      echo "</script>";
-  } else {
-      echo "Error updating name: " . mysqli_error($conn);
-  }
 }
 
 ?>
@@ -117,13 +96,6 @@ if (isset($_POST['submitName'])) {
             <input type="email" id="email" name="email" value="<?php echo $email; ?>"><br>
             <label for="birthdate">Birthdate:</label>
             <input type="date" id="birthdate" name="birthdate" value="<?php echo $birthdate; ?>"><br>
-            <label for="diabetesType">Diabetes Type:</label>
-            <select id="diabetesType" name="diabetesType">
-                <option value="Type 1" <?php if($diabetesType == 'Type 1') echo 'selected'; ?>>Type 1</option>
-                <option value="Type 2" <?php if($diabetesType == 'Type 2') echo 'selected'; ?>>Type 2</option>
-                <option value="GDM" <?php if($diabetesType == 'GDM') echo 'selected'; ?>>GDM</option>
-            </select><br>
-            
             <label for="sex">Sex:</label>
             <select id="sex" name="sex">
                 <option value="M" <?php if($sex == 'M') echo 'selected'; ?>>Male</option>

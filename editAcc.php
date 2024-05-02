@@ -81,31 +81,8 @@ if (isset($_POST['submitDT'])) {
 }
 
 if (isset($_POST['submitPic'])) {
-
     // Check if a file was uploaded
     if (!empty($_FILES['file']['name'])) {
-
-        // Check if the uploaded file is an image
-        $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
-        $fileType = $_FILES['file']['type'];
-        if (!in_array($fileType, $allowedTypes)) {
-            $error = "Only JPEG, PNG, and GIF files are allowed!";
-        }
-
-        // Check if the file size is within limits (e.g., 2MB)
-        $fileSize = $_FILES['file']['size'];
-        $maxFileSize = 2 * 1024 * 1024; // 2MB in bytes
-        if ($fileSize > $maxFileSize) {
-            $error = "File size exceeds the maximum allowed limit (2MB)";
-        }
-
-    }
-    else{
-        $error = "Please upload a picture for profile";
-    }
-
-    if(empty($error)){
-
         $MY_FILE = $_FILES['file']['tmp_name'];
         // To open the file and store its contents in $file_contents
         $file = fopen($MY_FILE, 'r');
@@ -130,6 +107,11 @@ if (isset($_POST['submitPic'])) {
         else {
             echo "Error updating profile picture: " . mysqli_error($conn);
         }
+
+      
+    }
+    else{
+        $error = "Please upload a picture for profile";
     }
     
 }

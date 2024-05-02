@@ -173,9 +173,9 @@ nav{
 /*Table*/
 
 .viewTable{
-	cursor:pointer;
-	border-collapse: collapse; /*ensure that no space between the cell borders*/
-	border: 1px;
+	  cursor:pointer;
+	  border-collapse: collapse; /*ensure that no space between the cell borders*/
+	  border: 1px;
     margin: 25px auto;
     font-family: 'Lato', sans-serif;
     min-width: 700px;
