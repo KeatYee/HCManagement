@@ -624,12 +624,15 @@ $avgValue = number_format($avgRow['avg_value'], 2);
 </div>
 
 <div class="btnContainer">
-  <button class=btnPdf id="generate-pdf">Generate PDF</button>
+  <button class=btnPdf id="generate-pdf" onclick="printDiv()">Generate PDF</button>
 </div>
 
 
 <!--Hamburger-->
 <script src="app.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.2/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
 <script>
   let countingStarted = false; // Flag to track whether counting has started
 
@@ -716,8 +719,9 @@ $avgValue = number_format($avgRow['avg_value'], 2);
 
   });
 
-  let button = document.getElementById("generate-pdf");
-button.addEventListener("click", function () {
+
+  /*let button = document.getElementById("generate-pdf");
+  button.addEventListener("click", function () {
     let doc = new jsPDF("p", "mm", [300, 300]);
     let makePDF = document.querySelector("#makepdf");
  
@@ -730,8 +734,85 @@ button.addEventListener("click", function () {
     // fromHTML Method
     doc.fromHTML(makePDF, 15, verticalOffset);
     doc.save("diacare_report.pdf");
-});
 
+  });*/
+
+  async function splitCanvasIntoParts(canvas, chunkHeight) {
+        const canvasChunks = [];
+        const totalChunks = Math.ceil(canvas.height / chunkHeight);
+
+        for (let i = 0; i < totalChunks; i++) {
+            const chunkCanvas = document.createElement('canvas');
+            const ctx = chunkCanvas.getContext('2d');
+
+            const startY = i * chunkHeight;
+            const height = Math.min(chunkHeight, canvas.height - startY);
+
+            chunkCanvas.width = canvas.width;
+            chunkCanvas.height = height;
+
+            ctx.drawImage(canvas, 0, startY, canvas.width, height, 0, 0, canvas.width, height);
+
+            canvasChunks.push(chunkCanvas);
+        }
+
+        return canvasChunks;
+  }
+
+
+  async function printDiv() {
+    const contentBody = document.querySelector('#makepdf');
+    canvas = await html2canvas(contentBody);
+
+        // Split the canvas into chunks
+        const chunkHeight = 2500; // Set your desired chunk height
+        const canvasChunks = await splitCanvasIntoParts(canvas, chunkHeight);
+
+        // Create a new jsPDF instance
+        const pdf = new window.jspdf.jsPDF({
+            orientation: 'portrait',
+            unit: 'mm',
+            format: 'a4'
+        });
+
+        const margin = 10; // Margin in mm
+        let currentPageHeight = margin; // Starting the content from a distance equal to the margin
+
+        // Add each chunk to the PDF
+        canvasChunks.forEach((chunk, index) => {
+            // Calculate the aspect ratio of the chunk
+            const aspectRatio = chunk.width / chunk.height;
+
+            // Calculate dimensions to fit the image within a 297mm height while maintaining the aspect ratio, accounting for margins
+            let imgHeight = 297 - 2 * margin; // Page height in mm minus top and bottom margins
+            let imgWidth = imgHeight * aspectRatio;
+
+            if (imgWidth > 210 - 2 * margin) {
+                imgWidth = 210 - 2 * margin; // Page width in mm minus left and right margins
+                imgHeight = imgWidth / aspectRatio;
+            }
+
+            const xPos = (210 - imgWidth) / 2;
+            const yPos = (297 - imgHeight) / 2;
+
+            if (currentPageHeight + imgHeight > 297 - margin) {
+                pdf.addPage();
+                currentPageHeight = margin; // Reset the current page height considering top margin
+            }
+
+            pdf.addImage(chunk.toDataURL('image/png'), 'PNG', margin, currentPageHeight, imgWidth, imgHeight);
+            currentPageHeight += imgHeight + margin; // Increment current height considering bottom margin
+        });
+        // Save the PDF (optional)
+        pdf.save('diacare_report.pdf');
+        alert('Report downloading...');
+        location.reload();
+
+  
+  }
+
+
+  
 
 
   function navigateMonth(delta) {

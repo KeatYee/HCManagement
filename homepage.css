@@ -33,6 +33,9 @@ justify-content: space-between;
 padding:30px 55px;
 background-color: #ffffff;
 z-index: 2;
+position: fixed;
+left: 0;
+right: 0;
 
 }
 
